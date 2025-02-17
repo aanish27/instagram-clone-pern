@@ -1,0 +1,20 @@
+{
+  "name": "PERN-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "",
+    "start:prod": "cd server && node app.js",
+    "start:dev": "npm run server && npm run client",
+    "build": "cd client && npm run build",
+    "client": "cd client && npm run dev",
+    "server": "cd server && node --watch app.js",
+    "install": "cd client && npm install && cd ../server && npm install",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
