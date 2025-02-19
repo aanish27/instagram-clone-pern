@@ -1,10 +1,10 @@
+import Sidebar from './components/Sidebar';
+
+
 function App() {
   return (
-    <div className="flex justify-between items-center">
-      <div className="sidebar p-8 bg-red-400  h-[100vh] w-[15vw]">
-        <div> Instagram </div>
-        <div><span>Icon</span> Home</div>
-      </div>
+    <div className="flex items-center justify-between">
+      <Sidebar />
       <main>Posts & Stories</main>
       <div>Right Sidebar</div>
     </div>
