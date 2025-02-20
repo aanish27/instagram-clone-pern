@@ -1,6 +1,5 @@
 import StoryRow from "./StoryRow";
-    import PostContainer from "./PostContainer";
-
+import PostContainer from "./PostContainer";
 
 function Main() {
   return (
