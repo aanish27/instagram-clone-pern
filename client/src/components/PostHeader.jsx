@@ -5,10 +5,10 @@ import profile_pic from "../assets/car.jpg";
 
 function PostHeader() {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between p-1 py-2">
       <div className="flex items-center justify-center gap-2">
-        <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-yellow-500">
-          <img src={profile_pic} alt="" className="h-15 w-15 rounded-full" />
+        <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-yellow-500">
+          <img src={profile_pic} alt="" className="h-10 w-10 rounded-full" />
         </div>
         <span> {"Aanish"} </span>
         <LuDot />

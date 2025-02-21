@@ -5,8 +5,8 @@ import { FiBookmark } from "react-icons/fi";
 function PostFooter() {
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <div className="flex gap-1">
+      <div className="flex items-center justify-between py-2">
+        <div className="flex gap-3">
           <FaRegHeart style={{ fontSize: "25px" }} />{" "}
           <FaRegComment style={{ fontSize: "25px" }} />{" "}
           <IoPaperPlaneOutline style={{ fontSize: "25px" }} />

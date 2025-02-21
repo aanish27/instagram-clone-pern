@@ -11,7 +11,7 @@ function Sidebar() {
   const iconStyle = { fontSize: '35px' };
 
   return (
-    <div className="h-[100vh] w-[15vw] bg-black p-8 text-white">
+    <div className="h-[100vh] w-fit p-5 text-white hidden md:block border-r-2 border-gray-900">
       <BrandName />
       <div className="pt-20">
         <SideBarItem
@@ -30,7 +30,7 @@ function Sidebar() {
             alt=""
             className="h-[35px] w-[35px] rounded-full"
           />
-          <span className="text-xl font-light">Aanish</span>
+          <span className="text-xl font-light md:hidden">Aanish</span>
         </div>
         <SideBarItem
           icon={<AiOutlineMenu style={iconStyle} />}
