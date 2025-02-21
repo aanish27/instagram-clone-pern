@@ -1,0 +1,16 @@
+import { FaRegHeart } from "react-icons/fa";
+import { LuMessageCircleMore } from "react-icons/lu";
+
+function FooterBarMobile() {
+  return (
+    <nav className="lobster-regular fixed right-0 bottom-0 flex h-10 w-full items-center justify-between bg-black md:hidden">
+      <div className="text-2xl">Instagram</div>
+      <div className="flex gap-2">
+        <FaRegHeart className="text-2xl" />
+        <LuMessageCircleMore className="text-2xl" />
+      </div>
+    </nav>
+  );
+}
+
+export default FooterBarMobile;
