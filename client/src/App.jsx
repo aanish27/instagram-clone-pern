@@ -19,35 +19,32 @@ function App() {
           </div>
         </nav>
         <Sidebar />
-        <main className="my-10 h-screen w-full overflow-scroll p-1 md:my-0 md:px-5">
-          {/* <div className="flex flex-col items-center justify-center"> */}
-            <div className="flex gap-2 overflow-x-scroll md:gap-4 md:w-full ">
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-              <StoryCard url={profile_pic} username={"aanish"} />
-            </div>
+        <main className="my-10 h-screen w-full overflow-scroll p-1 md:my-0 md:px-5 lg:w-[50%]">
+          <div className="flex gap-2 overflow-x-scroll md:w-full md:gap-4">
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+            <StoryCard url={profile_pic} username={"aanish"} />
+          </div>
+          <div className="flex w-full flex-col items-center justify-center md:px-20">
             <PostContainer />
             <PostContainer />
-          {/* </div> */}
+            <PostContainer />
+          </div>
         </main>
+        <RightSidebar />
       </div>
-      {/* <div className="flex items-center justify-between"> */}
-
-      {/* <Main /> */}
-      {/* <RightSidebar /> */}
-      {/* </div> */}
       <nav className="lobster-regular fixed right-0 bottom-0 flex h-10 w-full items-center justify-between bg-black md:hidden">
         <div className="text-2xl">Instagram</div>
         <div className="flex gap-2">

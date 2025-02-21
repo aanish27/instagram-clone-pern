@@ -4,7 +4,7 @@ import RightSidebarItem from "./RightSidebarItem";
 
 function RightSidebar() {
   return (
-    <div className="flex h-[100vh] w-[20vw] flex-col gap-3 p-3 hidden">
+    <div className="lg:flex h-[100vh] w-[20vw] lg:flex-col gap-3 py-3 mx-10 hidden">
       <RightSidebarItem url={profile_pic} action={"Switch"} />
       <div className="flex items-center justify-between">
         <div className="flex items-center">

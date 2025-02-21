@@ -4,7 +4,7 @@ import PostHeader from "./PostHeader";
 
 function PostContainer() {
   return (
-    <div className="w-full md:w-[30vw]">
+    <div className="w-full ">
       <PostHeader />
       <PostCard />
       <PostFooter />

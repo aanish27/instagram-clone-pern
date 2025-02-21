@@ -10,7 +10,7 @@ function SideBarItem({title , icon , notification}) {
             </span> : ''
           }
         </div>
-      <span className="text-xl font-light md:hidden">{title}</span>
+      <span className="text-xl font-light md:hidden lg:block">{title}</span>
     </div>
   );
 }

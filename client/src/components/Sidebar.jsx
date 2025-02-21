@@ -11,7 +11,7 @@ function Sidebar() {
   const iconStyle = { fontSize: '35px' };
 
   return (
-    <div className="h-[100vh] w-fit p-5 text-white hidden md:block border-r-2 border-gray-900">
+    <div className="h-[100vh] w-fit p-5 lg:pr-30 text-white hidden md:block border-r-2 border-gray-900">
       <BrandName />
       <div className="pt-20">
         <SideBarItem
