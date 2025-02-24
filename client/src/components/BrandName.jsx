@@ -1,6 +1,7 @@
 function BrandName() {
-  return <div className="lobster-regular text-5xl md:hidden"> Instagram </div>;
+  return (
+    <div className="cookie-regular text-4xl md:hidden lg:block">Instagram</div>
+  );
 }
-
 export default BrandName;
 

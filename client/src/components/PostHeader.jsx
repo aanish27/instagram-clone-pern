@@ -11,12 +11,11 @@ function PostHeader() {
           <img src={profile_pic} alt="" className="h-10 w-10 rounded-full" />
         </div>
         <span> {"Aanish"} </span>
-        <LuDot />
-        <div className="flex-direction flex"></div>
-        <span>9h</span>
+        <LuDot className="hidden lg:block" />
+        <span className="hidden lg:block">9h</span>
       </div>
       <div className="flex gap-3">
-        <FaStar />
+        <FaStar className="hidden"/>
         <BsThreeDots />
       </div>
     </div>
