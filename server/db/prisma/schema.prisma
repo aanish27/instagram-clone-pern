@@ -25,20 +25,6 @@ model Post {
   comments    Comment[]
 }
 
-//learn about polymorphoric relations
-model Like {
-  id        Int      @id @default(autoincrement())
-  Entity    Entity
-  creator   User     @relation(fields: [creatorId], references: [id])
-  creatorId Int
-  Post      Post?    @relation(fields: [postId], references: [id])
-  postId    Int?
-  Story     Story?   @relation(fields: [storyId], references: [id])
-  storyId   Int?
-  Comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId Int?
-}
-
 model Story {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
@@ -98,4 +84,21 @@ model User {
   likes     Like[]
   Follower  Follow[]  @relation("followers")
   Following Follow[]  @relation("followings")
+}
+
+//  this is how you implement Polymorphism in Prisma
+model Like {
+  id        Int      @id @default(autoincrement())
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId Int
+  entity    Entity
+  entityId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // this relations is primsa level realtions
+  post      Post?    @relation(fields: [entityId], references: [id], map: "post_like")
+  story     Story?   @relation(fields: [entityId], references: [id], map: "story_like")
+  comment   Comment? @relation(fields: [entityId], references: [id], map: "comment_like")
+
+  @@unique([entityId, entity]) // Ensures a like is unique per entity type
 }

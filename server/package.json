@@ -23,5 +23,8 @@
     "globals": "^15.15.0",
     "prettier": "3.5.1",
     "prisma": "^6.3.1"
+  },
+  "prisma": {
+    "schema": "db/prisma/schema.prisma"
   }
 }
