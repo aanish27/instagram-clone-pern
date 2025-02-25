@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  caption     String    @db.VarChar(255)
+  attachement String    @db.VarChar(255)
+  creator     User      @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  likes       Like[]
+  comments    Comment[]
+}
+
+//learn about polymorphoric relations
+model Like {
+  id        Int      @id @default(autoincrement())
+  Entity    Entity
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId Int
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+  Story     Story?   @relation(fields: [storyId], references: [id])
+  storyId   Int?
+  Comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId Int?
+}
+
+model Story {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  attachement String   @db.VarChar(255)
+  creator     User     @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  likes       Like[]
+}
+
+model Follow {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  follower    User          @relation("followers", fields: [followerId], references: [id])
+  followerId  Int
+  following   User          @relation("followings", fields: [followingId], references: [id])
+  followingId Int
+  status      RequestStatus
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  text      String   @db.VarChar(255)
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId Int
+  likes     Like[]
+  Post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+}
+
+enum RequestStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
+}
+
+enum Entity {
+  STORY
+  POST
+  COMMENT
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  username  String    @unique
+  bio       String?
+  email     String    @unique
+  phone     String
+  password  String
+  posts     Post[]
+  comments  Comment[]
+  stories   Story[]
+  likes     Like[]
+  Follower  Follow[]  @relation("followers")
+  Following Follow[]  @relation("followings")
+}
