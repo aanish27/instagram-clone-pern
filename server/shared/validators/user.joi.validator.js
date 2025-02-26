@@ -13,6 +13,7 @@ const createUserValidationSchema = Joi.object({
 });
 
 const updateUserValidationSchema = Joi.object({
+  id: Joi.number().positive(),
   name: Joi.string().min(3),
   username: Joi.string().min(6).max(20),
   bio: Joi.string().min(6).max(100),
