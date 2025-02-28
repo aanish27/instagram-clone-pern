@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -9,10 +10,9 @@ const signUp = asyncHandler(async (req, res, next) => {
     if (err) {
       return res.json({ message: err });
     }
-      req.body.password = hash;
-      next()
+    req.body.password = hash;
+    next();
   });
-
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -26,18 +26,27 @@ const login = asyncHandler(async (req, res) => {
     return res.json({ error: "user not found" });
   }
 
-  await bcrypt.compare(req.body.password, user.password, function (err, result) {
-    try {
-      if (result) {
-        //craete token and initilize session
+  await bcrypt.compare(
+    req.body.password,
+    user.password,
+    function (err, result) {
+      try {
+        const cookieOptions = { secure: true, httpOnly: true };
+        if (result) {
+          const token = jwt.sign(user, process.env.JWT_SECRET, {
+            expiresIn: "15m",
+          });
+          res.cookie("accessToken", token, cookieOptions);
+        } else {
+          throw new Error("Invalid Credentials");
+        }
+
         return res.json({ message: "success" });
-      } else {
-        throw new Error("Invalid Credentials");
+      } catch (error) {
+        return res.json({ error: error });
       }
-    } catch (error) {
-      return res.json({ error: error });
-    }
-  });
+    },
+  );
 });
 
 module.exports = { login, signUp };
