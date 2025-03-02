@@ -30,23 +30,24 @@ const login = asyncHandler(async (req, res) => {
     req.body.password,
     user.password,
     function (err, result) {
-      try {
-        const cookieOptions = { secure: true, httpOnly: true };
-        if (result) {
-          const token = jwt.sign(user, process.env.JWT_SECRET, {
-            expiresIn: "15m",
-          });
-          res.cookie("accessToken", token, cookieOptions);
-        } else {
-          throw new Error("Invalid Credentials");
-        }
-
-        return res.json({ message: "success" });
-      } catch (error) {
-        return res.json({ error: error });
+      if (err) {
+        return res.json({ title: "Passwords Dont Match", error: err });
       }
+      const cookieOptions = { secure: true, httpOnly: true };
+      const accesstoken = jwt.sign(user, process.env.JWT_SECRET, {
+        expiresIn: "6h",
+      });
+
+      res.cookie("accessToken", accesstoken, cookieOptions);
+      return res.json({ message: "Success" });
     },
   );
 });
 
-module.exports = { login, signUp };
+const logout = asyncHandler(async (req, res) => {
+  res.clearCookie("accessToken");
+
+  return res.json({ message: "loggedOut" });
+});
+
+module.exports = { login, signUp, logout };

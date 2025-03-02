@@ -17,6 +17,7 @@ const authRoutes = require("./routes/authRouter");
 // const likeRoutes = require("./routes/likeRouter");
 
 app.use("/login", authRoutes.login);
+app.use("/logout", verifyToken, authRoutes.logout);
 app.use("/user", verifyToken, userRoutes);
 // app.use("/post", postRoutes);
 // app.use("/comment", commentRoutes);
