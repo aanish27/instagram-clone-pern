@@ -10,7 +10,7 @@ const createUserValidationSchema = Joi.object({
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
     .required(),
   password: Joi.string().alphanum().min(8).max(30).required(),
-});
+}).options({ abortEarly: false });
 
 const updateUserValidationSchema = Joi.object({
   id: Joi.number().positive(),
@@ -22,11 +22,11 @@ const updateUserValidationSchema = Joi.object({
     .regex(/^[0-9]{10}$/)
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
   password: Joi.string().alphanum().min(8).max(30),
-});
+}).options({ abortEarly: false });
 
 const getUserByIdValidationSchema = Joi.object({
   id: Joi.number().positive(),
-});
+}).options({ abortEarly: false });
 
 module.exports = {
   createUserValidationSchema,

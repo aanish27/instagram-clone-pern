@@ -8,8 +8,8 @@ app.use(cookieParser());
 
 const verifyToken = require("./shared/middlewares/verifyToken");
 
-const userRoutes = require("./routes/userRouter");
 const authRoutes = require("./routes/authRouter");
+const userRoutes = require("./routes/userRouter");
 // const postRoutes = require("./routes/postRouter");
 // const commentRoutes = require("./routes/commentRouter");
 // const storyRoutes = require("./routes/storyRouter");

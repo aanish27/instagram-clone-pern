@@ -1,64 +1,54 @@
+const asyncHandler = require("express-async-handler");
+const ClientError = require("../errors/clientError");
 const {
   createUserValidationSchema,
   updateUserValidationSchema,
   getUserByIdValidationSchema,
 } = require("../validators/user.joi.validator");
 
-const createUserValidator = async (req, res, next) => {
-  try {
-    if (!req.body) {
-      return res.status(400).send({ message: "Missing request body!" });
-    }
-    // the validateAsync method is built into Joi
-    await createUserValidationSchema.validateAsync(req.body, {
-      abortEarly: false,
-    });
-
-    next();
-  } catch (e) {
-    res.status(400).send({ message: e.message });
+const createUserValidator = asyncHandler(async (req, res, next) => {
+  if (!req.body) {
+    throw new ClientError("Missing request body!");
   }
-};
 
-const updateUserValidator = async (req, res, next) => {
-  try {
-    if (!req.params?.id) {
-      return res
-        .status(400)
-        .send({ message: 'Required parameter "id" is missing!' });
-    }
+  const { validated, error } = createUserValidationSchema.validate(req.body);
 
-    if (!req.body) {
-      return res.status(400).send({ message: "Missing request body!" });
-    }
-
-    if (req.body.password || req.body.new_password) {
-      return res.status(400).send({ message: "Invalid change requested!" });
-    }
-
-    await updateUserValidationSchema.validateAsync(req.body);
-
-    next();
-  } catch (e) {
-    res.status(400).send({ message: e.message });
+  if (error) {
+    throw error;
   }
-};
 
-const getUserByIdValidator = async (req, res, next) => {
-  try {
-    if (!req.params?.id) {
-      return res
-        .status(400)
-        .send({ message: 'Required parameter "id" is missing!' });
-    }
+  req.body = validated;
+  next();
+});
 
-    await getUserByIdValidationSchema.validateAsync(req.params);
-
-    next();
-  } catch (e) {
-    res.status(400).send({ message: e.message });
+const updateUserValidator = asyncHandler(async (req, res, next) => {
+  if (!req.params?.id) {
+    throw new ClientError("Required parameter id is missing!");
   }
-};
+
+  if (!req.body) {
+    throw new ClientError("Missing request body!");
+  }
+
+  const { validated, error } = updateUserValidationSchema.validate(req.body);
+
+  if (error) {
+    throw error;
+  }
+
+  req.body = validated;
+  next();
+});
+
+const getUserByIdValidator = asyncHandler(async (req, res, next) => {
+  const { validated, error } = getUserByIdValidationSchema.validate(req.params);
+  if (error) {
+    throw error;
+  }
+
+  req.body = validated;
+  next();
+});
 
 module.exports = {
   createUserValidator,
