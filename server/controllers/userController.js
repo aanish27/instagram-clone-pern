@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
-const { signUp } = require("./authController")
 const {
-  createUserValidator,
   updateUserValidator,
   getUserByIdValidator,
 } = require("../shared/middlewares/userValidator");
@@ -11,19 +9,16 @@ const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
-const store = [
-  createUserValidator, signUp, //chainning middlewares
-  asyncHandler(async (req, res) => {
-    try {
-      await prisma.user.create({
-        data: req.body,
-      });
-      return res.send("Success");
-    } catch (error) {
-      return res.json({ error: error });
-    }
-  }),
-]
+const store = asyncHandler(async (req, res) => {
+  try {
+    await prisma.user.create({
+      data: req.body,
+    });
+    return res.send("Success");
+  } catch (error) {
+    return res.json({ error: error });
+  }
+});
 
 const index = asyncHandler(async (req, res) => {
   try {

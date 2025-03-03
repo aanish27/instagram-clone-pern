@@ -11,13 +11,13 @@ const createUserValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request body!");
   }
 
-  const { validated, error } = createUserValidationSchema.validate(req.body);
+  const { error, value } = createUserValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 

@@ -3,17 +3,24 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { createUserValidator } = require("../shared/middlewares/userValidator");
+const { store } = require("./userController");
 
-const signUp = asyncHandler(async (req, res, next) => {
-  const saltRounds = 10;
-  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    if (err) {
-      return res.json({ message: err });
-    }
-    req.body.password = hash;
-    next();
-  });
-});
+const signUp = [
+  createUserValidator,
+  asyncHandler(async (req, res, next) => {
+    const saltRounds = 10;
+    console.log(req.body);
+    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+      if (err) {
+        return res.json({ message: err });
+      }
+      req.body.password = hash;
+      next();
+    });
+  }),
+  store,
+];
 
 const login = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({

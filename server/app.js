@@ -17,6 +17,7 @@ const storyRoutes = require("./routes/storyRouter");
 const likeRoutes = require("./routes/likeRouter");
 
 app.use("/login", authRoutes.login);
+app.use("/signup", authRoutes.signUp);
 app.use("/logout", verifyToken, authRoutes.logout);
 app.use("/user", verifyToken, userRoutes);
 app.use("/post", postRoutes);

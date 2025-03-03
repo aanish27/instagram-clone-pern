@@ -10,13 +10,13 @@ const createLikeValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request body!");
   }
 
-  const { validated, error } = createLikeValidationSchema.validate(req.body);
+  const { error, value } = createLikeValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 

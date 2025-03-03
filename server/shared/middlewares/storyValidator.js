@@ -11,13 +11,13 @@ const createStoryValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request body!");
   }
 
-  const { validated, error } = createStoryValidationSchema.validate(req.body);
+  const { error, value } = createStoryValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 

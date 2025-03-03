@@ -11,13 +11,13 @@ const createCommentValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request body!");
   }
 
-  const { validated, error } = createCommentValidationSchema.validate(req.body);
+  const { error, value } = createCommentValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 
@@ -44,7 +44,7 @@ const destroyCommentByIdValidator = asyncHandler(async (req, res, next) => {
   const { validated, error } = getCommentByIdValidationSchema.validate(
     req.params,
   );
-  
+
   if (error) {
     throw error;
   }
