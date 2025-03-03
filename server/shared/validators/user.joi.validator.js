@@ -25,7 +25,7 @@ const updateUserValidationSchema = Joi.object({
 }).options({ abortEarly: false });
 
 const getUserByIdValidationSchema = Joi.object({
-  id: Joi.number().positive(),
+  id: Joi.number().positive().required(),
 }).options({ abortEarly: false });
 
 module.exports = {

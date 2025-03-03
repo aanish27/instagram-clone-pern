@@ -1,0 +1,87 @@
+const asyncHandler = require("express-async-handler");
+const { PrismaClient } = require("@prisma/client");
+const {
+  createStoryValidator,
+  updateStoryValidator,
+  getStoryByIdValidator,
+} = require("../shared/middlewares/storyValidator");
+
+const prisma = new PrismaClient({
+  errorFormat: "minimal",
+});
+
+const store = [
+  createStoryValidator,
+  asyncHandler(async (req, res) => {
+    req.body.creatorId = req.user.id;
+    try {
+      await prisma.story.create({
+        data: req.body,
+      });
+      return res.send("Success");
+    } catch (error) {
+      return res.json({ error: error });
+    }
+  }),
+];
+
+const show = [
+  getStoryByIdValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const Story = await prisma.story.findUnique({
+        where: {
+          id: parseInt(req.body.id),
+        },
+      });
+
+      if (!Story) {
+        return res.json({ error: "Story not found" });
+      }
+
+      return res.json(Story);
+    } catch (error) {
+      return res.json({ error: error });
+    }
+  }),
+];
+
+const update = [
+  updateStoryValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const Story = await prisma.story.update({
+        where: {
+          id: parseInt(req.params.id),
+        },
+        data: req.body,
+      });
+      return res.json(Story);
+    } catch (error) {
+      return res.json({ error: error });
+    }
+  }),
+];
+
+const destroy = [
+  getStoryByIdValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const Story = await prisma.story.delete({
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+
+      if (!Story) {
+        return res.json({ error: "Posy not found" });
+      }
+
+      return res.json({ message: "Story deleted" });
+    } catch (error) {
+      return res.json({ error: error });
+    }
+  }),
+];
+
+module.exports = { store, show, update, destroy };
