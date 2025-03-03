@@ -15,7 +15,7 @@ const store = [
   asyncHandler(async (req, res) => {
     req.body.creatorId = req.user.id;
     try {
-      await prisma.post.create({
+      await prisma.comment.create({
         data: req.body,
       });
       return res.send("Success");
@@ -29,13 +29,13 @@ const update = [
   updateCommentValidator,
   asyncHandler(async (req, res) => {
     try {
-      const post = await prisma.post.update({
+      const comment = await prisma.comment.update({
         where: {
           id: parseInt(req.params.id),
         },
         data: req.body,
       });
-      return res.json(post);
+      return res.json(comment);
     } catch (error) {
       return res.json({ error: error });
     }
@@ -46,13 +46,13 @@ const destroy = [
   destroyCommentByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      const post = await prisma.post.delete({
+      const comment = await prisma.comment.delete({
         where: {
           id: parseInt(req.params.id),
         },
       });
 
-      if (!post) {
+      if (!comment) {
         return res.json({ error: "comment not found" });
       }
 

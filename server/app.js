@@ -16,15 +16,16 @@ const storyRoutes = require("./routes/storyRouter");
 const followRoutes = require("./routes/followRouter");
 const likeRoutes = require("./routes/likeRouter");
 
-app.use("/login", authRoutes.login);
-app.use("/signup", authRoutes.signUp);
-app.use("/logout", verifyToken, authRoutes.logout);
+app.use("/", authRoutes);
 app.use("/user", verifyToken, userRoutes);
-app.use("/post", postRoutes);
-app.use("/comment", commentRoutes);
-app.use("/story", storyRoutes);
-app.use("/follow", followRoutes);
-app.use("/like", likeRoutes);
+app.use("/post", verifyToken, postRoutes);
+app.use("/comment", verifyToken, commentRoutes);
+app.use("/story", verifyToken, storyRoutes);
+app.use("/follow", verifyToken, followRoutes);
+app.use("/like", verifyToken, likeRoutes);
+app.use("/", async (req, res) => {
+  res.send("Welcome to Instagram Clone Made By Me!!!");
+});
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

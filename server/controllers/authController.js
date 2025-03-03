@@ -5,12 +5,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { createUserValidator } = require("../shared/middlewares/userValidator");
 const { store } = require("./userController");
+const verifyToken = require("../shared/middlewares/verifyToken");
 
-const signUp = [
+const signup = [
   createUserValidator,
   asyncHandler(async (req, res, next) => {
     const saltRounds = 10;
-    console.log(req.body);
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
       if (err) {
         return res.json({ message: err });
@@ -19,7 +19,7 @@ const signUp = [
       next();
     });
   }),
-  store,
+  store
 ];
 
 const login = asyncHandler(async (req, res) => {
@@ -51,10 +51,13 @@ const login = asyncHandler(async (req, res) => {
   );
 });
 
-const logout = asyncHandler(async (req, res) => {
-  res.clearCookie("accessToken");
+const logout = [
+  verifyToken,
+  asyncHandler(async (req, res) => {
+    res.clearCookie("accessToken");
 
-  return res.json({ message: "loggedOut" });
-});
+    return res.json({ message: "loggedOut" });
+  }),
+];
 
-module.exports = { login, signUp, logout };
+module.exports = { login, signup, logout };
