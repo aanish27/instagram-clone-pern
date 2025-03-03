@@ -10,12 +10,12 @@ const updateCommentValidationSchema = Joi.object({
   attachment: Joi.string().min(6).max(100),
 }).options({ abortEarly: false });
 
-const destroyCommentByIdValidationSchema = Joi.object({
+const getCommentByIdValidationSchema = Joi.object({
   id: Joi.number().positive().required(),
 }).options({ abortEarly: false });
 
 module.exports = {
   createCommentValidationSchema,
   updateCommentValidationSchema,
-  destroyCommentByIdValidationSchema,
+  getCommentByIdValidationSchema,
 };

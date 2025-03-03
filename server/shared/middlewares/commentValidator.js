@@ -3,7 +3,7 @@ const ClientError = require("../errors/clientError");
 const {
   createCommentValidationSchema,
   updateCommentValidationSchema,
-  destroyPostByIdValidationSchema,
+  getCommentByIdValidationSchema,
 } = require("../validators/comment.joi.validator");
 
 const createCommentValidator = asyncHandler(async (req, res, next) => {
@@ -41,9 +41,10 @@ const updateCommentValidator = asyncHandler(async (req, res, next) => {
 });
 
 const destroyCommentByIdValidator = asyncHandler(async (req, res, next) => {
-  const { validated, error } = destroyPostByIdValidationSchema.validate(
+  const { validated, error } = getCommentByIdValidationSchema.validate(
     req.params,
   );
+  
   if (error) {
     throw error;
   }

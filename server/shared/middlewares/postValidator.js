@@ -6,7 +6,7 @@ const {
   getPostByIdValidationSchema,
 } = require("../validators/user.joi.validator");
 
-const createUserValidator = asyncHandler(async (req, res, next) => {
+const createPostValidator = asyncHandler(async (req, res, next) => {
   if (!req.body) {
     throw new ClientError("Missing request body!");
   }
@@ -21,7 +21,7 @@ const createUserValidator = asyncHandler(async (req, res, next) => {
   next();
 });
 
-const updateUserValidator = asyncHandler(async (req, res, next) => {
+const updatePostValidator = asyncHandler(async (req, res, next) => {
   if (!req.params?.id) {
     throw new ClientError("Required parameter id is missing!");
   }
@@ -51,7 +51,7 @@ const getPostByIdValidator = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
-  createUserValidator,
-  updateUserValidator,
+  createPostValidator,
+  updatePostValidator,
   getPostByIdValidator,
 };

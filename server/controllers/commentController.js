@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const {
   createCommentValidator,
   updateCommentValidator,
-  getCommentByIdValidator,
+  destroyCommentByIdValidator,
 } = require("../shared/middlewares/commentValidator");
 
 const prisma = new PrismaClient({
@@ -43,7 +43,7 @@ const update = [
 ];
 
 const destroy = [
-  getCommentByIdValidator,
+  destroyCommentByIdValidator,
   asyncHandler(async (req, res) => {
     try {
       const post = await prisma.post.delete({
