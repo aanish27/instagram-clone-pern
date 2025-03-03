@@ -3,10 +3,9 @@ const { Router } = require("express");
 const routes = Router();
 const followController = require("../controllers/followController.js");
 
-routes.get("/", followController.index);
-routes.get("/:id", followController.show);
-routes.post("/", followController.store);
-routes.put("/:id", followController.update);
-routes.delete("/:id", followController.destroy);
+routes.post("/req", followController.createFollowRequest);
+routes.post("/", followController.createFollow);
+routes.delete("/req/:id", followController.destroyFollowRequest);
+routes.delete("/:id", followController.destroyFollow);
 
 module.exports = routes;
