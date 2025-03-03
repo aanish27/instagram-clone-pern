@@ -1,49 +1,54 @@
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const {
-  updateUserValidator,
-  getUserByIdValidator,
-} = require("../shared/middlewares/userValidator");
+  createPostValidator,
+  updatePostValidator,
+  getPostByIdValidator,
+} = require("../shared/middlewares/postValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
-const store = asyncHandler(async (req, res) => {
-  try {
-    await prisma.user.create({
-      data: req.body,
-    });
-    return res.send("Success");
-  } catch (error) {
-    return res.json({ error: error });
-  }
-});
+const store = [
+  createPostValidator,
+  asyncHandler(async (req, res) => {
+    req.body.creatorId = req.user.id;
+    try {
+      await prisma.post.create({
+        data: req.body,
+      });
+      return res.send("Success");
+    } catch (error) {
+      return res.json({ error: error });
+    }
+  }),
+];
 
 const index = asyncHandler(async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
-    return res.json({ Users: users });
+    const posts = await prisma.post.findMany();
+    return res.json({ Posts: posts });
   } catch (error) {
     return res.json({ error: error });
   }
 });
 
 const show = [
-  getUserByIdValidator,
+  getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      const user = await prisma.user.findUnique({
+      const post = await prisma.post.findUnique({
         where: {
-          id: parseInt(req.params.id),
+          id: parseInt(req.body.id),
         },
       });
 
-      if (!user) {
-        return res.json({ error: "user not found" });
+      if (!post) {
+        return res.json({ error: "Post not found" });
       }
 
-      return res.json(user);
+      return res.json(post);
     } catch (error) {
       return res.json({ error: error });
     }
@@ -51,16 +56,16 @@ const show = [
 ];
 
 const update = [
-  updateUserValidator, //chainning middlewares
+  updatePostValidator,
   asyncHandler(async (req, res) => {
     try {
-      const user = await prisma.user.update({
+      const post = await prisma.post.update({
         where: {
           id: parseInt(req.params.id),
         },
         data: req.body,
       });
-      return res.json(user);
+      return res.json(post);
     } catch (error) {
       return res.json({ error: error });
     }
@@ -68,20 +73,20 @@ const update = [
 ];
 
 const destroy = [
-  getUserByIdValidator,
+  getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      const user = await prisma.user.delete({
+      const post = await prisma.post.delete({
         where: {
           id: parseInt(req.params.id),
         },
       });
 
-      if (!user) {
-        return res.json({ error: "user not found" });
+      if (!post) {
+        return res.json({ error: "Posy not found" });
       }
 
-      return res.json({ message: "user deleted" });
+      return res.json({ message: "Post deleted" });
     } catch (error) {
       return res.json({ error: error });
     }
