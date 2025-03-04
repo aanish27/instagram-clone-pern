@@ -1,10 +1,11 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
-
+var cors = require("cors");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 const verifyToken = require("./shared/middlewares/verifyToken");
 
@@ -26,6 +27,8 @@ app.use("/like", verifyToken, likeRoutes);
 app.use("/", async (req, res) => {
   res.send("Welcome to Instagram Clone Made By Me!!!");
 });
+
+
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

@@ -13,16 +13,17 @@ const signup = [
     const saltRounds = 10;
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
       if (err) {
-        return res.json({ message: err });
+        return res.json({ error: err });
       }
       req.body.password = hash;
       next();
     });
   }),
-  store
+  store,
 ];
 
 const login = asyncHandler(async (req, res) => {
+
   const user = await prisma.user.findUnique({
     where: {
       email: req.body.email,
@@ -30,7 +31,7 @@ const login = asyncHandler(async (req, res) => {
   });
 
   if (!user) {
-    return res.json({ error: "user not found" });
+    return res.status(401).json({ error: "Invalid Credetials" });
   }
 
   await bcrypt.compare(
@@ -38,15 +39,20 @@ const login = asyncHandler(async (req, res) => {
     user.password,
     function (err, result) {
       if (err) {
-        return res.json({ title: "Passwords Dont Match", error: err });
+        return res.status(401).json({ error: err });
       }
-      const cookieOptions = { secure: true, httpOnly: true };
-      const accesstoken = jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: "6h",
-      });
 
-      res.cookie("accessToken", accesstoken, cookieOptions);
-      return res.json({ message: "Success" });
+      if (result) {
+        const cookieOptions = { secure: true, httpOnly: true };
+        const accesstoken = jwt.sign(user, process.env.JWT_SECRET, {
+          expiresIn: "6h",
+        });
+
+        res.cookie("accessToken", accesstoken, cookieOptions);
+        return res.json({ message: "User Logged In Successfully" });
+      } else {
+        return res.status(401).json({ error: "Invalid Credetials" });
+      }
     },
   );
 });
@@ -55,8 +61,7 @@ const logout = [
   verifyToken,
   asyncHandler(async (req, res) => {
     res.clearCookie("accessToken");
-
-    return res.json({ message: "loggedOut" });
+    return res.json({ message: "User logged Out!!" });
   }),
 ];
 
