@@ -1,26 +1,29 @@
-import { FaFacebook } from "react-icons/fa6";
-import Input from "../components/Input";
+import { FaFacebook } from "react-icons/fa";
 import Divider from "../components/Divider";
+import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
 
-function Login() {
+function SignUp() {
   const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    bio: "",
+    phone: "",
     email: "",
     password: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData, "beforesubmite");
 
     await axios
-      .post("http://localhost:3000/login", formData)
+      .post("http://localhost:3000/signup", formData)
       .then(function (response) {
-        console.log(response.data.message);
         e.target.reset();
-      }).catch(function (error) {
-        console.log(error.response.data.error);
+        console.log(response);
       });
   };
 
@@ -31,9 +34,42 @@ function Login() {
 
   return (
     <AuthLayout>
-      <div className="shadow-mg flex w-full flex-col items-center justify-center gap-5 py-10 md:border-1 md:border-[#343434]">
+      <div className="shadow-mg flex w-full flex-col items-center justify-center gap-5 py-10 text-center md:border-1 md:border-[#343434]">
         <div className="cookie-regular text-6xl">Instagram</div>
-        <form onSubmit={handleSubmit} className="m-1 flex w-full flex-col px-8">
+        <div className="px-5 font-semibold text-gray-400">
+          Sign up to see photos and videos from your friends.
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="m-1 flex w-full flex-col gap-1 px-8">
+          <Input
+            type={"text"}
+            placeholder={"Name"}
+            name={"name"}
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <Input
+            type={"text"}
+            placeholder={"Username"}
+            name={"username"}
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <Input
+            type={"text"}
+            placeholder={"Bio"}
+            name={"bio"}
+            value={formData.bio}
+            onChange={handleChange}
+          />
+          <Input
+            type={"text"}
+            placeholder={"Phone"}
+            name={"phone"}
+            value={formData.phone}
+            onChange={handleChange}
+          />
           <Input
             type={"text"}
             placeholder={"Email"}
@@ -49,7 +85,7 @@ function Login() {
             onChange={handleChange}
           />
           <button className="my-3 rounded-lg bg-[#0096FF] p-1 hover:bg-blue-500">
-            Log in
+            Sign Up
           </button>
         </form>
         <Divider text={"OR"} />
@@ -57,17 +93,16 @@ function Login() {
           <FaFacebook className="text-2xl" />
           <span>Log In with Facebook</span>
         </div>
-        <div className="text-sm">Forgot Passowrd?</div>
       </div>
 
       <div className="my-2 w-full py-4 text-center text-sm md:border-1 md:border-[#343434]">
-        Dont Have and Account?
+        Have an Account?
         <a href="" className="ms-2 text-blue-500">
-          Sign up
+          Log in
         </a>
       </div>
     </AuthLayout>
   );
 }
 
-export default Login;
+export default SignUp;

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = asyncHandler(async (req, res, next) => {
   if (!req.cookies.accessToken) {
-    return res.json({ message: "Access Denied" });
+    return res.status(401).json({ error: "Access Denied" });
   }
 
   await jwt.verify(
@@ -11,7 +11,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     process.env.JWT_SECRET,
     function (err, decoded) {
       if (err) {
-        return res.json({ title: "Access Denied", messages: err });
+        return res.status(401).json({ error: err });
       }
       req.user = decoded;
     },

@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
 import Messages from "./pages/Messages";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signUp" element={<SignUp />} />
       </Routes>
     </>
   );
