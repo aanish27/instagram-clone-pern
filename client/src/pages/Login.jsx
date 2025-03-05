@@ -4,8 +4,15 @@ import Divider from "../components/Divider";
 import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
+import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
+import { useAuth } from "../provider/authProvider";
+import Cookies from "js-cookie";
 
 function Login() {
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -15,11 +22,15 @@ function Login() {
     e.preventDefault();
 
     await axios
-      .post("http://localhost:3000/login", formData)
+      .post("http://localhost:3000/login", formData, { withCredentials: true })
       .then(function (response) {
         console.log(response.data.message);
         e.target.reset();
-      }).catch(function (error) {
+        setToken(true);
+        console.log(Cookies.get(), "Cookies");
+        navigate("/", { replace: true });
+      })
+      .catch(function (error) {
         console.log(error.response.data.error);
       });
   };

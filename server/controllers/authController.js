@@ -23,7 +23,6 @@ const signup = [
 ];
 
 const login = asyncHandler(async (req, res) => {
-
   const user = await prisma.user.findUnique({
     where: {
       email: req.body.email,
@@ -43,7 +42,12 @@ const login = asyncHandler(async (req, res) => {
       }
 
       if (result) {
-        const cookieOptions = { secure: true, httpOnly: true };
+        const cookieOptions = {
+          secure: true,
+          httpOnly: false,
+          sameSite: 'none',
+        };
+
         const accesstoken = jwt.sign(user, process.env.JWT_SECRET, {
           expiresIn: "6h",
         });
