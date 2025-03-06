@@ -1,20 +1,18 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(Cookies.get("accessToken") || false);
+  const [token, setToken_] = useState(Cookies.get("accessToken"));
+
+  const setToken = (token) => {
+    setToken_(token);
+  };
 
   useEffect(() => {
-    const cookieToken = Cookies.get("accessToken");
-      if (cookieToken) {
-        console.log(cookieToken);
-        
-      setToken(cookieToken);
-    }
-  }, []); // Run only on mount
+    console.log("TOKEN CHANGE", token);
+  }, [token]);
 
   const contextValue = useMemo(
     () => ({

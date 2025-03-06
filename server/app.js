@@ -8,7 +8,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "http://127.0.0.1:5173",
+    origin: "http://localhost:5173",
   }),
 );
 const verifyToken = require("./shared/middlewares/verifyToken");
@@ -31,8 +31,6 @@ app.use("/like", verifyToken, likeRoutes);
 app.use("/", async (req, res) => {
   res.send("Welcome to Instagram Clone Made By Me!!!");
 });
-
-
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

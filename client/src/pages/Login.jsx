@@ -4,7 +4,6 @@ import Divider from "../components/Divider";
 import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import Cookies from "js-cookie";
@@ -26,8 +25,8 @@ function Login() {
       .then(function (response) {
         console.log(response.data.message);
         e.target.reset();
-        setToken(true);
-        console.log(Cookies.get(), "Cookies");
+        setToken(Cookies.get("accessToken"));
+        console.log(Cookies.get("accessToken"), "Login");
         navigate("/", { replace: true });
       })
       .catch(function (error) {
