@@ -4,6 +4,8 @@ import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router";
+
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -97,9 +99,9 @@ function SignUp() {
 
       <div className="my-2 w-full py-4 text-center text-sm md:border-1 md:border-[#343434]">
         Have an Account?
-        <a href="" className="ms-2 text-blue-500">
-          Log in
-        </a>
+        <Link to="/login" className="ms-2 text-blue-500">
+          Login
+        </Link>
       </div>
     </AuthLayout>
   );

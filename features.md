@@ -1,6 +1,6 @@
 set up login page and authentication - DONE
 
-set up protected routes and authentication on the front end
+set up protected routes and authentication on the front end - DONE
 
 set up form validation using react-form-hook
 set up success messages - toast / anything
@@ -15,7 +15,7 @@ implement liking
 implement commenting
 
 set up notifications
-set up search 
+set up search
 set up post upload - File Upload
 
 setup profile page
