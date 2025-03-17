@@ -18,3 +18,10 @@
 body{
   background-color: black;
 }
+
+.noto-sans-jp-body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 250;
+  font-style: normal;
+}
