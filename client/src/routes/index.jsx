@@ -17,7 +17,7 @@ const Routes = () => {
 
   const routesForPublic = [
     {
-      path: "/welcome",
+      path: "*",
       element: <Static />,
     },
   ];
@@ -75,9 +75,9 @@ const Routes = () => {
   ];
 
   const router = createBrowserRouter([
-    ...routesForPublic,
     ...(!token ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
+    ...routesForPublic,
   ]);
 
   return <RouterProvider router={router} />;

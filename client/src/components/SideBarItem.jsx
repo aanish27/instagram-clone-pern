@@ -1,18 +1,23 @@
-function SideBarItem({ title, icon, notification }) {
+import { Link } from "react-router";
+
+
+function SideBarItem({ title, icon, notification , path}) {
   return (
-    <div className="my-3 flex items-center lg:gap-5 rounded-lg px-2 py-3 hover:bg-[#1d1d1dba]">
-      <div className="relative">
-        {icon}
-        {notification ? (
-          <span className="absolute top-0 right-0 h-4 w-4 rounded-2xl bg-red-500 text-center text-[10px]">
-            {notification}
-          </span>
-        ) : (
-          ""
-        )}
+    <Link to={path}>
+      <div className="my-3 flex items-center rounded-lg px-2 py-3 hover:bg-[#1d1d1dba] lg:gap-5">
+        <div className="relative">
+          {icon}
+          {notification ? (
+            <span className="absolute top-0 right-0 h-4 w-4 rounded-2xl bg-red-500 text-center text-[10px]">
+              {notification}
+            </span>
+          ) : (
+            ""
+          )}
+        </div>
+        <span className="text-base font-light md:hidden lg:block">{title}</span>
       </div>
-      <span className="text-base font-light md:hidden lg:block">{title}</span>
-    </div>
+    </Link>
   );
 }
 

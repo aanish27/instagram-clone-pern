@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import Cookies from "js-cookie";
+import { Link } from "react-router";
 
 function Login() {
   const env = import.meta.env.VITE_ENVIRONMENT;
@@ -74,9 +75,9 @@ function Login() {
 
       <div className="my-2 w-full py-4 text-center text-sm md:border-1 md:border-[#343434]">
         Dont Have and Account?
-        <a href="" className="ms-2 text-blue-500">
-          Sign up
-        </a>
+        <Link to="/signup" className="ms-2 text-blue-500">
+          Sign Up
+        </Link>
       </div>
     </AuthLayout>
   );

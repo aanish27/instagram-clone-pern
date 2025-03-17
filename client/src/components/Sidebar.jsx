@@ -19,20 +19,28 @@ function Sidebar() {
           icon={<GoHomeFill style={iconStyle} />}
           title={"Home"}
           notification={10}
+          path={"/"}
         />
-        <SideBarItem icon={<IoSearch style={iconStyle} />} title={"Search"} />
+        <SideBarItem
+          icon={<IoSearch style={iconStyle} />}
+          title={"Search"}
+          path={"/search"}
+        />
         <SideBarItem
           icon={<IoCompassOutline style={iconStyle} />}
           title={"Explore"}
+          path={"/explore"}
         />
         <SideBarItem
           icon={<FiHeart style={iconStyle} />}
           title={"Notifications"}
+          path={"/notifications"}
         />
         <SideBarItem icon={<CgAddR style={iconStyle} />} title={"Post"} />
         <SideBarItem
           icon={<AiOutlineMessage style={iconStyle} />}
           title={"Message"}
+          path={"/message"}
         />
         <SideBarItem icon={<LuVideotape style={iconStyle} />} title={"Reels"} />
         {/* <SideBarItem icon={<IoMdMenu style={iconStyle} />} title={"Aanish"} /> */}
