@@ -21,7 +21,7 @@ model Post {
   attachement String    @db.VarChar(255)
   creator     User      @relation(fields: [creatorId], references: [id])
   creatorId   Int
-  likes       Like[]
+  likes       Like[]    @relation("PostLike")
   comments    Comment[]
 }
 
@@ -32,27 +32,26 @@ model Story {
   attachement String   @db.VarChar(255)
   creator     User     @relation(fields: [creatorId], references: [id])
   creatorId   Int
-  likes       Like[]
+  likes       Like[]   @relation("StoryLike")
 }
 
 model FollowRequest {
-  id          Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  follower    User          @relation("followersReqs", fields: [followerId], references: [id])
-  followerId  Int
-  followee   User          @relation("followeesReqs", fields: [followeeId], references: [id])
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  follower   User     @relation("followersReqs", fields: [followerId], references: [id])
+  followerId Int
+  followee   User     @relation("followeesReqs", fields: [followeeId], references: [id])
   followeeId Int
-
 }
 
 model Follow {
-  id          Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  follower    User          @relation("followers", fields: [followerId], references: [id])
-  followerId  Int
-  followee   User          @relation("followees", fields: [followeeId], references: [id])
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  follower   User     @relation("followers", fields: [followerId], references: [id])
+  followerId Int
+  followee   User     @relation("followees", fields: [followeeId], references: [id])
   followeeId Int
 }
 
@@ -63,33 +62,33 @@ model Comment {
   text      String   @db.VarChar(255)
   creator   User     @relation(fields: [creatorId], references: [id])
   creatorId Int
-  likes     Like[]
+  likes     Like[]   @relation("CommentLike")
   Post      Post     @relation(fields: [postId], references: [id])
   postId    Int
 }
 
 enum Entity {
-  STORY
-  POST
-  COMMENT
+  Story
+  Post
+  Comment
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  username  String    @unique
-  bio       String?
-  email     String    @unique
-  phone     String
-  password  String
-  posts     Post[]
-  comments  Comment[]
-  stories   Story[]
-  likes     Like[]
-  Follower  Follow[]  @relation("followers")
-  Followee Follow[]  @relation("followees")
-  FollowerReq  FollowRequest[]  @relation("followersReqs")
-  FolloweeReq FollowRequest[]  @relation("followeesReqs")
+  id          Int             @id @default(autoincrement())
+  name        String
+  username    String          @unique
+  bio         String?
+  email       String          @unique
+  phone       String
+  password    String
+  posts       Post[]
+  comments    Comment[]
+  stories     Story[]
+  likes       Like[]
+  Follower    Follow[]        @relation("followers")
+  Followee    Follow[]        @relation("followees")
+  FollowerReq FollowRequest[] @relation("followersReqs")
+  FolloweeReq FollowRequest[] @relation("followeesReqs")
 }
 
 //  this is how you implement Polymorphism in Prisma
@@ -102,9 +101,9 @@ model Like {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // this relations is primsa level realtions
-  post      Post?    @relation(fields: [entityId], references: [id], map: "post_like")
-  story     Story?   @relation(fields: [entityId], references: [id], map: "story_like")
-  comment   Comment? @relation(fields: [entityId], references: [id], map: "comment_like")
+  Post      Post?    @relation("PostLike", fields: [entityId], references: [id], map: "post_like")
+  story     Story?   @relation("StoryLike", fields: [entityId], references: [id], map: "story_like")
+  comment   Comment? @relation("CommentLike", fields: [entityId], references: [id], map: "comment_like")
 
   @@unique([entityId, entity]) // Ensures a like is unique per entity type
 }

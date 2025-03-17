@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient , Entity } = require("@prisma/client");
 const {
   createLikeValidator,
   destroyLikeValidator,
@@ -12,6 +12,7 @@ const prisma = new PrismaClient({
 const store = [
   createLikeValidator,
   asyncHandler(async (req, res) => {
+    req.body.entity = Entity.Post
     req.body.creatorId = req.user.id;
     try {
       await prisma.like.create({
@@ -19,7 +20,7 @@ const store = [
       });
       return res.send("Success");
     } catch (error) {
-      return res.json({ error: error });
+      throw error
     }
   }),
 ];
