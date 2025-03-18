@@ -4,7 +4,7 @@ const {
   createPostValidationSchema,
   updatePostValidationSchema,
   getPostByIdValidationSchema,
-} = require("../validators/user.joi.validator");
+} = require("../validators/post.joi.validator");
 
 const createPostValidator = asyncHandler(async (req, res, next) => {
   if (!req.body) {

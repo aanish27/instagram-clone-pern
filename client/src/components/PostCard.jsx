@@ -1,6 +1,6 @@
 import profile_pic from "../assets/car.jpg";
 
-function PostCard() {
+function PostCard({attachment}) {
   return (
     <div className="w-full p-0">
       <div className="">

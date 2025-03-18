@@ -20,17 +20,24 @@ const store = [
       });
       return res.send("Success");
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
 const index = asyncHandler(async (req, res) => {
   try {
-    const posts = await prisma.post.findMany();
-    return res.json({ Posts: posts });
+    const posts = await prisma.post.findMany({
+      include: {
+        creator: true,
+        _count: {
+          select: { likes: true },
+        },
+      },
+    });
+    return res.json({ posts: posts });
   } catch (error) {
-    return res.json({ error: error });
+    throw error;
   }
 });
 

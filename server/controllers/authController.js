@@ -13,7 +13,7 @@ const signup = [
     const saltRounds = 10;
     bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
       if (err) {
-        return res.json({ error: err });
+        throw err;
       }
       req.body.password = hash;
       next();

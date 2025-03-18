@@ -22,8 +22,14 @@ const store = asyncHandler(async (req, res) => {
 
 const index = asyncHandler(async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
-    return res.json({ Users: users });
+    const users = await prisma.user.findMany({
+      where: {
+        id: {
+          notIn: [req.user.id],
+        },
+      },
+    });
+    return res.json({ users: users });
   } catch (error) {
     return res.json({ error: error });
   }

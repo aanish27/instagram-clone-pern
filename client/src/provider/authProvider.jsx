@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext();
@@ -9,10 +9,6 @@ const AuthProvider = ({ children }) => {
   const setToken = (token) => {
     setToken_(token);
   };
-
-  useEffect(() => {
-    console.log("TOKEN CHANGE", token);
-  }, [token]);
 
   const contextValue = useMemo(
     () => ({

@@ -16,8 +16,8 @@ function Login() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: (env == "local") ? "admin@gmail.com" : "",
-    password: (env == "local") ? "password" : "",
+    email: env == "local" ? "admin@example.com" : "",
+    password: env == "local" ? "password" : "",
   });
 
   const handleSubmit = async (e) => {

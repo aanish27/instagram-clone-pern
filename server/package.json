@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
+    "@faker-js/faker": "^9.6.0",
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "globals": "^15.15.0",
@@ -30,6 +31,7 @@
     "prisma": "^6.3.1"
   },
   "prisma": {
-    "schema": "db/prisma/schema.prisma"
+    "schema": "db/prisma/schema.prisma",
+    "seed": "node db/prisma/seed.js"
   }
 }

@@ -4,7 +4,7 @@ import { FiBookmark } from "react-icons/fi";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 
-function PostFooter() {
+function PostFooter({ username, caption, likes }) {
   const [isliked, setLiked] = useState(false);
 
   const handleLikeClick = () => {
@@ -31,11 +31,11 @@ function PostFooter() {
         <FiBookmark style={{ fontSize: "25px" }} />
       </div>
       <div>
-        <b>1948 </b>likes
+        <b>{likes} </b>likes
       </div>
       <div>
-        <b>Aanish</b> Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Totam, nesciunt. <span className="text-gray-400"> more</span>{" "}
+        <b>{username}</b> {caption}
+        <span className="text-gray-400"> more</span>{" "}
       </div>
     </div>
   );
