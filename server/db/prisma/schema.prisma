@@ -14,25 +14,25 @@ datasource db {
 }
 
 model Post {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  caption     String    @db.VarChar(255)
-  attachement String    @db.VarChar(255)
-  creator     User      @relation(fields: [creatorId], references: [id])
-  creatorId   Int
-  likes       Like[]    @relation("PostLike")
-  comments    Comment[]
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  caption    String    @db.VarChar(255)
+  attachment String    @db.VarChar(255)
+  creator    User      @relation(fields: [creatorId], references: [id])
+  creatorId  Int
+  likes      Like[]    @relation("PostLike")
+  comments   Comment[]
 }
 
 model Story {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  attachement String   @db.VarChar(255)
-  creator     User     @relation(fields: [creatorId], references: [id])
-  creatorId   Int
-  likes       Like[]   @relation("StoryLike")
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  attachment String   @db.VarChar(255)
+  creator    User     @relation(fields: [creatorId], references: [id])
+  creatorId  Int
+  likes      Like[]   @relation("StoryLike")
 }
 
 model FollowRequest {

@@ -1,7 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { faker } = require("@faker-js/faker");
-// const bcrypt = require("bcrypt");
+
+const {
+  userSeeder,
+  commentSeeder,
+  storySeeder,
+  factory,
+  followRequestSeeder,
+  followSeeder,
+  postSeeder,
+} = require("./factory");
 
 async function main() {
   //default user
@@ -9,32 +17,41 @@ async function main() {
     data: {
       name: "admin",
       username: "admin99",
-      bio: "misterio",
+      bio: "mysterio",
       email: "admin@example.com",
       phone: "947677632",
       password: "$2b$10$yEMGpvDukKwlHOFK7Ls7uOoph8RhLdlD.nrdgGhWg5BqdPmGoPgbq", //password
     },
   });
 
-  // const saltRounds = 10;
-  // let password = null
-  // await bcrypt.hash("password", saltRounds, function (err, hash) {
-  //   if (err) {
-  //     throw err;
-  //   }
-  //   password = hash
-  // });
+  await prisma.user.createMany({
+    data: factory(30, userSeeder),
+    skipDuplicates: true,
+  });
 
-  const lastName = faker.person.lastName();
-  await prisma.user.create({
-    data: {
-      name: faker.person.lastName(),
-      username: faker.internet.username({ lastName: lastName }),
-      bio: faker.book.title(),
-      email: faker.internet.email(),
-      phone: faker.phone.number({ style: "international" }),
-      password: "password",
-    },
+  await prisma.post.createMany({
+    data: factory(30, postSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.follow.createMany({
+    data: factory(30, followSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.followRequest.createMany({
+    data: factory(30, followRequestSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.comment.createMany({
+    data: factory(30, commentSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.story.createMany({
+    data: factory(30, storySeeder),
+    skipDuplicates: true,
   });
 }
 
