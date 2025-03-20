@@ -1,10 +1,8 @@
-import profile_pic from "../assets/car.jpg";
-
 function PostCard({attachment}) {
   return (
     <div className="w-full p-0">
       <div className="">
-        <img className="h-auto w-full" src={profile_pic} alt="" />
+        <img className="h-auto w-full max-h-[450px]" src={attachment} alt="" />
       </div>
     </div>
   );

@@ -15,10 +15,10 @@ const createFollowRequest = [
   asyncHandler(async (req, res) => {
     req.body.followerId = req.user.id;
     try {
-      await prisma.followRequest.create({
+      const request =  await prisma.followRequest.create({
         data: req.body,
       });
-      return res.send("Success");
+      return res.json({id: request.id});
     } catch (error) {
       return res.json({ error: error });
     }
@@ -29,19 +29,14 @@ const destroyFollowRequest = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      const req = await prisma.followRequest.delete({
+      await prisma.followRequest.delete({
         where: {
           id: parseInt(req.params.id),
         },
       });
-
-      if (!req) {
-        return res.json({ error: "Req not found" });
-      }
-
       return res.json({ message: "Request deleted" });
     } catch (error) {
-      return res.json({ error: error });
+      throw error
     }
   }),
 ];

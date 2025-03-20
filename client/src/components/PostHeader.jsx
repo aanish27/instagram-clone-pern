@@ -1,9 +1,8 @@
 // import { LuDot } from "react-icons/lu";
 import { FaStar } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
-import profile_pic from "../assets/car.jpg";
 
-function PostHeader({ username}) {
+function PostHeader({username , profile_pic}) {
 
   return (
     <div className="flex items-center justify-between p-1 py-2">

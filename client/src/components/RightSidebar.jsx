@@ -32,7 +32,7 @@ function RightSidebar() {
           return (
             <RightSidebarItem
               key={user.id}
-              url={profile_pic}
+              url={user.profile_pic}
               action={"Follow"}
               user={user}
             />

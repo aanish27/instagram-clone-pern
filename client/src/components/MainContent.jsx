@@ -13,7 +13,6 @@ function MainContent() {
     axios
       .get("http://localhost:3000/post", { withCredentials: true })
       .then(function (response) {
-        console.log(response.data);
         setPosts(response.data.posts);
       });
   }, []);
@@ -43,7 +42,6 @@ function MainContent() {
       <StoryRow />
       <div className="flex w-full flex-col items-center justify-center md:px-20">
         {posts && posts.map((post) => {
-          console.log(post);
           return (
             <PostContainer key={post.id} {...post} />
           );

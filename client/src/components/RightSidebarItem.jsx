@@ -1,21 +1,41 @@
+
 import axios from "axios";
+import { useState } from "react";
 
 function RightSidebarItem({ url, action, user }) {
+  const [isReqSent, setReqSent] = useState(false)
+  const [reqId, setReqId] = useState(null);
   const handleFollowButtonOnclick = async (e) => {
     const id = e.target.getAttribute("data-followee-id");
-
-    await axios
-      .post(
-        "http://localhost:3000/follow/req",
-        { followeeId: id },
-        { withCredentials: true },
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (!isReqSent) {
+      await axios
+        .post(
+          "http://localhost:3000/follow/req",
+          { followeeId: id },
+          { withCredentials: true },
+        )
+        .then((response) => {
+          setReqSent(!isReqSent);
+          setReqId(response.data.id)
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+       await axios
+         .delete(
+           `http://localhost:3000/follow/req/${reqId}`,
+           { withCredentials: true },
+         )
+         .then((response) => {
+           setReqSent(!isReqSent);
+           console.log(response);
+         })
+         .catch((error) => {
+           console.log(error);
+         });
+    }
   };
 
   return (
@@ -30,8 +50,9 @@ function RightSidebarItem({ url, action, user }) {
       <button
         className="font-bold text-blue-500"
         data-followee-id={user.id}
+        data-follow-req={reqId}
         onClick={handleFollowButtonOnclick}>
-        {action}
+        {isReqSent ? "Sent" : action }
       </button>
     </div>
   );

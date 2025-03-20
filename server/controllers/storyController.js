@@ -10,6 +10,19 @@ const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
+const index = asyncHandler(async (req, res) => {
+  try {
+    const stories = await prisma.story.findMany({
+      include: {
+        creator: true,
+      },
+    });
+    return res.json({ stories: stories });
+  } catch (error) {
+    throw error;
+  }
+})
+
 const store = [
   createStoryValidator,
   asyncHandler(async (req, res) => {
@@ -84,4 +97,4 @@ const destroy = [
   }),
 ];
 
-module.exports = { store, show, update, destroy };
+module.exports = { index, store, show, update, destroy };

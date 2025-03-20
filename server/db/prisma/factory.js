@@ -17,6 +17,7 @@ const userSeeder = () => {
     bio: faker.book.title(),
     email: faker.internet.email(),
     phone: faker.phone.number({ style: "international" }),
+    profile_pic: faker.image.personPortrait(),
     password: "password",
   };
 };
@@ -25,7 +26,12 @@ const postSeeder = () => {
   return {
     caption: faker.internet.emoji(),
     creatorId: faker.number.int({ min: 1, max: 30 }),
-    attachment: faker.image.urlPicsumPhotos(),
+    attachment: faker.image.urlPicsumPhotos({
+      height: 450,
+      width: 450,
+      grayscale: false,
+      blur: 0,
+    }),
   };
 };
 
