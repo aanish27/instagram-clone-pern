@@ -27,3 +27,29 @@ on click story Open a modal
 on click like make it red - DONE
 on click comment expand below
 onClick see all show more followers
+
+
+role based access...user based access
+
+dont shw user posts
+should nt shw user anywhere -> story , post , follow
+form validation - react form hooks
+open-side bar
+
+add service layer
+
+user page
+fix overflow follow
+saved posts
+comments story model
+search
+expolore
+notification + follow req accept for notifaction use web sockets or use pub/sub pattern
+post add
+
+user chats
+
+eliipsis for caption
+more button on post
+username overflow on story
+
