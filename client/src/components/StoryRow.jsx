@@ -13,7 +13,7 @@ function StoryRow() {
       .catch((error) => {
         console.log(error);
       });
-  });
+  }, []);
 
   return (
     <div className="hide-scroll-bar flex min-w-full shrink-0 gap-2 overflow-x-scroll md:w-full md:gap-4">

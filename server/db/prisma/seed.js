@@ -9,20 +9,23 @@ const {
   followRequestSeeder,
   followSeeder,
   postSeeder,
+  postLikeSeeder,
+  commentLikeSeeder,
+  storyLikeSeeder,
 } = require("./factory");
 
 async function main() {
   //default user
-  await prisma.user.create({
-    data: {
-      name: "admin",
-      username: "admin99",
-      bio: "mysterio",
-      email: "admin@example.com",
-      phone: "947677632",
-      password: "$2b$10$yEMGpvDukKwlHOFK7Ls7uOoph8RhLdlD.nrdgGhWg5BqdPmGoPgbq", //password
-    },
-  });
+  // await prisma.user.create({
+  //   data: {
+  //     name: "admin",
+  //     username: "admin99",
+  //     bio: "mysterio",
+  //     email: "admin@example.com",
+  //     phone: "947677632",
+  //     password: "$2b$10$yEMGpvDukKwlHOFK7Ls7uOoph8RhLdlD.nrdgGhWg5BqdPmGoPgbq", //password
+  //   },
+  // });
 
   await prisma.user.createMany({
     data: factory(30, userSeeder),
@@ -51,6 +54,21 @@ async function main() {
 
   await prisma.story.createMany({
     data: factory(30, storySeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.like.createMany({
+    data: factory(30, postLikeSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.like.createMany({
+    data: factory(30, commentLikeSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.like.createMany({
+    data: factory(30, storyLikeSeeder),
     skipDuplicates: true,
   });
 }

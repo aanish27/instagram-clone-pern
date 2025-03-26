@@ -67,12 +67,6 @@ model Comment {
   postId    Int
 }
 
-enum Entity {
-  Story
-  Post
-  Comment
-}
-
 model User {
   id          Int             @id @default(autoincrement())
   name        String
@@ -97,14 +91,14 @@ model Like {
   id        Int      @id @default(autoincrement())
   creator   User     @relation(fields: [creatorId], references: [id])
   creatorId Int
-  entity    Entity
-  entityId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // this relations is primsa level realtions
-  Post      Post?    @relation("PostLike", fields: [entityId], references: [id], map: "post_like")
-  story     Story?   @relation("StoryLike", fields: [entityId], references: [id], map: "story_like")
-  comment   Comment? @relation("CommentLike", fields: [entityId], references: [id], map: "comment_like")
 
-  @@unique([entityId, entity]) // Ensures a like is unique per entity type
+  postId Int?
+  storyId Int?
+  commentId Int?
+
+  Post      Post?    @relation("PostLike", fields: [postId], references: [id])
+  story     Story?   @relation("StoryLike", fields: [storyId], references: [id])
+  comment   Comment? @relation("CommentLike", fields: [commentId], references: [id])
 }

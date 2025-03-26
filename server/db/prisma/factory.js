@@ -64,6 +64,27 @@ const commentSeeder = () => {
   };
 };
 
+const postLikeSeeder = () => {
+  return {
+    creatorId: faker.number.int({ min: 1, max: 30 }),
+    postId: faker.number.int({ min: 1, max: 20 }),
+  };
+};
+
+const commentLikeSeeder = () => {
+  return {
+    creatorId: faker.number.int({ min: 1, max: 30 }),
+    commentId: faker.number.int({ min: 1, max: 20 }),
+  };
+};
+
+const storyLikeSeeder = () => {
+  return {
+    creatorId: faker.number.int({ min: 1, max: 30 }),
+    storyId: faker.number.int({ min: 1, max: 20 }),
+  };
+};
+
 module.exports = {
   commentSeeder,
   storySeeder,
@@ -72,4 +93,7 @@ module.exports = {
   userSeeder,
   followRequestSeeder,
   followSeeder,
+  commentLikeSeeder,
+  postLikeSeeder,
+  storyLikeSeeder
 };
