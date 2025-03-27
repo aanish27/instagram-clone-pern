@@ -1,8 +1,5 @@
 import StoryRow from "./StoryRow";
 import PostContainer from "./PostContainer";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router";
-import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -17,26 +14,6 @@ function MainContent() {
       });
   }, []);
 
-  const navigate = useNavigate();
-  const { setToken } = useAuth();
-  const handleLogoutClick = async (e) => {
-    e.preventDefault();
-
-    await axios
-      .post("http://localhost:3000/logout", {}, { withCredentials: true })
-      .then(function (response) {
-        console.log(response.data.message);
-        setToken();
-        console.log(Cookies.get("accessToken"), "Login");
-        navigate("/login", { replace: true });
-      })
-      .catch(function (error) {
-        console.log(error);
-
-        console.log(error.response.data.error);
-      });
-  };
-
   return (
     <main className="hide-scroll-bar display- my-10 h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[50%]">
       <StoryRow />
@@ -47,9 +24,6 @@ function MainContent() {
           );
         })}
       </div>
-      <button className="mx-5 bg-red-400 px-20" onClick={handleLogoutClick}>
-        Logout
-      </button>
     </main>
   );
 }

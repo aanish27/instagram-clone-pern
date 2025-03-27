@@ -7,10 +7,33 @@ import { LuVideotape } from "react-icons/lu";
 import { AiOutlineMessage } from "react-icons/ai";
 import { CgAddR } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
+import { useAuth } from "../provider/authProvider";
+import axios from "axios";
 
 function Sidebar() {
   const iconStyle = { fontSize: "25px" };
 
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
+  const handleLogoutClick = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post("http://localhost:3000/logout", {}, { withCredentials: true })
+      .then(function (response) {
+        console.log(response.data.message);
+        setToken();
+        console.log(Cookies.get("accessToken"), "Login");
+        navigate("/login", { replace: true });
+      })
+      .catch(function (error) {
+        console.log(error);
+
+        console.log(error.response.data.error);
+      });
+  };
   return (
     <div className="hidden h-[100vh] w-[15vw] border-r-2 border-gray-900 p-5 text-white md:block">
       <BrandName />
@@ -54,6 +77,9 @@ function Sidebar() {
             Aanish
           </span>
         </div>
+        <button className="mx-5 bg-red-400 px-20" onClick={handleLogoutClick}>
+          Logout
+        </button>
       </div>
     </div>
   );
