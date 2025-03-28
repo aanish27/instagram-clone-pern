@@ -24,7 +24,7 @@ function Login() {
   useEffect(() => {
     setValue("email", env == "local" ? "admin@example.com" : "");
     setValue("password", env == "local" ? "password" : "");
-  }, [])
+  }, []);
 
   const {
     register,
@@ -36,14 +36,13 @@ function Login() {
 
   console.log(watch("email"));
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (data) => {
+    console.log(data);
 
     await axios
-      .post("http://localhost:3000/login", formData, { withCredentials: true })
+      .post("http://localhost:3000/login", data, { withCredentials: true })
       .then(function (response) {
         console.log(response.data.message);
-        e.target.reset();
         setToken(Cookies.get("accessToken"));
         console.log(Cookies.get("accessToken"), "Login");
         navigate("/", { replace: true });
