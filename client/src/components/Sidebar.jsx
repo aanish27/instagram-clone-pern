@@ -77,7 +77,7 @@ function Sidebar() {
             Aanish
           </span>
         </div>
-        <button className="mx-5 bg-red-400 px-20" onClick={handleLogoutClick}>
+        <button className="btn btn-primary px-20 mt-4 " onClick={handleLogoutClick}>
           Logout
         </button>
       </div>
