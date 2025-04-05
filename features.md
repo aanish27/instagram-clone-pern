@@ -6,47 +6,39 @@ set up api calls to fetch story - DONE
 set up api calls to fetch followers - DONE
 implement followReq - DONE
 implement liking - DONE
-
-set up form validation using react-form-hook
-set up success messages - toast / anything
-
-implement commenting
-implement follow - following
-
-set up notifications
-set up search
-set up post upload - File Upload
-
-setup profile page
-design Story model
-
-on click story Open a modal
 on click like make it red - DONE
-on click comment expand below
-onClick see all show more followers
+on click story Open a modal - DONE
 
-role based access...user based access
-
-dont shw user posts - getFeed()
-should nt shw user anywhere -> story , post , follow
-form validation - react form hooks
-open-side bar
-
-add service layer
-
-user page
-fix overflow follow
-saved posts
-comments story model
-search
-expolore
-notification + follow req accept for notifaction use web sockets or use pub/sub pattern
-post add
-
-user chats
-
+Frontend
 eliipsis for caption
 more button on post
 username overflow on story
-
+set up form validation using react-form-hook
+set up success messages - toast / anything
+setup profile page
+design Story model
+on click comment expand below
+onClick see all show more followers
+open-side bar
+fix overflow follow
+comments story model
 dark mode - light mode
+
+Backend
+dont shw user posts - getFeed()
+should nt shw user anywhere -> story , post , follow
+add service layer
+
+Features
+user chats
+implement commenting
+implement follow - following
+set up search
+set up post upload - File Upload
+role based access...user based access
+saved posts
+search
+expolore
+post add
+notification + follow req accept for notifaction use web sockets or use pub/sub pattern
+set up notifications
