@@ -10,16 +10,16 @@ function StoryCard({ story }) {
   };
   return (
     <div
-      className="flex flex-col items-center justify-center"
+      className="flex w-17 flex-col items-center justify-center md:w-16"
       onClick={handleClick}>
-      <div className="flex h-17 w-17 flex-col items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 overflow-ellipsis md:h-18 md:w-18">
+      <div className="flex h-17 w-[100%] flex-col items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-yellow-500 overflow-ellipsis md:h-16">
         <img
           src={story.attachment}
           alt=""
-          className="h-16 w-16 rounded-full md:h-17 md:w-17"
+          className="h-16 w-16 rounded-full md:h-15 md:w-15"
         />
       </div>
-      <span> {story.creator.username} </span>
+      <span className="w-[100%] truncate"> {story.creator.username} </span>
     </div>
   );
 }
