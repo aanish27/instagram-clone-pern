@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const {
   updateUserValidator,
   getUserByIdValidator,
+  searchUserValidator,
 } = require("../shared/middlewares/userValidator");
 
 const prisma = new PrismaClient({
@@ -94,4 +95,27 @@ const destroy = [
   }),
 ];
 
-module.exports = { index, store, show, update, destroy };
+const search = [
+  searchUserValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const result = await prisma.user.findMany({
+        where: {
+          username: {
+            contains: req.body.search,
+          },
+        },
+      });
+
+      if (!result) {
+        return res.json({ error: "No Matching Users" });
+      }
+
+      return res.json(result);
+    } catch (error) {
+      return res.json(error);
+    }
+  }),
+];
+
+module.exports = { index, store, show, update, destroy, search };

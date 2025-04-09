@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 
 
-function SideBarItem({ title, icon, notification , path}) {
+function SideBarItem({ title, icon, notification , path , isExpanded , onClick}) {
   return (
     <Link to={path}>
-      <div className="my-3 flex items-center rounded-lg px-2 py-3 hover:bg-[#1d1d1dba] lg:gap-5">
+      <div className="my-3 flex items-center rounded-lg px-2 py-3 hover:bg-[#1d1d1dba] lg:gap-5" onClick={onClick}>
         <div className="relative">
           {icon}
           {notification ? (
@@ -15,7 +15,13 @@ function SideBarItem({ title, icon, notification , path}) {
             ""
           )}
         </div>
-        <span className="text-base font-light md:hidden lg:block">{title}</span>
+        {!isExpanded ? (
+          <span className="mr-[5vw] text-base font-light md:hidden lg:block">
+            {title}
+          </span>
+        ) : (
+          ""
+        )}
       </div>
     </Link>
   );

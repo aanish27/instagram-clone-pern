@@ -11,12 +11,29 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
+import { useState } from "react";
+import Input from "./Input";
+import { useForm } from "react-hook-form";
 
 function Sidebar() {
+  const [searchResult, setSearchResult] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const iconStyle = { fontSize: "25px" };
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
 
   const navigate = useNavigate();
   const { setToken } = useAuth();
+
+  const handleSideBarExapandClick = () => {
+    setSidebarExpanded(!isSidebarExpanded);
+  };
+
   const handleLogoutClick = async (e) => {
     e.preventDefault();
 
@@ -34,52 +51,124 @@ function Sidebar() {
         console.log(error.response.data.error);
       });
   };
+
+  const handleSearch = async (data) => {
+    axios
+      .get("http://localhost:3000/user/search", {
+        params: data,
+        withCredentials: "true",
+      })
+      .then((response) => {
+        setSearchResult(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
-    <div className="hidden h-[100vh] w-[15vw] border-r-2 border-gray-900 p-5 text-white md:block">
-      <BrandName />
-      <div className="pt-10">
-        <SideBarItem
-          icon={<GoHomeFill style={iconStyle} />}
-          title={"Home"}
-          notification={10}
-          path={"/"}
-        />
-        <SideBarItem
-          icon={<IoSearch style={iconStyle} />}
-          title={"Search"}
-          path={"/search"}
-        />
-        <SideBarItem
-          icon={<IoCompassOutline style={iconStyle} />}
-          title={"Explore"}
-          path={"/explore"}
-        />
-        <SideBarItem
-          icon={<FiHeart style={iconStyle} />}
-          title={"Notifications"}
-          path={"/notifications"}
-        />
-        <SideBarItem icon={<CgAddR style={iconStyle} />} title={"Post"} />
-        <SideBarItem
-          icon={<AiOutlineMessage style={iconStyle} />}
-          title={"Message"}
-          path={"/message"}
-        />
-        <SideBarItem icon={<LuVideotape style={iconStyle} />} title={"Reels"} />
-        {/* <SideBarItem icon={<IoMdMenu style={iconStyle} />} title={"Aanish"} /> */}
-        <div className="flex items-center gap-5 pt-4">
-          <img
-            src={profile_pic}
-            alt=""
-            className="h-[30px] w-[30px] rounded-full"
+    <div className="hidden h-[100vh] border-r-2 border-gray-900 text-white md:flex">
+      <div className="p-5">
+        {/* <BrandName /> */}
+        <div className="pt-10">
+          <SideBarItem
+            icon={<GoHomeFill style={iconStyle} />}
+            title={"Home"}
+            notification={10}
+            path={"/"}
+            isExpanded={isSidebarExpanded}
           />
-          <span className="text-basic font-light md:hidden lg:block">
-            Aanish
-          </span>
+          <SideBarItem
+            icon={<IoSearch style={iconStyle} />}
+            title={"Search"}
+            // path={"/search"}
+            isExpanded={isSidebarExpanded}
+            onClick={handleSideBarExapandClick}
+          />
+          <SideBarItem
+            icon={<IoCompassOutline style={iconStyle} />}
+            title={"Explore"}
+            path={"/explore"}
+            isExpanded={isSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<FiHeart style={iconStyle} />}
+            title={"Notifications"}
+            path={"/notifications"}
+            isExpanded={isSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<CgAddR style={iconStyle} />}
+            title={"Post"}
+            isExpanded={isSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<AiOutlineMessage style={iconStyle} />}
+            title={"Message"}
+            path={"/message"}
+            isExpanded={isSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<LuVideotape style={iconStyle} />}
+            title={"Reels"}
+            path={"/reels"}
+            isExpanded={isSidebarExpanded}
+          />
+          {/* <SideBarItem icon={<IoMdMenu style={iconStyle} />} title={"Aanish"} /> */}
+          {/* <div className="flex items-center gap-5 pt-4">
+            <img
+              src={profile_pic}
+              alt=""
+              className="h-[30px] w-[30px] rounded-full"
+            />
+            <span className="text-basic font-light md:hidden lg:block">
+              Aanish
+            </span>
+          </div> */}
+          <button
+            className="btn btn-primary mt-4 px-20"
+            onClick={handleLogoutClick}>
+            Logout
+          </button>
         </div>
-        <button className="btn btn-primary px-20 mt-4 " onClick={handleLogoutClick}>
-          Logout
-        </button>
+      </div>
+      <div className={isSidebarExpanded ? "block w-[25vw] p-5" : "hidden"}>
+        <div className="text-2xl font-extrabold">Search</div>
+        <div className="mt-5">
+          <form onSubmit={handleSubmit(handleSearch)}>
+            <Input
+              register={register}
+              type={"text"}
+              placeholder={"Search"}
+              name={"search"}
+              className={
+                "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
+              }
+            />
+            <button> Search</button>
+          </form>
+          {searchResult &&
+            searchResult.map((user) => {
+              return (
+                <div key={user.id} className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <img
+                      src={user.profile_pic}
+                      alt=""
+                      className="h-15 w-15 rounded-full"
+                    />
+                    <div className="flex flex-col p-3">
+                      <div className="font-semibold">{user.name}</div>
+                      <div className="font-extralight text-gray-400">
+                        followed By
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
       </div>
     </div>
   );

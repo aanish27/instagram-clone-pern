@@ -4,6 +4,7 @@ const routes = Router();
 const userController = require("../controllers/userController.js");
 
 routes.get("/", userController.index);
+routes.get("/search", userController.search);
 routes.get("/:id", userController.show);
 routes.post("/", userController.store);
 routes.put("/:id", userController.update);

@@ -4,6 +4,7 @@ const {
   createUserValidationSchema,
   updateUserValidationSchema,
   getUserByIdValidationSchema,
+  searchUsersSchema,
 } = require("../validators/user.joi.validator");
 
 const createUserValidator = asyncHandler(async (req, res, next) => {
@@ -50,8 +51,20 @@ const getUserByIdValidator = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const searchUserValidator = asyncHandler(async (req, res, next) => {
+  const { error, value } = searchUsersSchema.validate(req.query);
+
+  if (error) {
+    throw error;
+  }
+
+  req.body = value;
+  next();
+});
+
 module.exports = {
   createUserValidator,
   updateUserValidator,
   getUserByIdValidator,
+  searchUserValidator,
 };
