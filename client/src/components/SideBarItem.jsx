@@ -1,10 +1,11 @@
 import { Link } from "react-router";
 
-
-function SideBarItem({ title, icon, notification , path , isExpanded , onClick}) {
+function SideBarItem({ title, icon, notification, path, isExpanded, onClick }) {
   return (
     <Link to={path}>
-      <div className="my-3 flex items-center rounded-lg px-2 py-3 hover:bg-[#1d1d1dba] lg:gap-5" onClick={onClick}>
+      <div
+        className="my-3 flex items-center rounded-lg px-2 py-3 hover:bg-[#1d1d1dba] lg:gap-5"
+        onClick={onClick}>
         <div className="relative">
           {icon}
           {notification ? (
