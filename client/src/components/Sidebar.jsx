@@ -1,5 +1,4 @@
 import { IoSearch, IoCompassOutline } from "react-icons/io5";
-import profile_pic from "../assets/car.jpg";
 import BrandName from "./BrandName";
 import SideBarItem from "./SideBarItem";
 import { GoHomeFill } from "react-icons/go";
@@ -13,28 +12,23 @@ import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Input from "./Input";
+import PostUploadModal from "./PostUploadModal";
 import { useForm } from "react-hook-form";
-import { useDropzone } from "react-dropzone";
-import { useCallback } from "react";
-import { MdOutlinePhotoLibrary } from "react-icons/md";
-import { FaArrowLeft } from "react-icons/fa6";
-import EmojiPicker from "emoji-picker-react";
-import { CiFaceSmile } from "react-icons/ci";
-import RightSidebarItem from "./RightSidebarItem";
 
 function Sidebar() {
   const [searchResult, setSearchResult] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [wordCount, setWordCount] = useState(0);
-  useEffect(() => {
-    document.getElementById("postUploadModal").showModal();
-  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm();
+
+  useEffect(() => {
+    document.getElementById("postUploadModal").showModal();
+  }, []);
 
   const iconStyle = { fontSize: "25px" };
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
@@ -46,8 +40,7 @@ function Sidebar() {
     setSidebarExpanded(!isSidebarExpanded);
   };
 
-  const handlePostUploadClick = (e) => {
-    e.preventDefault();
+  const handlePostUploadClick = () => {
     document.getElementById("postUploadModal").showModal();
   };
 
@@ -84,91 +77,9 @@ function Sidebar() {
       });
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    setUploadedImage(acceptedFiles);
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-  });
-
   return (
     <>
-      <dialog id="postUploadModal" className="modal backdrop-blur">
-        {uploadedImage == null ? (
-          <div className="modal-box bg-insta-black flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center p-0">
-            <div className="flex w-[100%] justify-between bg-black p-2">
-              <button>
-                <FaArrowLeft />
-              </button>
-              <h2>Create new Post</h2>
-              <button className="font-semibold text-blue-500">Share</button>
-            </div>
-            <div className="flex h-[100%] w-[100%]">
-              <img src={profile_pic} alt="" className="w-[65%]" />
-              <div className="flex w-[100%] flex-col p-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src={profile_pic}
-                      alt=""
-                      className="h-10 w-10 rounded-full"
-                    />
-                    <div className="flex flex-col p-3">
-                      <div className="font-semibold">Aanish</div>
-                    </div>
-                  </div>
-                </div>
-                <form action="" className="w-[100%]">
-                  <textarea
-                    name=""
-                    id=""
-                    className="h-35 w-[100%]"
-                    onChange={(e) => {
-                      setWordCount(e.target.value.length);
-                    }}></textarea>
-                  <div className="flex items-center justify-between">
-                    <div className="">
-                      <CiFaceSmile className="" />
-                      <div className="hidden">
-                        <EmojiPicker />
-                      </div>
-                    </div>
-                    <div className="text-xs font-extralight text-gray-500">
-                      {`${wordCount}/200`}
-                    </div>
-                  </div>
-                  <input type="file" id="postAttachment" className="hidden" />
-                </form>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="modal-box bg-insta-black flex flex-col items-center justify-center">
-            <h2>Create new Post</h2>
-            <hr className="m-1 w-100"></hr>
-            <div {...getRootProps()} className="h-100 w-100">
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Drag photos here</p>
-              ) : (
-                <div className="flex h-100 flex-col items-center justify-center gap-3">
-                  <MdOutlinePhotoLibrary className="text-6xl" />
-                  <p className="text-xl">Drag photos here</p>
-                  <button className="btn btn-primary">
-                    Select from computer
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-        {/* <form method="dialog" className="modal-backdrop">
-          <button className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">
-            ✕
-          </button>T
-        </form> */}
-      </dialog>
+      <PostUploadModal />
       <div className="hidden h-[100vh] border-r-2 border-gray-900 text-white md:flex">
         <div className="p-5">
           {/* <BrandName /> */}
