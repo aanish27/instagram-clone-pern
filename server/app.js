@@ -35,7 +35,7 @@ app.use("/", async (req, res) => {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err.message);
-  res.status(500).send(err.message);
+  res.status(500).json(err.message);
 });
 
 const PORT = process.env.PORT || 3000;

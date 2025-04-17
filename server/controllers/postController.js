@@ -4,13 +4,15 @@ const {
   createPostValidator,
   updatePostValidator,
   getPostByIdValidator,
-} = require("../shared/middlewares/postValidator");
+} = require("../shared/middlewares/validators/postValidator");
+const upload = require("../shared/middlewares/uploadMulter");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
 const store = [
+  upload.single("attachment"),
   createPostValidator,
   asyncHandler(async (req, res) => {
     req.body.creatorId = req.user.id;
@@ -18,7 +20,7 @@ const store = [
       await prisma.post.create({
         data: req.body,
       });
-      return res.send("Success");
+      return res.json({ message: "New Post Shared" });
     } catch (error) {
       throw error;
     }

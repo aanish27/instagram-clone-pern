@@ -11,7 +11,6 @@ import profile_pic from "../assets/car.jpg";
 import axios from "axios";
 
 function PostUploadModal() {
-  const formRef = useRef();
   const [uploadedImage, setUploadedImage] = useState(null);
   const [wordCount, setWordCount] = useState(0);
   const [preview, setPreview] = useState(null);
@@ -46,15 +45,20 @@ function PostUploadModal() {
   });
 
   const handlePostUpload = async (data) => {
-    const formData = new FormData(formRef.current);
-    console.log(formData);
+    const formData = new FormData();
+    // loop this
+    formData.append("caption", data.caption);
+    formData.append("attachment", data.attachment);
+
     await axios
-      .post("http://localhost:3000/post", data, { withCredentials: true })
+      .post("http://localhost:3000/post", formData, {
+        withCredentials: true,
+      })
       .then(function (response) {
-        //   console.log(response.data.message);
+        console.log(response.data.message);
       })
       .catch(function (error) {
-        //   console.log(error.response.data.error);
+        console.log(error.response.data.error);
       });
   };
 
@@ -90,7 +94,6 @@ function PostUploadModal() {
                 </div>
               </div>
               <form
-                ref={formRef}
                 id="postUploadForm"
                 onSubmit={handleSubmit(handlePostUpload)}
                 className="w-[100%]">
