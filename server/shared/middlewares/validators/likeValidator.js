@@ -1,9 +1,9 @@
 const asyncHandler = require("express-async-handler");
-const ClientError = require("../errors/clientError");
+const ClientError = require("../../errors/clientError");
 const {
   createLikeValidationSchema,
   destroyLikeValidationSchema,
-} = require("../validators/like.joi.validator");
+} = require("../../validators/like.joi.validator");
 
 const createLikeValidator = asyncHandler(async (req, res, next) => {
   if (!req.body) {

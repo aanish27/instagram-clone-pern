@@ -1,11 +1,11 @@
 const asyncHandler = require("express-async-handler");
-const ClientError = require("../errors/clientError");
+const ClientError = require("../../errors/clientError");
 const {
   createUserValidationSchema,
   updateUserValidationSchema,
   getUserByIdValidationSchema,
   searchUsersSchema,
-} = require("../validators/user.joi.validator");
+} = require("../../validators/user.joi.validator");
 
 const createUserValidator = asyncHandler(async (req, res, next) => {
   if (!req.body) {

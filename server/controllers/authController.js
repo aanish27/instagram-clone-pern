@@ -3,7 +3,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { createUserValidator } = require("../shared/middlewares/userValidator");
+const {
+  createUserValidator,
+} = require("../shared/middlewares/validators/userValidator");
 const { store } = require("./userController");
 const verifyToken = require("../shared/middlewares/verifyToken");
 
@@ -45,7 +47,7 @@ const login = asyncHandler(async (req, res) => {
         const cookieOptions = {
           secure: true,
           httpOnly: false,
-          sameSite: 'none',
+          sameSite: "none",
         };
 
         const accesstoken = jwt.sign(user, process.env.JWT_SECRET, {

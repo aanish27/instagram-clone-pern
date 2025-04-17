@@ -4,7 +4,7 @@ const {
   updateUserValidator,
   getUserByIdValidator,
   searchUserValidator,
-} = require("../shared/middlewares/userValidator");
+} = require("../shared/middlewares/validators/userValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",

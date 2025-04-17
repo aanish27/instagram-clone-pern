@@ -4,7 +4,7 @@ const {
   createStoryValidator,
   updateStoryValidator,
   getStoryByIdValidator,
-} = require("../shared/middlewares/storyValidator");
+} = require("../shared/middlewares/validators/storyValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
@@ -21,7 +21,7 @@ const index = asyncHandler(async (req, res) => {
   } catch (error) {
     throw error;
   }
-})
+});
 
 const store = [
   createStoryValidator,

@@ -4,7 +4,7 @@ const {
   createCommentValidator,
   updateCommentValidator,
   destroyCommentByIdValidator,
-} = require("../shared/middlewares/commentValidator");
+} = require("../shared/middlewares/validators/commentValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",

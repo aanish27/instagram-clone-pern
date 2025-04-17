@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const {
   createLikeValidator,
   destroyLikeValidator,
-} = require("../shared/middlewares/likeValidator");
+} = require("../shared/middlewares/validators/likeValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
@@ -25,7 +25,7 @@ const store = [
       default:
         break;
     }
-    delete req.body.entityId
+    delete req.body.entityId;
     delete req.body.entity;
     req.body.creatorId = req.user.id;
     try {
