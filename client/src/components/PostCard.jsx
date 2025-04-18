@@ -1,4 +1,5 @@
 const env = import.meta.env.VITE_STORAGE_URL;
+const regex = /^https:\/\/picsum\.photos\/seed\//;
 
 function PostCard({ attachment }) {
   return (
@@ -6,7 +7,7 @@ function PostCard({ attachment }) {
       <div className="">
         <img
           className="h-auto max-h-[450px] w-full"
-          src={`${env}${attachment}`}
+          src={regex.test(attachment) ? attachment : `${env}${attachment}`}
           alt=""
         />
       </div>
