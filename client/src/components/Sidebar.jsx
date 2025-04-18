@@ -22,12 +22,10 @@ function Sidebar() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
   } = useForm();
 
   useEffect(() => {
-    document.getElementById("postUploadModal").showModal();
+    // document.getElementById("postUploadModal").showModal();
   }, []);
 
   const iconStyle = { fontSize: "25px" };

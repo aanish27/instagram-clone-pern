@@ -12,12 +12,12 @@ import axios from "axios";
 
 function PostUploadModal() {
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [wordCount, setWordCount] = useState(0);
   const [preview, setPreview] = useState(null);
 
-  //   useEffect(() => {}, [uploadedImage]);
   useEffect(() => {
     if (!uploadedImage) {
+      setPreview(null);
+      reset();
       return;
     }
 
@@ -34,6 +34,7 @@ function PostUploadModal() {
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm();
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -46,9 +47,9 @@ function PostUploadModal() {
 
   const handlePostUpload = async (data) => {
     const formData = new FormData();
-    // loop this
-    formData.append("caption", data.caption);
-    formData.append("attachment", data.attachment);
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
     await axios
       .post("http://localhost:3000/post", formData, {
@@ -56,6 +57,10 @@ function PostUploadModal() {
       })
       .then(function (response) {
         console.log(response.data.message);
+        document.getElementById("postUploadModal").close();
+        setTimeout(() => {
+          setUploadedImage(null);
+        }, 1000);
       })
       .catch(function (error) {
         console.log(error.response.data.error);
@@ -99,9 +104,6 @@ function PostUploadModal() {
                 className="w-[100%]">
                 <textarea
                   className="h-35 w-[100%]"
-                  onChange={(e) => {
-                    setWordCount(e.target.value.length);
-                  }}
                   {...register("caption")}></textarea>
                 <div className="flex items-center justify-between">
                   <div className="">
@@ -111,7 +113,7 @@ function PostUploadModal() {
                     </div>
                   </div>
                   <div className="text-xs font-extralight text-gray-500">
-                    {`${wordCount}/200`}
+                    {watch("caption") ? `${watch("caption").length} / 200` : ""}
                   </div>
                 </div>
                 <input
@@ -130,7 +132,9 @@ function PostUploadModal() {
           <div {...getRootProps()} className="h-100 w-100">
             <input {...getInputProps()} />
             {isDragActive ? (
-              <p>Drag photos here</p>
+              <div className="flex items-center justify-center">
+                <p>Drag photos here</p>
+              </div>
             ) : (
               <div className="flex h-100 flex-col items-center justify-center gap-3">
                 <MdOutlinePhotoLibrary className="text-6xl" />
