@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import Input from "./Input";
 import PostUploadModal from "./PostUploadModal";
 import { useForm } from "react-hook-form";
+import { MdLogout } from "react-icons/md";
 
 function Sidebar() {
   const [searchResult, setSearchResult] = useState(null);
@@ -137,11 +138,12 @@ function Sidebar() {
               Aanish
             </span>
           </div> */}
-            <button
-              className="btn btn-primary mt-4 px-20"
-              onClick={handleLogoutClick}>
-              Logout
-            </button>
+            <SideBarItem
+              icon={<MdLogout style={iconStyle} />}
+              title={"Logout"}
+              onClick={handleLogoutClick}
+              isExpanded={isSidebarExpanded}
+            />
           </div>
         </div>
         <div className={isSidebarExpanded ? "block w-[25vw] p-5" : "hidden"}>

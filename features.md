@@ -8,6 +8,11 @@ implement followReq - DONE
 implement liking - DONE
 on click like make it red - DONE
 on click story Open a modal - DONE
+set up post upload - File Upload - DONE
+post add - DONE
+set up search - DONE
+search - DONE
+open-side bar - DONE
 
 Frontend
 eliipsis for caption
@@ -17,9 +22,8 @@ set up form validation using react-form-hook
 set up success messages - toast / anything
 setup profile page
 design Story model
-on click comment expand below
+on click comment show modal
 onClick see all show more followers
-open-side bar
 fix overflow follow
 comments story model
 dark mode - light mode
@@ -33,12 +37,8 @@ Features
 user chats
 implement commenting
 implement follow - following
-set up search
-set up post upload - File Upload
 role based access...user based access
 saved posts
-search
 expolore
-post add
 notification + follow req accept for notifaction use web sockets or use pub/sub pattern
 set up notifications
