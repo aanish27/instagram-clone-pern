@@ -17,6 +17,7 @@ like count increase - DONE
 onClick see all show more followers - DONE
 fix overflow follow - DONE
 on click comment show modal - DONE
+dont shw user posts - getFeed() - DONE
 
 Frontend
 eliipsis for caption
@@ -32,9 +33,9 @@ dark mode - light mode
 user liked posts
 
 Backend
-dont shw user posts - getFeed()
 should nt shw user anywhere -> story , post , follow
 add service layer
+user...data has password on the frontend
 
 Features
 user chats

@@ -27,14 +27,26 @@ const store = [
   }),
 ];
 
-const index = asyncHandler(async (req, res) => {
+const getFeed = asyncHandler(async (req, res) => {
   try {
     const posts = await prisma.post.findMany({
+      where: {
+        creator: {
+          Followee: {
+            some: {
+              followerId: req.user.id,
+            },
+          },
+        },
+      },
       include: {
         creator: true,
         _count: {
           select: { likes: true },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     return res.json({ posts: posts });
@@ -102,4 +114,4 @@ const destroy = [
   }),
 ];
 
-module.exports = { index, store, show, update, destroy };
+module.exports = { getFeed, store, show, update, destroy };
