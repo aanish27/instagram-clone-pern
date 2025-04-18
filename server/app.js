@@ -8,9 +8,10 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_ORIGIN,
   }),
 );
+app.use(express.static("uploads"));
 const verifyToken = require("./shared/middlewares/verifyToken");
 
 const authRoutes = require("./routes/authRouter");

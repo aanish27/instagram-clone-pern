@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
@@ -9,10 +9,12 @@ import { CiFaceSmile } from "react-icons/ci";
 // import RightSidebarItem from "./RightSidebarItem";
 import profile_pic from "../assets/car.jpg";
 import axios from "axios";
+import { FetchPostContext } from "../provider/provider";
 
 function PostUploadModal() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const { isFetchAgain , setFetchAgain } = useContext(FetchPostContext);
 
   useEffect(() => {
     if (!uploadedImage) {
@@ -57,6 +59,7 @@ function PostUploadModal() {
       })
       .then(function (response) {
         console.log(response.data.message);
+        setFetchAgain(!isFetchAgain)
         document.getElementById("postUploadModal").close();
         setTimeout(() => {
           setUploadedImage(null);
