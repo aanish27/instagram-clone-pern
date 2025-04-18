@@ -1,4 +1,4 @@
 import { createContext } from "react";
 
-export const StoryModalConext = createContext();
+export const StoryModalContext = createContext();
 export const FetchPostContext = createContext();

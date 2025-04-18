@@ -12,7 +12,7 @@ function Home() {
   return (
     <>
       <NavbarMobile />
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between max-h-screen overflow-hidden">
         <FetchPostContext.Provider value={{ isFetchAgain, setFetchAgain }}>
           <Sidebar />
           <MainContent />

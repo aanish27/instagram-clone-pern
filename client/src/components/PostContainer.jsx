@@ -16,6 +16,7 @@ function PostContainer(post) {
         caption={post.caption}
         likes={post._count.likes}
         id={post.id}
+        attachment={post.attachment}
       />
     </div>
   );

@@ -13,6 +13,10 @@ post add - DONE
 set up search - DONE
 search - DONE
 open-side bar - DONE
+like count increase - DONE
+onClick see all show more followers - DONE
+fix overflow follow - DONE
+on click comment show modal - DONE
 
 Frontend
 eliipsis for caption
@@ -22,11 +26,10 @@ set up form validation using react-form-hook
 set up success messages - toast / anything
 setup profile page
 design Story model
-on click comment show modal
-onClick see all show more followers
-fix overflow follow
+
 comments story model
 dark mode - light mode
+user liked posts
 
 Backend
 dont shw user posts - getFeed()

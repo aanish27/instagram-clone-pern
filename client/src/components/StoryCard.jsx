@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { StoryModalConext } from "../provider/provider";
+import { StoryModalContext } from "../provider/provider";
 
 function StoryCard({ story }) {
-  const [StoryModal, setStoryModal] = useContext(StoryModalConext);
+  const [StoryModal, setStoryModal] = useContext(StoryModalContext);
 
   const handleClick = () => {
     setStoryModal(story);
@@ -19,7 +19,7 @@ function StoryCard({ story }) {
           className="h-16 w-16 rounded-full md:h-15 md:w-15"
         />
       </div>
-      <span className="w-[100%] truncate"> {story.creator.username} </span>
+      <span className="w-[100%] overflow-hidden whitespace-nowrap"> {story.creator.username} </span>
     </div>
   );
 }

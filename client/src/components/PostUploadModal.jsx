@@ -70,12 +70,16 @@ function PostUploadModal() {
       });
   };
 
+  const handleGoBackClick = () => {
+    setUploadedImage(null)
+  }
+
   return (
     <dialog id="postUploadModal" className="modal backdrop-blur">
       {uploadedImage != null ? (
         <div className="modal-box bg-insta-black flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center p-0">
           <div className="flex w-[100%] justify-between bg-black p-2">
-            <button>
+            <button onClick={handleGoBackClick}>
               <FaArrowLeft />
             </button>
             <h2>Create new Post</h2>

@@ -23,13 +23,25 @@ const store = asyncHandler(async (req, res) => {
 
 const index = asyncHandler(async (req, res) => {
   try {
-    const users = await prisma.user.findMany({
-      where: {
-        id: {
-          notIn: [req.user.id],
+    let users = null;
+    if (req.query.all == "true") {
+      users = await prisma.user.findMany({
+        where: {
+          id: {
+            notIn: [req.user.id],
+          },
         },
-      },
-    });
+      });
+    } else {
+      users = await prisma.user.findMany({
+        take: 30,
+        where: {
+          id: {
+            notIn: [req.user.id],
+          },
+        },
+      });
+    }
     return res.json({ users: users });
   } catch (error) {
     return res.json({ error: error });

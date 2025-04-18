@@ -79,7 +79,7 @@ function Sidebar() {
   return (
     <>
       <PostUploadModal />
-      <div className="hidden h-[100vh] border-r-2 border-gray-900 text-white md:flex">
+      <div className="hidden min-h-screen border-r-2 border-gray-900 text-white md:flex">
         <div className="p-5">
           {/* <BrandName /> */}
           <div className="pt-10">
@@ -146,7 +146,10 @@ function Sidebar() {
             />
           </div>
         </div>
-        <div className={isSidebarExpanded ? "block w-[25vw] p-5" : "hidden"}>
+        <div
+          className={
+            isSidebarExpanded ? "block max-h-screen w-[25vw] p-5" : "hidden"
+          }>
           <div className="text-2xl font-extrabold">Search</div>
           <div className="mt-5">
             <form onSubmit={handleSubmit(handleSearch)}>
@@ -161,28 +164,30 @@ function Sidebar() {
               />
               <button> Search</button>
             </form>
-            {searchResult &&
-              searchResult.map((user) => {
-                return (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <img
-                        src={user.profile_pic}
-                        alt=""
-                        className="h-15 w-15 rounded-full"
-                      />
-                      <div className="flex flex-col p-3">
-                        <div className="font-semibold">{user.name}</div>
-                        <div className="font-extralight text-gray-400">
-                          followed By
+            <div className="hide-scroll-bar overflow-y-scroll max-h-[80vh]">
+              {searchResult &&
+                searchResult.map((user) => {
+                  return (
+                    <div
+                      key={user.id}
+                      className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <img
+                          src={user.profile_pic}
+                          alt=""
+                          className="h-15 w-15 rounded-full"
+                        />
+                        <div className="flex flex-col p-3">
+                          <div className="font-semibold">{user.name}</div>
+                          <div className="font-extralight text-gray-400">
+                            followed By
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+            </div>
           </div>
         </div>
       </div>

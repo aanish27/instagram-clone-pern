@@ -17,7 +17,7 @@ function MainContent() {
   }, [isFetchAgain]);
 
   return (
-    <main className="hide-scroll-bar display- my-10 h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[40%]">
+    <main className="hide-scroll-bar my-10 max-h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[40%]">
       <StoryRow />
       <div className="flex w-full flex-col items-center justify-center md:px-20">
         {posts &&
