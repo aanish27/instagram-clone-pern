@@ -1,14 +1,16 @@
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { FiBookmark } from "react-icons/fi";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import { CommentModalContext } from "../provider/provider";
 
-function PostFooter({ username, caption, likes, id }) {
+function PostFooter({ username, caption, likes, id, attachment }) {
   const [isliked, setLiked] = useState(false);
   const [likeId, setLikeId] = useState(null);
   const [likeCount, setLikeCount] = useState(likes);
+  const { postComment, setPostComment } = useContext(CommentModalContext);
 
   const handleLikeButtonOnclick = async () => {
     if (!isliked) {
@@ -47,8 +49,7 @@ function PostFooter({ username, caption, likes, id }) {
   };
 
   const handleCommentClick = () => {
-    // document.getElementById("commentModal").showModal();
-    // setValue("postId", id);
+    setPostComment({ username, caption, likes, id, attachment });
   };
 
   return (

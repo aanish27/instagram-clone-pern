@@ -114,4 +114,28 @@ const destroy = [
   }),
 ];
 
-module.exports = { getFeed, store, show, update, destroy };
+const getComments = [
+  getPostByIdValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const comments = await prisma.comment.findMany({
+        where: {
+          postId: parseInt(req.params.id),
+        },
+        include: {
+          creator: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      });
+
+      return res.json(comments);
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
+module.exports = { getFeed, store, show, update, destroy, getComments };

@@ -10,12 +10,12 @@ const updatePostValidationSchema = Joi.object({
   // attachment: Joi.string().min(6).max(100),
 }).options({ abortEarly: false });
 
-const getUserByIdValidationSchema = Joi.object({
+const getPostByIdValidationSchema = Joi.object({
   id: Joi.number().positive().required(),
 }).options({ abortEarly: false });
 
 module.exports = {
   createPostValidationSchema,
   updatePostValidationSchema,
-  getUserByIdValidationSchema,
+  getPostByIdValidationSchema,
 };
