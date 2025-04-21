@@ -1,13 +1,13 @@
 const Joi = require("joi");
 
 const createCommentValidationSchema = Joi.object({
-  caption: Joi.string().min(3).max(100).required(),
-  attachment: Joi.string().min(6).max(100).required(),
+  text: Joi.string().min(1).max(100).required(),
+  postId: Joi.number().positive().required(),
 }).options({ abortEarly: false });
 
 const updateCommentValidationSchema = Joi.object({
-  caption: Joi.string().min(3).max(100),
-  attachment: Joi.string().min(6).max(100),
+  text: Joi.string().min(1).max(100),
+  postId: Joi.number().positive(),
 }).options({ abortEarly: false });
 
 const getCommentByIdValidationSchema = Joi.object({

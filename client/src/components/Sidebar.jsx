@@ -12,7 +12,7 @@ import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Input from "./Input";
-import PostUploadModal from "./PostUploadModal";
+import PostUploadModal from "../modals/PostUploadModal";
 import { useForm } from "react-hook-form";
 import { MdLogout } from "react-icons/md";
 
