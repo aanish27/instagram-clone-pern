@@ -85,6 +85,13 @@ const storyLikeSeeder = () => {
   };
 };
 
+const usersSavedPostsSeeder = () => {
+  return {
+    userId: faker.number.int({ min: 1, max: 30 }),
+    postId: faker.number.int({ min: 1, max: 20 }),
+  };
+};
+
 module.exports = {
   commentSeeder,
   storySeeder,
@@ -95,5 +102,6 @@ module.exports = {
   followSeeder,
   commentLikeSeeder,
   postLikeSeeder,
-  storyLikeSeeder
+  storyLikeSeeder,
+  usersSavedPostsSeeder,
 };

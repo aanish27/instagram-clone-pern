@@ -12,6 +12,7 @@ const {
   postLikeSeeder,
   commentLikeSeeder,
   storyLikeSeeder,
+  usersSavedPostsSeeder,
 } = require("./factory");
 
 async function main() {
@@ -69,6 +70,11 @@ async function main() {
 
   await prisma.like.createMany({
     data: factory(30, storyLikeSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.usersSavedPosts.createMany({
+    data: factory(100, usersSavedPostsSeeder),
     skipDuplicates: true,
   });
 }

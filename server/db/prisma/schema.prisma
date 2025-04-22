@@ -14,15 +14,16 @@ datasource db {
 }
 
 model Post {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  caption    String    @db.VarChar(255)
-  attachment String    @db.VarChar(255)
-  creator    User      @relation(fields: [creatorId], references: [id])
-  creatorId  Int
-  likes      Like[]    @relation("PostLike")
-  comments   Comment[]
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  caption         String            @db.VarChar(255)
+  attachment      String            @db.VarChar(255)
+  creator         User              @relation(fields: [creatorId], references: [id])
+  creatorId       Int
+  likes           Like[]            @relation("PostLike")
+  comments        Comment[]
+  UsersSavedPosts UsersSavedPosts[]
 }
 
 model Story {
@@ -68,22 +69,23 @@ model Comment {
 }
 
 model User {
-  id          Int             @id @default(autoincrement())
-  name        String
-  username    String          @unique
-  bio         String?
-  email       String          @unique
-  phone       String
-  password    String
-  profile_pic String?
-  posts       Post[]
-  comments    Comment[]
-  stories     Story[]
-  likes       Like[]
-  Follower    Follow[]        @relation("followers")
-  Followee    Follow[]        @relation("followees")
-  FollowerReq FollowRequest[] @relation("followersReqs")
-  FolloweeReq FollowRequest[] @relation("followeesReqs")
+  id              Int               @id @default(autoincrement())
+  name            String
+  username        String            @unique
+  bio             String?
+  email           String            @unique
+  phone           String
+  password        String
+  profile_pic     String?
+  posts           Post[]
+  comments        Comment[]
+  stories         Story[]
+  likes           Like[]
+  Follower        Follow[]          @relation("followers")
+  Followee        Follow[]          @relation("followees")
+  FollowerReq     FollowRequest[]   @relation("followersReqs")
+  FolloweeReq     FollowRequest[]   @relation("followeesReqs")
+  UsersSavedPosts UsersSavedPosts[]
 }
 
 //  this is how you implement Polymorphism in Prisma
@@ -94,11 +96,20 @@ model Like {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  postId Int?
-  storyId Int?
+  postId    Int?
+  storyId   Int?
   commentId Int?
 
-  Post      Post?    @relation("PostLike", fields: [postId], references: [id])
-  story     Story?   @relation("StoryLike", fields: [storyId], references: [id])
-  comment   Comment? @relation("CommentLike", fields: [commentId], references: [id])
+  Post    Post?    @relation("PostLike", fields: [postId], references: [id])
+  story   Story?   @relation("StoryLike", fields: [storyId], references: [id])
+  comment Comment? @relation("CommentLike", fields: [commentId], references: [id])
+}
+
+model UsersSavedPosts {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@id([userId, postId])
 }

@@ -138,4 +138,63 @@ const getComments = [
   }),
 ];
 
-module.exports = { getFeed, store, show, update, destroy, getComments };
+const getSavedPosts = asyncHandler(async (req, res) => {
+  try {
+    const savedPosts = await prisma.post.findMany({
+      where: {
+        UsersSavedPosts: {
+          some: {
+            user: {
+              id: req.user.id,
+            },
+          },
+        },
+      },
+    });
+
+    return res.json(savedPosts);
+  } catch (error) {
+    throw error;
+  }
+});
+
+const storeSavePost = [
+  getPostByIdValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      await prisma.usersSavedPosts.create({
+        data: { userId: req.user.id, postId: req.body.id },
+      });
+
+      return res.send("success");
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+const deleteSavePost = [
+  getPostByIdValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      await prisma.usersSavedPosts.delete({
+        where: { userId: req.user.id, postId: req.body.id },
+      });
+
+      return res.send("success");
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
+module.exports = {
+  getFeed,
+  store,
+  show,
+  update,
+  destroy,
+  getComments,
+  getSavedPosts,
+  storeSavePost,
+  deleteSavePost,
+};

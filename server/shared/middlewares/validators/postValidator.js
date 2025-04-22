@@ -49,12 +49,13 @@ const updatePostValidator = asyncHandler(async (req, res, next) => {
 });
 
 const getPostByIdValidator = asyncHandler(async (req, res, next) => {
-  const { validated, error } = getPostByIdValidationSchema.validate(req.params);
+  const { error, value } = getPostByIdValidationSchema.validate(req.params);
+
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 
