@@ -18,6 +18,7 @@ onClick see all show more followers - DONE
 fix overflow follow - DONE
 on click comment show modal - DONE
 dont shw user posts - getFeed() - DONE
+implement commenting - DONE
 
 Frontend
 eliipsis for caption
@@ -39,7 +40,6 @@ user...data has password on the frontend
 
 Features
 user chats
-implement commenting
 implement follow - following
 role based access...user based access
 saved posts

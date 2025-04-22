@@ -1,35 +1,26 @@
 import { CiFaceSmile } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { IoEllipsisHorizontal } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { CommentModalContext } from "../provider/provider";
 import profile_pic from "../assets/car.jpg";
 import PostIconFooter from "../components/PostIconFooter";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-function CommentModal() {
+function CommentModal({ post }) {
   const [comments, setComments] = useState(null);
-  const { postComment } = useContext(CommentModalContext);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    setFocus
-  } = useForm();
+  const { register, handleSubmit, setValue, reset, setFocus } = useForm();
 
   useEffect(() => {
     reset();
     fetchComments();
-  }, [postComment]);
+  }, []);
 
   function fetchComments() {
-    setValue("postId", postComment.id);
+    setValue("postId", post.id);
 
     axios
-      .get(`${serverUrl}/post/comments/${postComment.id}`, {
+      .get(`${serverUrl}/post/comments/${post.id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -39,6 +30,7 @@ function CommentModal() {
         console.log(error);
       });
   }
+
   const handleCommentSubmitClick = (data) => {
     axios
       .post(`${serverUrl}/comment`, data, {
@@ -54,25 +46,21 @@ function CommentModal() {
       });
   };
 
-  const handleCommentClick = () => {
-     setFocus("text");
-  };
-
   return (
     <dialog id="commentModal" className="modal backdrop-blur">
       <div className="modal-box flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center bg-black p-0">
         <div className="flex h-[100%] w-[100%]">
-          <img src={postComment.attachment} alt="" className="w-[65%]" />
+          <img src={post.attachment} alt="" className="w-[65%]" />
           <div className="flex w-[100%] flex-col p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <img
-                  src={postComment.attachment}
+                  src={post.attachment}
                   alt=""
                   className="h-10 w-10 rounded-full"
                 />
                 <div className="flex flex-col p-3">
-                  <div className="font-semibold">{postComment.username}</div>
+                  <div className="font-semibold">{post.username}</div>
                 </div>
               </div>
               <IoEllipsisHorizontal />
@@ -104,8 +92,10 @@ function CommentModal() {
               <div>
                 <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />
                 <PostIconFooter
-                  postId={postComment.id}
-                  handleCommentClick={handleCommentClick}
+                  postId={post.id}
+                  handleCommentClick={() => {
+                    setFocus("text");
+                  }}
                 />
                 <div>{/* <div>liked by</div> */}</div>
                 <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />

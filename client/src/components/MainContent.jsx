@@ -31,7 +31,7 @@ function MainContent() {
       <StoryRow />
       <div className="flex w-full flex-col items-center justify-center md:px-20">
         <CommentModalContext.Provider value={{ postComment, setPostComment }}>
-          {postComment && <CommentModal />}
+          {postComment && <CommentModal post={postComment}/>}
           {posts &&
             posts.map((post) => {
               return <PostContainer key={post.id} {...post} />;
