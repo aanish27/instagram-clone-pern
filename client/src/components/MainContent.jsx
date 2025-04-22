@@ -4,7 +4,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { CommentModalContext, FetchPostContext } from "../provider/provider";
 import CommentModal from "../modals/CommentModal";
-import { createContext } from "react";
 
 function MainContent() {
   const [posts, setPosts] = useState([]);
@@ -23,7 +22,6 @@ function MainContent() {
     if (!postComment) {
       return;
     }
-    // console.log(post);
 
     document.getElementById("commentModal").showModal();
   }, [postComment]);
@@ -34,7 +32,6 @@ function MainContent() {
       <div className="flex w-full flex-col items-center justify-center md:px-20">
         <CommentModalContext.Provider value={{ postComment, setPostComment }}>
           {postComment && <CommentModal />}
-
           {posts &&
             posts.map((post) => {
               return <PostContainer key={post.id} {...post} />;
