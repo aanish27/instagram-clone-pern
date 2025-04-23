@@ -1,4 +1,4 @@
-function Avatar({ size = 10, isStory, img, ringSize }) {
+function Avatar({ size = "h-10 w-10", isStory, img, ringSize }) {
   return (
     <>
       {isStory ? (
