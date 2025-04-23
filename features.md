@@ -19,6 +19,7 @@ fix overflow follow - DONE
 on click comment show modal - DONE
 dont shw user posts - getFeed() - DONE
 implement commenting - DONE
+saved posts - DONE
 
 Frontend
 eliipsis for caption
@@ -42,7 +43,6 @@ Features
 user chats
 implement follow - following
 role based access...user based access
-saved posts
 expolore
 notification + follow req accept for notifaction use web sockets or use pub/sub pattern
 set up notifications

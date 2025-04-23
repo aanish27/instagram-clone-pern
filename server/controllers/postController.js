@@ -172,12 +172,18 @@ const storeSavePost = [
     }
   }),
 ];
+
 const deleteSavePost = [
   getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
       await prisma.usersSavedPosts.delete({
-        where: { userId: req.user.id, postId: req.body.id },
+        where: {
+          userId_postId: {
+            userId: req.user.id,
+            postId: req.body.id,
+          },
+        },
       });
 
       return res.send("success");

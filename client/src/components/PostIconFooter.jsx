@@ -1,18 +1,23 @@
-import { FaRegComment, FaRegHeart } from "react-icons/fa";
+import {
+  FaHeart,
+  FaBookmark,
+  FaRegBookmark,
+  FaRegComment,
+  FaRegHeart,
+} from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
-import { FiBookmark } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function PostIconFooter({ postId, handleCommentClick }) {
-  const [isliked, setLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [likeId, setLikeId] = useState(null);
   const iconStyle = { fontSize: "25px" };
 
   const handleLikeButtonOnclick = async () => {
-    if (!isliked) {
+    if (!isLiked) {
       await axios
         .post(
           `${serverUrl}/like`,
@@ -23,7 +28,7 @@ function PostIconFooter({ postId, handleCommentClick }) {
           { withCredentials: true },
         )
         .then((response) => {
-          setLiked(!isliked);
+          setIsLiked(!isLiked);
           setLikeId(response.data.id);
         })
         .catch((error) => {
@@ -35,9 +40,36 @@ function PostIconFooter({ postId, handleCommentClick }) {
           withCredentials: true,
         })
         .then((response) => {
-          setLiked(!isliked);
+          setIsLiked(!isLiked);
           // setLikeCount(likeCount + 1);
           setLikeId(null);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const handleSaveClick = async () => {
+    const url = `${serverUrl}/post/saved/${postId}`;
+    if (!isSaved) {
+      await axios
+        .post(url, {}, { withCredentials: true })
+        .then((response) => {
+          setIsSaved(!isSaved);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      await axios
+        .delete(url, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setIsSaved(!isSaved);
+          console.log(response);
         })
         .catch((error) => {
           console.log(error);
@@ -49,13 +81,10 @@ function PostIconFooter({ postId, handleCommentClick }) {
     <div className="flex items-center justify-between py-2">
       <div className="flex gap-3">
         <button onClick={handleLikeButtonOnclick} data-like-id={likeId}>
-          {isliked ? (
+          {isLiked ? (
             <FaHeart style={iconStyle} className="text-red-500" />
           ) : (
-            <FaRegHeart
-              style={iconStyle}
-              className={isliked ? "text-red-500" : ""}
-            />
+            <FaRegHeart style={iconStyle} />
           )}
         </button>
         <button onClick={handleCommentClick}>
@@ -63,7 +92,13 @@ function PostIconFooter({ postId, handleCommentClick }) {
         </button>
         <IoPaperPlaneOutline style={iconStyle} />
       </div>
-      <FiBookmark style={iconStyle} />
+      <button onClick={handleSaveClick}>
+        {isSaved ? (
+          <FaBookmark style={iconStyle} />
+        ) : (
+          <FaRegBookmark style={iconStyle} />
+        )}
+      </button>
     </div>
   );
 }
