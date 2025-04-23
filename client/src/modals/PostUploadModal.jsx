@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
@@ -6,15 +6,15 @@ import { MdOutlinePhotoLibrary } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { CiFaceSmile } from "react-icons/ci";
-// import RightSidebarItem from "./RightSidebarItem";
 import profile_pic from "../assets/car.jpg";
 import axios from "axios";
-import { FetchPostContext } from "../provider/provider";
+import { useDispatch } from "react-redux";
+import { toggleFetchPosts } from "../app/features/postSlice";
 
 function PostUploadModal() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [preview, setPreview] = useState(null);
-  const { isFetchAgain , setFetchAgain } = useContext(FetchPostContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!uploadedImage) {
@@ -26,7 +26,7 @@ function PostUploadModal() {
     const objectUrl = URL.createObjectURL(uploadedImage);
     setPreview(objectUrl);
     setValue("attachment", uploadedImage);
-    // free memory when ever this component is unmounted
+    
     return () => URL.revokeObjectURL(objectUrl);
   }, [uploadedImage]);
 
@@ -59,20 +59,20 @@ function PostUploadModal() {
       })
       .then(function (response) {
         console.log(response.data.message);
-        setFetchAgain(!isFetchAgain)
+        dispatch(toggleFetchPosts());
         document.getElementById("postUploadModal").close();
         setTimeout(() => {
           setUploadedImage(null);
         }, 1000);
       })
       .catch(function (error) {
-        console.log(error.response.data.error);
+        console.log(error);
       });
   };
 
   const handleGoBackClick = () => {
-    setUploadedImage(null)
-  }
+    setUploadedImage(null);
+  };
 
   return (
     <dialog id="postUploadModal" className="modal backdrop-blur">

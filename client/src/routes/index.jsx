@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import Static from "../pages/Static";
-import Home from "../pages/Home";
 import Explore from "../pages/Explore";
 import PostForm from "../pages/PostForm";
 import Reels from "../pages/Reels";
@@ -11,6 +10,7 @@ import Messages from "../pages/Messages";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import PrivateRoutes from "../routes/PrivateRoutes";
+import Feed from "../pages/Feed";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -29,7 +29,7 @@ const Routes = () => {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Feed />,
         },
         {
           path: "/explore",

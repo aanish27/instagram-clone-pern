@@ -164,7 +164,7 @@ function Sidebar() {
               />
               <button> Search</button>
             </form>
-            <div className="hide-scroll-bar overflow-y-scroll max-h-[80vh]">
+            <div className="hide-scroll-bar max-h-[80vh] overflow-y-scroll">
               {searchResult &&
                 searchResult.map((user) => {
                   return (
