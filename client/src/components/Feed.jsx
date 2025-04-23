@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { CommentModalContext, FetchPostContext } from "../provider/provider";
 import CommentModal from "../modals/CommentModal";
 
-function MainContent() {
+function Feed() {
   const [posts, setPosts] = useState([]);
   const [postComment, setPostComment] = useState(null);
   const { isFetchAgain } = useContext(FetchPostContext);
@@ -42,4 +42,4 @@ function MainContent() {
   );
 }
 
-export default MainContent;
+export default Feed;

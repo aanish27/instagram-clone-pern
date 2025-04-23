@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import MainContent from "../components/MainContent";
+import Feed from "../components/Feed";
 import RightSidebar from "../components/RightSidebar";
 import NavbarMobile from "../components/NavbarMobile";
 import FooterBarMobile from "../components/FooterBarMobile";
@@ -15,7 +15,7 @@ function Home() {
       <div className="flex items-center justify-between max-h-screen overflow-hidden">
         <FetchPostContext.Provider value={{ isFetchAgain, setFetchAgain }}>
           <Sidebar />
-          <MainContent />
+          <Feed />
         </FetchPostContext.Provider>
         <RightSidebar />
       </div>
