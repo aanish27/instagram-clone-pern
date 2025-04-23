@@ -1,15 +1,14 @@
 // import { LuDot } from "react-icons/lu";
 import { FaStar } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
+import Avatar from "./Avatar";
 
 function PostHeader({username , profile_pic}) {
 
   return (
     <div className="flex items-center justify-between p-1 py-2">
       <div className="flex items-center justify-center gap-2">
-        <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-yellow-500">
-          <img src={profile_pic} alt="" className="h-10 w-10 rounded-full" />
-        </div>
+        <Avatar img={profile_pic} size={"h-11 w-11"} isStory={true} ringSize={"h-12 w-12"} />
         <span> {username} </span>
         {/* <LuDot className="hidden lg:block" /> */}
         {/* <span className="hidden lg:block">9h  </span> */}

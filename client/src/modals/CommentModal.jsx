@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import profile_pic from "../assets/car.jpg";
 import PostIconFooter from "../components/PostIconFooter";
+import Avatar from "../components/Avatar";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function CommentModal({ post }) {
@@ -54,11 +54,7 @@ function CommentModal({ post }) {
           <div className="flex w-[100%] flex-col p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <img
-                  src={post.attachment}
-                  alt=""
-                  className="h-10 w-10 rounded-full"
-                />
+                <Avatar img={post.attachment} />
                 <div className="flex flex-col p-3">
                   <div className="font-semibold">{post.username}</div>
                 </div>
@@ -74,11 +70,7 @@ function CommentModal({ post }) {
                       <div
                         className="flex items-center gap-3 py-2"
                         key={comment.id}>
-                        <img
-                          src={profile_pic}
-                          alt=""
-                          className="h-10 w-10 rounded-full"
-                        />
+                        <Avatar img={post.attachment} />
                         <p className="font-extralight">
                           <span className="mr-2 font-semibold">
                             {comment.creator.username}

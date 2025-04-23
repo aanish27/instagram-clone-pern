@@ -10,6 +10,7 @@ import profile_pic from "../assets/car.jpg";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { toggleFetchPosts } from "../app/features/postSlice";
+import Avatar from "../components/Avatar";
 
 function PostUploadModal() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -26,7 +27,6 @@ function PostUploadModal() {
     const objectUrl = URL.createObjectURL(uploadedImage);
     setPreview(objectUrl);
     setValue("attachment", uploadedImage);
-    
     return () => URL.revokeObjectURL(objectUrl);
   }, [uploadedImage]);
 
@@ -95,11 +95,7 @@ function PostUploadModal() {
             <div className="flex w-[100%] flex-col p-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <img
-                    src={profile_pic}
-                    alt=""
-                    className="h-10 w-10 rounded-full"
-                  />
+                  <Avatar img={profile_pic} />
                   <div className="flex flex-col p-3">
                     <div className="font-semibold">Aanish</div>
                   </div>
