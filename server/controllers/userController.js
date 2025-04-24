@@ -130,4 +130,40 @@ const search = [
   }),
 ];
 
-module.exports = { index, store, show, update, destroy, search };
+const getProfile = [
+  searchUserValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const result = await prisma.user.findFirst({
+        where: {
+          username: req.body.search,
+        },
+        include: {
+          posts: true,
+          UsersSavedPosts: { select: { post: true } },
+          _count: {
+            select: { posts: true, Followee: true, Follower: true },
+          },
+        },
+      });
+
+      if (!result) {
+        return res.status(404).json({ error: "No Matching Users" });
+      }
+
+      return res.json(result);
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
+module.exports = {
+  index,
+  store,
+  show,
+  update,
+  destroy,
+  search,
+  getProfile,
+};

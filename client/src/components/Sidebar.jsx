@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { CgAddR } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -138,6 +138,9 @@ function Sidebar() {
               Aanish
             </span>
           </div> */}
+            <Link to={"/Jack.Davis2"}>
+              PROFILE
+            </Link>
             <SideBarItem
               icon={<MdLogout style={iconStyle} />}
               title={"Logout"}

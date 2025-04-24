@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router";
+import { RouterProvider, createBrowserRouter, redirect } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import Static from "../pages/Static";
 import Explore from "../pages/Explore";
@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import PrivateRoutes from "../routes/PrivateRoutes";
 import Feed from "../pages/Feed";
+import { validateUsername } from "../app/helpers";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -48,16 +49,23 @@ const Routes = () => {
           element: <Reels />,
         },
         {
-          path: "/profile",
-          element: <Profile />,
-        },
-        {
           path: "/notifications",
           element: <Notifications />,
         },
         {
           path: "/messages",
           element: <Messages />,
+        },
+        {
+          path: "/:username",
+          loader: async ({ params }) => {
+            let user = await validateUsername(params.username);
+            if (!user) {
+              return redirect("/");
+            }
+            return user;
+          },
+          element: <Profile />,
         },
       ],
     },
