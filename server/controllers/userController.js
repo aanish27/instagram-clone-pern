@@ -48,6 +48,10 @@ const index = asyncHandler(async (req, res) => {
   }
 });
 
+const getAuth = asyncHandler(async (req, res) => {
+  return res.json(req.user);
+});
+
 const show = [
   getUserByIdValidator,
   asyncHandler(async (req, res) => {
@@ -160,6 +164,7 @@ const getProfile = [
 
 module.exports = {
   index,
+  getAuth,
   store,
   show,
   update,

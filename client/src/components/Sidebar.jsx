@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { CgAddR } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import Cookies from "js-cookie";
-import { Link, useNavigate } from "react-router";
+import {useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -15,9 +15,12 @@ import Input from "./Input";
 import PostUploadModal from "../modals/PostUploadModal";
 import { useForm } from "react-hook-form";
 import { MdLogout } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { FaRegUser } from "react-icons/fa";
 
 function Sidebar() {
   const [searchResult, setSearchResult] = useState(null);
+  const authUser = useSelector((state) => state.auth.authUser);
 
   const {
     register,
@@ -56,8 +59,7 @@ function Sidebar() {
       })
       .catch(function (error) {
         console.log(error);
-
-        console.log(error.response.data.error);
+        // console.log(error.response.data.error);
       });
   };
 
@@ -127,20 +129,12 @@ function Sidebar() {
               path={"/reels"}
               isExpanded={isSidebarExpanded}
             />
-            {/* <SideBarItem icon={<IoMdMenu style={iconStyle} />} title={"Aanish"} /> */}
-            {/* <div className="flex items-center gap-5 pt-4">
-            <img
-              src={profile_pic}
-              alt=""
-              className="h-[30px] w-[30px] rounded-full"
+            <SideBarItem
+              icon={<FaRegUser style={iconStyle} />}
+              title={"Profile"}
+              path={`/${authUser.username}`}
+              isExpanded={isSidebarExpanded}
             />
-            <span className="text-basic font-light md:hidden lg:block">
-              Aanish
-            </span>
-          </div> */}
-            <Link to={"/Jack.Davis2"}>
-              PROFILE
-            </Link>
             <SideBarItem
               icon={<MdLogout style={iconStyle} />}
               title={"Logout"}

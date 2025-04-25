@@ -12,9 +12,24 @@ import SignUp from "../pages/SignUp";
 import PrivateRoutes from "../routes/PrivateRoutes";
 import Feed from "../pages/Feed";
 import { validateUsername } from "../app/helpers";
+import { getAuthUser } from "../app/helpers";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../app/features/authSlice";
+import { useEffect } from "react";
 
 const Routes = () => {
   const { token } = useAuth();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    getAuthUser().then((user) => {
+      dispatch(setAuthUser(user));
+    });
+  }, []);
 
   const routesForPublic = [
     {

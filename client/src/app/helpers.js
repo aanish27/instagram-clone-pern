@@ -13,3 +13,15 @@ export const validateUsername = async (search) => {
     return false;
   }
 };
+
+export const getAuthUser = async () => {
+  try {
+    const response = await axios.get(`${serverUrl}/user/auth`, {
+      withCredentials: "true",
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
