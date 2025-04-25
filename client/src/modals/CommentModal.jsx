@@ -5,16 +5,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
+import { useSelector } from "react-redux";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function CommentModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
+  const authUser = useSelector((state) => state.auth.authUser);
 
   useEffect(() => {
     reset();
     fetchComments();
-  }, []);
+  }, [post]);
 
   function fetchComments() {
     setValue("postId", post.id);
@@ -56,7 +58,9 @@ function CommentModal({ post }) {
               <div className="flex items-center">
                 <Avatar img={post.attachment} />
                 <div className="flex flex-col p-3">
-                  <div className="font-semibold">{post.username}</div>
+                  <div className="font-semibold">
+                    {/* {post.username ? post.username : authUser.username} */}
+                  </div>
                 </div>
               </div>
               <IoEllipsisHorizontal />
@@ -118,6 +122,9 @@ function CommentModal({ post }) {
           </div>
         </div>
       </div>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
     </dialog>
   );
 }

@@ -8,7 +8,7 @@ import TabContent from "../components/TabContent";
 import { useLoaderData } from "react-router";
 
 function Profile() {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const user = useLoaderData();
 
   const savedPosts = useMemo(() => {

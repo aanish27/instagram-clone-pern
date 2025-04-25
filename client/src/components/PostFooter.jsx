@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { CommentModalContext } from "../provider/provider";
+import { useDispatch } from "react-redux";
 import PostIconFooter from "./PostIconFooter";
+import { setViewPost } from "../app/features/postSlice";
 
-function PostFooter({ username, caption, likes, id, attachment }) {
-  const { setPostComment } = useContext(CommentModalContext);
-
+function PostFooter({ username, caption, id, attachment }) {
+  const dispatch = useDispatch();
   const handleCommentClick = () => {
-    setPostComment({ username, caption, likes, id, attachment });
+    dispatch(setViewPost({ username, caption, id, attachment }));
   };
 
   return (

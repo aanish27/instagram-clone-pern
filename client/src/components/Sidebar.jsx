@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { CgAddR } from "react-icons/cg";
 import { FiHeart } from "react-icons/fi";
 import Cookies from "js-cookie";
-import {useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -132,7 +132,7 @@ function Sidebar() {
             <SideBarItem
               icon={<FaRegUser style={iconStyle} />}
               title={"Profile"}
-              path={`/${authUser.username}`}
+              path={authUser ? `/${authUser.username}` : ""}
               isExpanded={isSidebarExpanded}
             />
             <SideBarItem

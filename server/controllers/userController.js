@@ -144,7 +144,11 @@ const getProfile = [
         },
         include: {
           posts: true,
-          UsersSavedPosts: { select: { post: true } },
+          UsersSavedPosts: {
+            include: {
+              post: { include: { creator: { select: { username: true } } } },
+            },
+          },
           _count: {
             select: { posts: true, Followee: true, Follower: true },
           },

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setViewPost } from "../app/features/postSlice";
 
 function TabContent({ activeTab, posts, savedPosts }) {
   const [contents, setContents] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     switch (activeTab) {
@@ -16,6 +19,24 @@ function TabContent({ activeTab, posts, savedPosts }) {
     }
   }, [activeTab]);
 
+  const handlePostClick = (post) => {
+    const {
+      // creator: { username },
+      attachment,
+      id,
+      caption,
+    } = post;
+
+    dispatch(
+      setViewPost({
+        // creator: { username },
+        attachment,
+        id,
+        caption,
+      }),
+    );
+  };
+
   return (
     <div className="flex flex-wrap gap-2">
       {contents &&
@@ -25,6 +46,7 @@ function TabContent({ activeTab, posts, savedPosts }) {
               key={content.id}
               src={content.attachment}
               className="h-[300px] w-[300px]"
+              onClick={() => handlePostClick(content)}
             />
           );
         })}
