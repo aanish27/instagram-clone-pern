@@ -9,13 +9,13 @@ import { useLoaderData } from "react-router";
 
 function Profile() {
   const [activeTab, setActiveTab] = useState(0);
+  const tabs = ["Posts", "Saved", "Tagged"];
   const user = useLoaderData();
 
   const savedPosts = useMemo(() => {
     return user.UsersSavedPosts.map((saved) => saved.post);
   }, [user]);
 
-  const tabs = ["Posts", "Saved", "Tagged"];
   const handleTabClick = (e) => {
     setActiveTab(Number(e.target.dataset.tab));
   };

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-function CommentModal({ post }) {
+function ViewPostModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ function CommentModal({ post }) {
 
   return (
     <dialog
-      id="commentModal"
+      id="viewPostModal"
       className="modal backdrop-blur"
       onClick={modalOnClose}
       onKeyDown={modalOnClose}>
@@ -141,4 +141,4 @@ function CommentModal({ post }) {
   );
 }
 
-export default CommentModal;
+export default ViewPostModal;

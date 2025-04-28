@@ -3,8 +3,8 @@ import NavbarMobile from "../components/NavbarMobile";
 import FooterBarMobile from "../components/FooterBarMobile";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommentModal from "../modals/CommentModal";
 import { closeViewPostModal } from "../app/helpers";
+import ViewPostModal from "../modals/ViewPostModal";
 
 function MainLayout({ children }) {
   const post = useSelector((state) => state.post.viewPost);
@@ -23,14 +23,14 @@ function MainLayout({ children }) {
     if (post && !IsViewModalOpen) {
       return;
     } else if (IsViewModalOpen) {
-      document.getElementById("commentModal").showModal();
+      document.getElementById("viewPostModal").showModal();
       return;
     }
   }, [IsViewModalOpen, post]);
 
   return (
     <>
-      {IsViewModalOpen && <CommentModal post={post} />}
+      {IsViewModalOpen && <ViewPostModal post={post} />}
       <NavbarMobile />
       <div className="flex max-h-screen items-center justify-between overflow-hidden">
         <Sidebar />
