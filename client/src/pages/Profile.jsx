@@ -9,6 +9,8 @@ import { useLoaderData } from "react-router";
 
 function Profile() {
   const [activeTab, setActiveTab] = useState(0);
+  const [followModalH1, setFollowModalH1] = useState(null);
+  const [followModalContent, setFollowModalContent] = useState(null);
   const tabs = ["Posts", "Saved", "Tagged"];
   const user = useLoaderData();
 
@@ -20,8 +22,36 @@ function Profile() {
     setActiveTab(Number(e.target.dataset.tab));
   };
 
+  const followersOnClick = () => {
+    setFollowModalH1("Followers");
+    setFollowModalContent(user.Follower);
+    document.getElementById("followModal").showModal();
+  };
+
+  const followingsOnClick = () => {
+    setFollowModalH1("Followings");
+    setFollowModalContent(user.Followee);
+    document.getElementById("followModal").showModal();
+  };
+
   return (
     <MainLayout>
+      <dialog id="followModal" className="modal">
+        <div className="modal-box">
+          <h3 className="text-lg font-bold">{followModalH1}!</h3>
+          {followModalContent &&
+            followModalContent.map((user) => {
+              if (followModalH1 == "Followers") {
+                return <div key={user.id}>{user.followee.id}</div>;
+              } else {
+                return <div key={user.id}>{user.follower.id}</div>;
+              }
+            })}
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
       <div className="flex h-screen w-full items-center justify-center overflow-scroll">
         <div className="flex h-screen w-[50vw] flex-col gap-3">
           <div className="mt-10 flex gap-2">
@@ -40,13 +70,13 @@ function Profile() {
                   <span className="pr-1 text-white">{user._count.posts}</span>
                   posts
                 </div>
-                <div className="text-gray-400">
+                <div className="text-gray-400" onClick={followersOnClick}>
                   <span className="pr-1 text-white">
                     {user._count.Followee}
                   </span>
                   followers
                 </div>
-                <div className="text-gray-400">
+                <div className="text-gray-400" onClick={followingsOnClick}>
                   <span className="pr-1 text-white">
                     {user._count.Follower}
                   </span>

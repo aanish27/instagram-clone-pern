@@ -8,6 +8,11 @@ const {
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
+  omit: {
+    user: {
+      password: true,
+    },
+  },
 });
 
 const store = asyncHandler(async (req, res) => {
@@ -144,6 +149,8 @@ const getProfile = [
         },
         include: {
           posts: true,
+          Followee: { select: { follower: true } },
+          Follower: { select: { followee: true } },
           UsersSavedPosts: {
             include: {
               post: { include: { creator: { select: { username: true } } } },
