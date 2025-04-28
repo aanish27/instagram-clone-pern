@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openViewPostModal } from "../app/helpers";
 
 function TabContent({ activeTab, posts, savedPosts }) {
   const [contents, setContents] = useState(null);
   const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth.authUser);
 
   useEffect(() => {
     switch (activeTab) {
@@ -19,20 +20,11 @@ function TabContent({ activeTab, posts, savedPosts }) {
     }
   }, [activeTab]);
 
-  const handlePostClick = (post) => {
-    const {
-      // creator: { username },
-      attachment,
-      id,
-      caption,
-    } = post;
-
-    openViewPostModal(dispatch, {
-      // creator: { username },
-      attachment,
-      id,
-      caption,
-    });
+  const handlePostClick = (paramsObj) => {
+    const post = { ...paramsObj };
+    const username = activeTab == 0 ? authUser.username : post.creator.username;
+    post["creator"] = username;
+    openViewPostModal(dispatch, post);
   };
 
   return (

@@ -5,16 +5,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function CommentModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
-  const post = useSelector((state) => state.post.viewPost);
   const dispatch = useDispatch();
-  const authUser = useSelector((state) => state.auth.authUser);
 
   useEffect(() => {
     reset();
@@ -74,9 +72,7 @@ function CommentModal({ post }) {
               <div className="flex items-center">
                 <Avatar img={post.attachment} />
                 <div className="flex flex-col p-3">
-                  <div className="font-semibold">
-                    {/* {post.username ? post.username : authUser.username} */}
-                  </div>
+                  <div className="font-semibold">{post.creator}</div>
                 </div>
               </div>
               <IoEllipsisHorizontal />

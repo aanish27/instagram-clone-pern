@@ -1,6 +1,6 @@
 import axios from "axios";
-import { setIsViewModalOpen } from "./uiSlice";
-import { setViewPost } from "./postSlice";
+import { setIsViewModalOpen } from "./features/uiSlice";
+import { setViewPost } from "./features/postSlice";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const validateUsername = async (search) => {
