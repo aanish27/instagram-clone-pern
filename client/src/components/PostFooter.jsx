@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
 import PostIconFooter from "./PostIconFooter";
-import { setViewPost } from "../app/features/postSlice";
+import { openViewPostModal } from "../app/helpers";
 
 function PostFooter({ username, caption, id, attachment }) {
   const dispatch = useDispatch();
   const handleCommentClick = () => {
-    dispatch(setViewPost({ username, caption, id, attachment }));
+    openViewPostModal(dispatch, { username, caption, id, attachment });
   };
 
   return (

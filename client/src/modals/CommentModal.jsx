@@ -5,18 +5,21 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { closeViewPostModal } from "../app/helpers";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function CommentModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
+  const post = useSelector((state) => state.post.viewPost);
+  const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.authUser);
 
   useEffect(() => {
     reset();
     fetchComments();
-  }, [post]);
+  }, []);
 
   function fetchComments() {
     setValue("postId", post.id);
@@ -48,9 +51,22 @@ function CommentModal({ post }) {
       });
   };
 
+  const modalOnClose = (e) => {
+    if (e.type == "keydown" && e.code !== "Escape") {
+      return;
+    }
+    closeViewPostModal(dispatch);
+  };
+
   return (
-    <dialog id="commentModal" className="modal backdrop-blur">
-      <div className="modal-box flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center bg-black p-0">
+    <dialog
+      id="commentModal"
+      className="modal backdrop-blur"
+      onClick={modalOnClose}
+      onKeyDown={modalOnClose}>
+      <div
+        className="modal-box flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center bg-black p-0"
+        onClick={(e) => e.stopPropagation()}>
         <div className="flex h-[100%] w-[100%]">
           <img src={post.attachment} alt="" className="w-[65%]" />
           <div className="flex w-[100%] flex-col p-2">

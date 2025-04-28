@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setViewPost } from "../app/features/postSlice";
+import { openViewPostModal } from "../app/helpers";
 
 function TabContent({ activeTab, posts, savedPosts }) {
   const [contents, setContents] = useState(null);
@@ -27,14 +27,12 @@ function TabContent({ activeTab, posts, savedPosts }) {
       caption,
     } = post;
 
-    dispatch(
-      setViewPost({
-        // creator: { username },
-        attachment,
-        id,
-        caption,
-      }),
-    );
+    openViewPostModal(dispatch, {
+      // creator: { username },
+      attachment,
+      id,
+      caption,
+    });
   };
 
   return (

@@ -1,4 +1,6 @@
 import axios from "axios";
+import { setIsViewModalOpen } from "./uiSlice";
+import { setViewPost } from "./postSlice";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export const validateUsername = async (search) => {
@@ -24,4 +26,14 @@ export const getAuthUser = async () => {
     console.log(error);
     return null;
   }
+};
+
+export const openViewPostModal = (dispatch, post) => {
+  dispatch(setViewPost(post));
+  dispatch(setIsViewModalOpen(true));
+};
+
+export const closeViewPostModal = (dispatch) => {
+  dispatch(setIsViewModalOpen(false));
+  dispatch(setViewPost(null));
 };
