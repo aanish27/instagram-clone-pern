@@ -76,22 +76,32 @@ const destroyFollow = [
   }),
 ];
 
+const destroyFollower = [
+  destroyFollowValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const follow = await prisma.follow.findFirstOrThrow({
+        where: {
+          followerId: req.body.id,
+          followeeId: req.user.id,
+        },
+      });
+
+      await prisma.follow.delete({
+        where: { id: follow.id },
+      });
+
+      return res.json({ message: "Follower deleted" });
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
 module.exports = {
   createFollowRequest,
   destroyFollowRequest,
   createFollow,
   destroyFollow,
+  destroyFollower,
 };
-
-//Implementation
-
-// follow_req -> store only reqs
-
-// from front end have 2 btns..accept reject on reject..delete the req...on accept create a new record on follow table
-
-// follower -> followee
-// status -> pending
-// status -> accepted()
-
-// follow_table
-// accepted()

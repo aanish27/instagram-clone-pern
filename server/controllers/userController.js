@@ -149,15 +149,15 @@ const getProfile = [
         },
         include: {
           posts: true,
-          Followee: { select: { follower: true } },
-          Follower: { select: { followee: true } },
+          followers: { select: { follower: true } },
+          followings: { select: { followee: true } },
           UsersSavedPosts: {
             include: {
               post: { include: { creator: { select: { username: true } } } },
             },
           },
           _count: {
-            select: { posts: true, Followee: true, Follower: true },
+            select: { posts: true, followers: true, followings: true },
           },
         },
       });

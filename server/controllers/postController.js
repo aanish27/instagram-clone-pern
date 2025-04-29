@@ -32,7 +32,7 @@ const getFeed = asyncHandler(async (req, res) => {
     const posts = await prisma.post.findMany({
       where: {
         creator: {
-          Followee: {
+          followers: {
             some: {
               followerId: req.user.id,
             },

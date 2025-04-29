@@ -6,11 +6,11 @@ const {
 } = require("../../validators/follow.joi.validator");
 
 const createFollowValidator = asyncHandler(async (req, res, next) => {
-  if (!req.body) {
-    throw new ClientError("Missing request body!");
+  if (!req.params) {
+    throw new ClientError("Missing request Params!");
   }
 
-  const { error, value } = createFollowValidationSchema.validate(req.body);
+  const { error, value } = createFollowValidationSchema.validate(req.params);
 
   if (error) {
     throw error;
@@ -21,15 +21,13 @@ const createFollowValidator = asyncHandler(async (req, res, next) => {
 });
 
 const destroyFollowValidator = asyncHandler(async (req, res, next) => {
-  const { validated, error } = destroyFollowValidationSchema.validate(
-    req.params,
-  );
+  const { error, value } = destroyFollowValidationSchema.validate(req.params);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 
