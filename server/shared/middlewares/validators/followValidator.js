@@ -3,6 +3,7 @@ const ClientError = require("../../errors/clientError");
 const {
   createFollowValidationSchema,
   destroyFollowValidationSchema,
+  searchFollowValidationSchema,
 } = require("../../validators/follow.joi.validator");
 
 const createFollowValidator = asyncHandler(async (req, res, next) => {
@@ -31,7 +32,19 @@ const destroyFollowValidator = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const searchFollowValidator = asyncHandler(async (req, res, next) => {
+  const { error, value } = searchFollowValidationSchema.validate(req.query);
+
+  if (error) {
+    throw error;
+  }
+
+  req.body = value;
+  next();
+});
+
 module.exports = {
   createFollowValidator,
   destroyFollowValidator,
+  searchFollowValidator,
 };

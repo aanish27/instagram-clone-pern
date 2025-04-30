@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const {
   createFollowValidator,
   destroyFollowValidator,
+  searchFollowValidator,
 } = require("../shared/middlewares/validators/followValidator");
 
 const prisma = new PrismaClient({
@@ -29,9 +30,7 @@ const destroyFollowRequest = [
   asyncHandler(async (req, res) => {
     try {
       await prisma.followRequest.delete({
-        where: {
-          id: parseInt(req.params.id),
-        },
+        where: { id: parseInt(req.params.id) },
       });
       return res.json({ message: "Request deleted" });
     } catch (error) {
@@ -98,10 +97,41 @@ const destroyFollower = [
   }),
 ];
 
+const search = [
+  searchFollowValidator,
+  asyncHandler(async (req, res) => {
+    let user = null;
+    try {
+      if (req.query.followee) {
+        user = await prisma.follow.findMany({
+          where: {
+            followee: { username: { startsWith: req.body.followee } },
+            follower: { username: req.user.username },
+          },
+          include: { followee: true },
+        });
+      } else {
+        user = await prisma.follow.findMany({
+          where: {
+            followee: { username: req.user.username },
+            follower: { username: { startsWith: req.body.follower } },
+          },
+          include: { follower: true },
+        });
+      }
+
+      return res.json(user);
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
 module.exports = {
   createFollowRequest,
   destroyFollowRequest,
   createFollow,
   destroyFollow,
   destroyFollower,
+  search,
 };
