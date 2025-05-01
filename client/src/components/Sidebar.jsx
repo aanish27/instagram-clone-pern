@@ -11,35 +11,22 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Input from "./Input";
 import PostUploadModal from "../modals/PostUploadModal";
-import { useForm } from "react-hook-form";
 import { MdLogout } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaRegUser } from "react-icons/fa";
+import Search from "./Search";
 
 function Sidebar() {
-  const [searchResult, setSearchResult] = useState(null);
   const authUser = useSelector((state) => state.auth.authUser);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  useEffect(() => {
-    // document.getElementById("postUploadModal").showModal();
-  }, []);
-
-  const iconStyle = { fontSize: "25px" };
-  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
-
   const navigate = useNavigate();
   const { setToken } = useAuth();
+  const iconStyle = { fontSize: "25px" };
+  const IsSidebarExpanded = useSelector((state) => state.ui.IsSidebarExpanded);
+  const [IsSearchActive, setIsSearchActive] = useState(false);
 
   const handleSideBarExapandClick = () => {
-    setSidebarExpanded(!isSidebarExpanded);
+    IsSearchActive ? setIsSearchActive(false) : setIsSearchActive(true);
   };
 
   const handlePostUploadClick = () => {
@@ -63,21 +50,6 @@ function Sidebar() {
       });
   };
 
-  const handleSearch = async (data) => {
-    axios
-      .get("http://localhost:3000/user/search", {
-        params: data,
-        withCredentials: "true",
-      })
-      .then((response) => {
-        setSearchResult(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <>
       <PostUploadModal />
@@ -90,103 +62,60 @@ function Sidebar() {
               title={"Home"}
               notification={10}
               path={"/"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<IoSearch style={iconStyle} />}
               title={"Search"}
               // path={"/search"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
               onClick={handleSideBarExapandClick}
             />
             <SideBarItem
               icon={<IoCompassOutline style={iconStyle} />}
               title={"Explore"}
               path={"/explore"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<FiHeart style={iconStyle} />}
               title={"Notifications"}
               path={"/notifications"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<CgAddR style={iconStyle} />}
               title={"Post"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
               onClick={handlePostUploadClick}
             />
             <SideBarItem
               icon={<AiOutlineMessage style={iconStyle} />}
               title={"Message"}
               path={"/message"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<LuVideotape style={iconStyle} />}
               title={"Reels"}
               path={"/reels"}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<FaRegUser style={iconStyle} />}
               title={"Profile"}
               path={authUser ? `/${authUser.username}` : ""}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
             <SideBarItem
               icon={<MdLogout style={iconStyle} />}
               title={"Logout"}
               onClick={handleLogoutClick}
-              isExpanded={isSidebarExpanded}
+              isExpanded={IsSidebarExpanded}
             />
           </div>
         </div>
-        <div
-          className={
-            isSidebarExpanded ? "block max-h-screen w-[25vw] p-5" : "hidden"
-          }>
-          <div className="text-2xl font-extrabold">Search</div>
-          <div className="mt-5">
-            <form onSubmit={handleSubmit(handleSearch)}>
-              <Input
-                register={register}
-                type={"text"}
-                placeholder={"Search"}
-                name={"search"}
-                className={
-                  "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
-                }
-              />
-              <button> Search</button>
-            </form>
-            <div className="hide-scroll-bar max-h-[80vh] overflow-y-scroll">
-              {searchResult &&
-                searchResult.map((user) => {
-                  return (
-                    <div
-                      key={user.id}
-                      className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <img
-                          src={user.profile_pic}
-                          alt=""
-                          className="h-15 w-15 rounded-full"
-                        />
-                        <div className="flex flex-col p-3">
-                          <div className="font-semibold">{user.name}</div>
-                          <div className="font-extralight text-gray-400">
-                            followed By
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-        </div>
+        {IsSearchActive ? <Search /> : ""}
       </div>
     </>
   );
