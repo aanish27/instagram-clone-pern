@@ -20,6 +20,9 @@ on click comment show modal - DONE
 dont shw user posts - getFeed() - DONE
 implement commenting - DONE
 saved posts - DONE
+user...data has password on the frontend - DONE
+expolore - DONE
+setup profile page - DONE
 
 Frontend
 eliipsis for caption
@@ -27,7 +30,6 @@ more button on post
 username overflow on story
 set up form validation using react-form-hook
 set up success messages - toast / anything
-setup profile page
 design Story model
 
 comments story model
@@ -37,13 +39,11 @@ user liked posts
 Backend
 should nt shw user anywhere -> story , post , follow
 add service layer
-user...data has password on the frontend
 
 Features
 user chats
 implement follow - following
 role based access...user based access
-expolore
 notification + follow req accept for notifaction use web sockets or use pub/sub pattern
 set up notifications
 liked by

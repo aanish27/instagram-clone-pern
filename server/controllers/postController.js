@@ -193,8 +193,52 @@ const deleteSavePost = [
   }),
 ];
 
+const getExplore = asyncHandler(async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        NOT: {
+          OR: [
+            {
+              creator: {
+                followers: {
+                  some: {
+                    followerId: req.user.id,
+                  },
+                },
+                followings: {
+                  some: { followeeId: req.user.id },
+                },
+              },
+            },
+            {
+              creator: {
+                id: 61,
+              },
+            },
+          ],
+        },
+      },
+      include: {
+        creator: true,
+        _count: {
+          select: { likes: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10
+    });
+    return res.json({ posts: posts });
+  } catch (error) {
+    throw error;
+  }
+});
+
 module.exports = {
   getFeed,
+  getExplore,
   store,
   show,
   update,
