@@ -10,12 +10,13 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PostUploadModal from "../modals/PostUploadModal";
 import { MdLogout } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { FaRegUser } from "react-icons/fa";
 import Search from "./Search";
+import MessageList from "./MessageList";
 
 function Sidebar() {
   const authUser = useSelector((state) => state.auth.authUser);
@@ -24,9 +25,14 @@ function Sidebar() {
   const iconStyle = { fontSize: "25px" };
   const IsSidebarExpanded = useSelector((state) => state.ui.IsSidebarExpanded);
   const [IsSearchActive, setIsSearchActive] = useState(false);
+  const [IsMessageActive, setIsMessageActive] = useState(false);
 
-  const handleSideBarExapandClick = () => {
+  const handleSearchClick = () => {
     IsSearchActive ? setIsSearchActive(false) : setIsSearchActive(true);
+  };
+
+  const handleMessageClick = () => {
+    IsMessageActive ? setIsMessageActive(false) : setIsMessageActive(true);
   };
 
   const handlePostUploadClick = () => {
@@ -53,8 +59,8 @@ function Sidebar() {
   return (
     <>
       <PostUploadModal />
-      <div className="hidden min-h-screen border-r-2 border-gray-900 text-white md:flex">
-        <div className="p-5">
+      <div className="hidden min-h-screen text-white md:flex">
+        <div className="border-r-2 border-gray-900 p-5">
           {/* <BrandName /> */}
           <div className="pt-10">
             <SideBarItem
@@ -69,7 +75,7 @@ function Sidebar() {
               title={"Search"}
               // path={"/search"}
               isExpanded={IsSidebarExpanded}
-              onClick={handleSideBarExapandClick}
+              onClick={handleSearchClick}
             />
             <SideBarItem
               icon={<IoCompassOutline style={iconStyle} />}
@@ -92,8 +98,9 @@ function Sidebar() {
             <SideBarItem
               icon={<AiOutlineMessage style={iconStyle} />}
               title={"Message"}
-              path={"/message"}
+              path={"/messages"}
               isExpanded={IsSidebarExpanded}
+              onClick={handleMessageClick}
             />
             <SideBarItem
               icon={<LuVideotape style={iconStyle} />}
@@ -116,6 +123,7 @@ function Sidebar() {
           </div>
         </div>
         {IsSearchActive ? <Search /> : ""}
+        {IsMessageActive ? <MessageList /> : ""}
       </div>
     </>
   );

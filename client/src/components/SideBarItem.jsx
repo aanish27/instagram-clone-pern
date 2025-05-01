@@ -1,8 +1,6 @@
 import { Link } from "react-router";
 
 function SideBarItem({ title, icon, notification, path, isExpanded, onClick }) {
-  console.log(isExpanded);
-
   return (
     <Link to={path}>
       <div
@@ -19,7 +17,7 @@ function SideBarItem({ title, icon, notification, path, isExpanded, onClick }) {
           )}
         </div>
         {isExpanded ? (
-           <span className="mr-[5vw] text-base font-light md:hidden lg:block">
+          <span className="mr-[5vw] text-base font-light md:hidden lg:block">
             {title}
           </span>
         ) : (
