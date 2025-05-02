@@ -1,7 +1,28 @@
+// import { Form } from "react-router";
+import { useEffect, useRef } from "react";
 import Input from "../components/Input";
 import MainLayout from "../layouts/MainLayout";
+import { io } from "socket.io-client";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Messages() {
+  const socketRef = useRef();
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:3000");
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    // console.log();
+
+    socketRef.current.emit("chat message", "did this comethrough");
+  };
+
   return (
     <MainLayout>
       <div className="flex h-full w-full flex-col justify-between p-3">
@@ -85,7 +106,10 @@ function Messages() {
         <div className="flex gap-2">
           {/* <Input /> */}
           <div>icon</div>
-          <input type="text" className="bg-insta-black w-full" />
+          <form onSubmit={sendMessage}>
+            <input type="text" className="bg-insta-black w-full" />
+            <button>Send</button>
+          </form>
           <div>icon</div>
           <div>icon</div>
           <div>icon</div>
