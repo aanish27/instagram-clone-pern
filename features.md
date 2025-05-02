@@ -31,7 +31,7 @@ username overflow on story
 set up form validation using react-form-hook
 set up success messages - toast / anything
 design Story model
-
+integrate react query
 comments story model
 dark mode - light mode
 user liked posts
