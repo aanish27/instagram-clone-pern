@@ -18,6 +18,7 @@ const createCommentValidator = asyncHandler(async (req, res, next) => {
   }
 
   req.body = value;
+  req.body.creatorId = req.user.id;
   next();
 });
 
@@ -30,26 +31,24 @@ const updateCommentValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request body!");
   }
 
-  const { validated, error } = updateCommentValidationSchema.validate(req.body);
+  const { error, value } = updateCommentValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 
 const destroyCommentByIdValidator = asyncHandler(async (req, res, next) => {
-  const { validated, error } = getCommentByIdValidationSchema.validate(
-    req.params,
-  );
+  const { error, value } = getCommentByIdValidationSchema.validate(req.params);
 
   if (error) {
     throw error;
   }
 
-  req.body = validated;
+  req.body = value;
   next();
 });
 

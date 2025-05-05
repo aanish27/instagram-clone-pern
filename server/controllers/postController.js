@@ -6,6 +6,7 @@ const {
   getPostByIdValidator,
 } = require("../shared/middlewares/validators/postValidator");
 const upload = require("../shared/middlewares/uploadMulter");
+const PostService = require("../services/PostService");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
@@ -15,11 +16,8 @@ const store = [
   upload.single("attachment"),
   createPostValidator,
   asyncHandler(async (req, res) => {
-    req.body.creatorId = req.user.id;
     try {
-      await prisma.post.create({
-        data: req.body,
-      });
+      PostService.store(req.body);
       return res.json({ message: "New Post Shared" });
     } catch (error) {
       throw error;
@@ -29,26 +27,7 @@ const store = [
 
 const getFeed = asyncHandler(async (req, res) => {
   try {
-    const posts = await prisma.post.findMany({
-      where: {
-        creator: {
-          followers: {
-            some: {
-              followerId: req.user.id,
-            },
-          },
-        },
-      },
-      include: {
-        creator: true,
-        _count: {
-          select: { likes: true },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const posts = await PostService.getFeed(req.user.id);
     return res.json({ posts: posts });
   } catch (error) {
     throw error;
@@ -118,19 +97,7 @@ const getComments = [
   getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      const comments = await prisma.comment.findMany({
-        where: {
-          postId: parseInt(req.params.id),
-        },
-        include: {
-          creator: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      });
-
+      const comments = await PostService.getComments(req.body.id);
       return res.json(comments);
     } catch (error) {
       throw error;
@@ -140,18 +107,7 @@ const getComments = [
 
 const getSavedPosts = asyncHandler(async (req, res) => {
   try {
-    const savedPosts = await prisma.post.findMany({
-      where: {
-        UsersSavedPosts: {
-          some: {
-            user: {
-              id: req.user.id,
-            },
-          },
-        },
-      },
-    });
-
+    const savedPosts = await PostService.getSavedPosts(req.user.id);
     return res.json(savedPosts);
   } catch (error) {
     throw error;
@@ -162,10 +118,7 @@ const storeSavePost = [
   getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      await prisma.usersSavedPosts.create({
-        data: { userId: req.user.id, postId: req.body.id },
-      });
-
+      await PostService.storeSavePost(req.user.id, req.body.postId);
       return res.send("success");
     } catch (error) {
       throw error;
@@ -177,15 +130,7 @@ const deleteSavePost = [
   getPostByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      await prisma.usersSavedPosts.delete({
-        where: {
-          userId_postId: {
-            userId: req.user.id,
-            postId: req.body.id,
-          },
-        },
-      });
-
+      await PostService.deleteSavePost(req.user.id, req.body.id);
       return res.send("success");
     } catch (error) {
       throw error;
@@ -195,41 +140,7 @@ const deleteSavePost = [
 
 const getExplore = asyncHandler(async (req, res) => {
   try {
-    const posts = await prisma.post.findMany({
-      where: {
-        NOT: {
-          OR: [
-            {
-              creator: {
-                followers: {
-                  some: {
-                    followerId: req.user.id,
-                  },
-                },
-                followings: {
-                  some: { followeeId: req.user.id },
-                },
-              },
-            },
-            {
-              creator: {
-                id: 61,
-              },
-            },
-          ],
-        },
-      },
-      include: {
-        creator: true,
-        _count: {
-          select: { likes: true },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 10
-    });
+    const posts = await PostService.getExplore(req.user.id);
     return res.json({ posts: posts });
   } catch (error) {
     throw error;

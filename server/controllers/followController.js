@@ -1,37 +1,28 @@
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require("@prisma/client");
 const {
   createFollowValidator,
   destroyFollowValidator,
   searchFollowValidator,
 } = require("../shared/middlewares/validators/followValidator");
+const FollowService = require("../services/FollowService");
 
-const prisma = new PrismaClient({
-  errorFormat: "minimal",
-});
-
-const createFollowRequest = [
+const sendFollowRequest = [
   createFollowValidator,
   asyncHandler(async (req, res) => {
-    req.body.followerId = req.user.id;
     try {
-      const request = await prisma.followRequest.create({
-        data: req.body,
-      });
+      const request = await FollowService.sendFollowRequest(req.body);
       return res.json({ id: request.id });
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
-const destroyFollowRequest = [
+const cancelFollowRequest = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      await prisma.followRequest.delete({
-        where: { id: parseInt(req.params.id) },
-      });
+      await FollowService.cancelFollowRequest(req.body.id);
       return res.json({ message: "Request deleted" });
     } catch (error) {
       throw error;
@@ -39,57 +30,35 @@ const destroyFollowRequest = [
   }),
 ];
 
-const createFollow = [
+const acceptFollowRequest = [
   createFollowValidator,
   asyncHandler(async (req, res) => {
-    req.body.followerId = req.user.id;
     try {
-      await prisma.follow.create({
-        data: req.body,
-      });
+      await FollowService.acceptFollowRequest(req.body);
       return res.send("Success");
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
-const destroyFollow = [
+const unfollowUser = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      const follow = await prisma.follow.delete({
-        where: {
-          id: parseInt(req.params.id),
-        },
-      });
-
-      if (!follow) {
-        return res.json({ error: "Follow not found" });
-      }
-
+      await FollowService.unfollowUser(req.body.id);
       return res.json({ message: "Follow deleted" });
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
-const destroyFollower = [
+const removeFollower = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      const follow = await prisma.follow.findFirstOrThrow({
-        where: {
-          followerId: req.body.id,
-          followeeId: req.user.id,
-        },
-      });
-
-      await prisma.follow.delete({
-        where: { id: follow.id },
-      });
-
+      await FollowService.removeFollower(req.body.id, req.user.id);
       return res.json({ message: "Follower deleted" });
     } catch (error) {
       throw error;
@@ -100,26 +69,8 @@ const destroyFollower = [
 const search = [
   searchFollowValidator,
   asyncHandler(async (req, res) => {
-    let user = null;
     try {
-      if (req.query.followee) {
-        user = await prisma.follow.findMany({
-          where: {
-            followee: { username: { startsWith: req.body.followee } },
-            follower: { username: req.user.username },
-          },
-          include: { followee: true },
-        });
-      } else {
-        user = await prisma.follow.findMany({
-          where: {
-            followee: { username: req.user.username },
-            follower: { username: { startsWith: req.body.follower } },
-          },
-          include: { follower: true },
-        });
-      }
-
+      const user = FollowService.search(req);
       return res.json(user);
     } catch (error) {
       throw error;
@@ -128,10 +79,10 @@ const search = [
 ];
 
 module.exports = {
-  createFollowRequest,
-  destroyFollowRequest,
-  createFollow,
-  destroyFollow,
-  destroyFollower,
+  sendFollowRequest,
+  cancelFollowRequest,
+  acceptFollowRequest,
+  unfollowUser,
+  removeFollower,
   search,
 };

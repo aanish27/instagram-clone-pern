@@ -48,3 +48,7 @@ notification + follow req accept for notifaction use web sockets or use pub/sub 
 set up notifications
 liked by
 emoji picker setup
+integrate morgan
+
+Bugs
+fix signup

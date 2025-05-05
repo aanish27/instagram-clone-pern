@@ -5,6 +5,7 @@ const {
   updateCommentValidator,
   destroyCommentByIdValidator,
 } = require("../shared/middlewares/validators/commentValidator");
+const CommentService = require("../services/CommentService");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
@@ -13,14 +14,11 @@ const prisma = new PrismaClient({
 const store = [
   createCommentValidator,
   asyncHandler(async (req, res) => {
-    req.body.creatorId = req.user.id;
     try {
-      await prisma.comment.create({
-        data: req.body,
-      });
+      await CommentService.store(req.body);
       return res.send("Success");
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
@@ -46,19 +44,10 @@ const destroy = [
   destroyCommentByIdValidator,
   asyncHandler(async (req, res) => {
     try {
-      const comment = await prisma.comment.delete({
-        where: {
-          id: parseInt(req.params.id),
-        },
-      });
-
-      if (!comment) {
-        return res.json({ error: "comment not found" });
-      }
-
+      await CommentService.destroy(req.body.id);
       return res.json({ message: "Comment deleted" });
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];

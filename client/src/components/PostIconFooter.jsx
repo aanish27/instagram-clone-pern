@@ -36,7 +36,7 @@ function PostIconFooter({ postId, handleCommentClick }) {
         });
     } else {
       await axios
-        .delete(`${serverUrl}/like/${likeId}`, {
+        .delete(`${serverUrl}/like/${Number(likeId)}`, {
           withCredentials: true,
         })
         .then((response) => {

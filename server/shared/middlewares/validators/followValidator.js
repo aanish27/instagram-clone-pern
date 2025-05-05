@@ -18,6 +18,7 @@ const createFollowValidator = asyncHandler(async (req, res, next) => {
   }
 
   req.body = value;
+  req.body.followerId = req.user.id;
   next();
 });
 

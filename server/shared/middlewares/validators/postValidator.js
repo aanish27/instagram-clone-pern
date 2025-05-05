@@ -21,6 +21,7 @@ const createPostValidator = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
+  req.body.creatorId = req.user.id;
   req.body = value;
   next();
 });
