@@ -11,7 +11,7 @@ const createFollowValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing request Params!");
   }
 
-  const { error, value } = createFollowValidationSchema.validate(req.params);
+  const { error, value } = createFollowValidationSchema.validate(req.body);
 
   if (error) {
     throw error;

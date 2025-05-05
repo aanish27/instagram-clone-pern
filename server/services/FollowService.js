@@ -4,26 +4,26 @@ const prisma = new PrismaClient({
 });
 
 class FollowService {
-  static async storeFollowRequest(data) {
-    await prisma.followRequest.create({
+  static async sendFollowRequest(data) {
+    return await prisma.followRequest.create({
       data: data,
     });
   }
 
   static async cancelFollowRequest(id) {
-    await prisma.followRequest.delete({
+    return await prisma.followRequest.delete({
       where: { id: id },
     });
   }
 
   static async acceptFollowRequest(data) {
-    await prisma.follow.create({
+    return await prisma.follow.create({
       data: data,
     });
   }
 
   static async unfollowUser(id) {
-    await prisma.follow.delete({
+    return await prisma.follow.delete({
       where: {
         id: id,
       },
@@ -38,7 +38,7 @@ class FollowService {
       },
     });
 
-    await prisma.follow.delete({
+    return await prisma.follow.delete({
       where: { id: follow.id },
     });
   }
