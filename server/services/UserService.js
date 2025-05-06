@@ -94,6 +94,15 @@ class UserService {
       },
     });
   }
+
+  static async getFollowers(userId) {
+    return await prisma.user.findMany({
+      where: {
+        id: userId,
+      },
+      include: { followers: true },
+    });
+  }
 }
 
 module.exports = UserService;

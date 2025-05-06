@@ -18,6 +18,18 @@ function Feed() {
       });
   }, [fetchPosts]);
 
+  useEffect(() => {
+    // const eventSource = new EventSource("http://localhost:3000/events", {
+    //   withCredentials: true,
+    // });
+
+    eventSource.onmessage = (event) => {
+      console.log(event.data);
+    };
+
+    return () => eventSource.close();
+  }, []);
+
   return (
     <MainLayout>
       <main className="hide-scroll-bar my-10 max-h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[40%]">

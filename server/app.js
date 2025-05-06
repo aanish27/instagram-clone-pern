@@ -22,7 +22,7 @@ app.use(
 );
 app.use(express.static("uploads"));
 const verifyToken = require("./shared/middlewares/verifyToken");
-
+const asyncHandler = require("express-async-handler");
 const authRoutes = require("./routes/authRouter");
 const userRoutes = require("./routes/userRouter");
 const postRoutes = require("./routes/postRouter");
@@ -30,14 +30,45 @@ const commentRoutes = require("./routes/commentRouter");
 const storyRoutes = require("./routes/storyRouter");
 const followRoutes = require("./routes/followRouter");
 const likeRoutes = require("./routes/likeRouter");
+const eventBus = require("./shared/utils/eventBus");
 
 app.use("/", authRoutes);
+
+const clients = new Map();
+// --- SSE: Client subscribes here ---
+app.get("/events", (req, res) => {
+  // Set headers for SSE
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  // Push to client list
+  clients.push(res);
+  console.log("Client connected. Total:", clients.length);
+  // Clean up when client closes connection
+  req.on("close", () => {
+    clients = clients.filter((c) => c !== res);
+  });
+});
+
 app.use("/user", verifyToken, userRoutes);
 app.use("/post", verifyToken, postRoutes);
 app.use("/comment", verifyToken, commentRoutes);
 app.use("/story", verifyToken, storyRoutes);
 app.use("/follow", verifyToken, followRoutes);
-app.use("/like", verifyToken, likeRoutes);
+app.use(
+  "/like",
+  verifyToken,
+  asyncHandler(async (req, res, next) => {
+    req.clients = clients;
+    next();
+  }),
+  likeRoutes,
+);
+
+
+
 app.use("/", async (req, res) => {
   res.send("Welcome to Instagram Clone Made By Me!!!");
 });
