@@ -14,16 +14,17 @@ datasource db {
 }
 
 model Post {
-  id              Int               @id @default(autoincrement())
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  caption         String            @db.VarChar(255)
-  attachment      String            @db.VarChar(255)
-  creator         User              @relation(fields: [creatorId], references: [id])
-  creatorId       Int
-  likes           Like[]            @relation("PostLike")
-  comments        Comment[]
-  UsersSavedPosts UsersSavedPosts[]
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  caption      String            @db.VarChar(255)
+  attachment   String            @db.VarChar(255)
+  creator      User              @relation(fields: [creatorId], references: [id])
+  creatorId    Int
+  likes        Like[]            @relation("PostLike")
+  comments     Comment[]
+  savedPosts   UsersSavedPosts[]
+  notification Notification[]    @relation("NotificationPost")
 }
 
 model Story {
@@ -37,13 +38,14 @@ model Story {
 }
 
 model FollowRequest {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  follower   User     @relation("followersReqs", fields: [followerId], references: [id])
-  followerId Int
-  followee   User     @relation("followeesReqs", fields: [followeeId], references: [id])
-  followeeId Int
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  follower     User           @relation("followersReqs", fields: [followerId], references: [id])
+  followerId   Int
+  followee     User           @relation("followeesReqs", fields: [followeeId], references: [id])
+  followeeId   Int
+  notification Notification[] @relation("NotificationFollowRequest")
 }
 
 model Follow {
@@ -57,35 +59,38 @@ model Follow {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  text      String   @db.VarChar(255)
-  creator   User     @relation(fields: [creatorId], references: [id])
-  creatorId Int
-  likes     Like[]   @relation("CommentLike")
-  Post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  text         String         @db.VarChar(255)
+  creator      User           @relation(fields: [creatorId], references: [id])
+  creatorId    Int
+  likes        Like[]         @relation("CommentLike")
+  Post         Post           @relation(fields: [postId], references: [id])
+  postId       Int
+  notification Notification[] @relation("NotificationComment")
 }
 
 model User {
-  id              Int               @id @default(autoincrement())
-  name            String
-  username        String            @unique
-  bio             String?
-  email           String            @unique
-  phone           String
-  password        String
-  profile_pic     String?
-  posts           Post[]
-  comments        Comment[]
-  stories         Story[]
-  likes           Like[]
-  followings        Follow[]          @relation("followings")
-  followers        Follow[]          @relation("followers")
-  FollowerReq     FollowRequest[]   @relation("followersReqs")
-  FolloweeReq     FollowRequest[]   @relation("followeesReqs")
-  UsersSavedPosts UsersSavedPosts[]
+  id          Int               @id @default(autoincrement())
+  name        String
+  username    String            @unique
+  bio         String?
+  email       String            @unique
+  phone       String
+  password    String
+  profile_pic String?
+  posts       Post[]
+  comments    Comment[]
+  stories     Story[]
+  likes       Like[]
+  followings  Follow[]          @relation("followings")
+  followers   Follow[]          @relation("followers")
+  followerReq FollowRequest[]   @relation("followersReqs")
+  followeeReq FollowRequest[]   @relation("followeesReqs")
+  savedPosts  UsersSavedPosts[]
+  sender      Notification[]    @relation("sent")
+  receiver    Notification[]    @relation("received")
 }
 
 //  this is how you implement Polymorphism in Prisma
@@ -100,9 +105,10 @@ model Like {
   storyId   Int?
   commentId Int?
 
-  Post    Post?    @relation("PostLike", fields: [postId], references: [id])
-  story   Story?   @relation("StoryLike", fields: [storyId], references: [id])
-  comment Comment? @relation("CommentLike", fields: [commentId], references: [id])
+  post         Post?          @relation("PostLike", fields: [postId], references: [id])
+  story        Story?         @relation("StoryLike", fields: [storyId], references: [id])
+  comment      Comment?       @relation("CommentLike", fields: [commentId], references: [id])
+  notification Notification[] @relation("NotificationLike")
 }
 
 model UsersSavedPosts {
@@ -112,4 +118,24 @@ model UsersSavedPosts {
   postId Int
 
   @@id([userId, postId])
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation("sent", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   User     @relation("received", fields: [receiverId], references: [id])
+  receiverId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  postId          Int?
+  commentId       Int?
+  likeId          Int?
+  followRequestId Int?
+
+  post          Post?          @relation("NotificationPost", fields: [postId], references: [id])
+  like          Like?          @relation("NotificationLike", fields: [likeId], references: [id])
+  comment       Comment?       @relation("NotificationComment", fields: [commentId], references: [id])
+  followRequest FollowRequest? @relation("NotificationFollowRequest", fields: [followRequestId], references: [id])
 }

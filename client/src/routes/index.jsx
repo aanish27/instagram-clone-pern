@@ -62,11 +62,7 @@ const Routes = () => {
         {
           path: "/reels",
           element: <Reels />,
-        },
-        {
-          path: "/notifications",
-          element: <Notifications />,
-        },
+        },  
         {
           path: "/messages",
           element: <Messages />,

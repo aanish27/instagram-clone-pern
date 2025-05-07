@@ -96,11 +96,11 @@ class UserService {
   }
 
   static async getFollowers(userId) {
-    return await prisma.user.findMany({
+    return await prisma.follow.findMany({
       where: {
-        id: userId,
+        followeeId: userId,
       },
-      include: { followers: true },
+      select: { follower: true },
     });
   }
 }

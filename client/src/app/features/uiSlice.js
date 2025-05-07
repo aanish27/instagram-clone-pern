@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   IsViewModalOpen: false,
   IsSidebarExpanded: true,
+  NotificationReload: true,
 };
 
 export const uiSlice = createSlice({
@@ -18,10 +19,17 @@ export const uiSlice = createSlice({
     closeSidebar: (state) => {
       state.IsSidebarExpanded = false;
     },
+    toggleNotificationReload: (state) => {
+      state.NotificationReload = !state.NotificationReload;
+    },
   },
 });
 
-export const { setIsViewModalOpen, expandSidebar, closeSidebar } =
-  uiSlice.actions;
+export const {
+  setIsViewModalOpen,
+  expandSidebar,
+  closeSidebar,
+  toggleNotificationReload,
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

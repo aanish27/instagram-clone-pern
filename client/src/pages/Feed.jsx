@@ -4,11 +4,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import RightSidebar from "../components/RightSidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+// import { toggleNotificationReload } from "../app/features/uiSlice";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const fetchPosts = useSelector((state) => state.post.fetchPosts);
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -19,12 +21,16 @@ function Feed() {
   }, [fetchPosts]);
 
   useEffect(() => {
-    // const eventSource = new EventSource("http://localhost:3000/events", {
-    //   withCredentials: true,
-    // });
+    const eventSource = new EventSource(
+      "http://localhost:3000/notifications/connect",
+      {
+        withCredentials: true,
+      },
+    );
 
     eventSource.onmessage = (event) => {
       console.log(event.data);
+      // dispatch(toggleNotificationReload())
     };
 
     return () => eventSource.close();
