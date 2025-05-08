@@ -10,6 +10,7 @@ const prisma = new PrismaClient({
     },
   },
 });
+const { format, isThisMonth, isThisWeek, isToday } = require("date-fns");
 
 class NotificationService {
   static async store(data) {
@@ -20,48 +21,42 @@ class NotificationService {
   }
 
   static async recentNotifications(receiverId) {
-    const notification = await prisma.notification.findMany({
+    const notifications = await prisma.notification.findMany({
       where: {
         receiverId: receiverId,
       },
-      select: {
+      include: {
         like: { select: { post: true } },
         sender: true,
         post: true,
-        comment: true,
+        comment: { include: { post: true } },
         followRequest: true,
       },
     });
 
     const data = {
-      posts: [],
-      comments: [],
-      followRequests: [],
-      likes: [],
+      today: [],
+      thisWeek: [],
+      thisMonth: [],
+      earlier: [],
     };
 
-    notification.reduce((acc, element) => {
-      if (element.post) {
-        acc.posts.push({ ...element.post, sender: { ...element.sender } });
-      } else if (element.comment) {
-        acc.comments.push({
-          ...element.comment,
-          sender: { ...element.sender },
-        });
-      } else if (element.followRequest) {
-        acc.followRequests.push({
-          ...element.followRequest,
-          sender: { ...element.sender },
-        });
-      } else if (element.like) {
-        acc.likes.push({ ...element.like.post, sender: { ...element.sender } });
+    notifications.forEach((element) => {
+      const date = format(element.createdAt, "P");
+      let arr;
+      if (isToday(date)) {
+        arr = data.today;
+      } else if (isThisWeek(date)) {
+        arr = data.thisWeek;
+      } else if (isThisMonth(date)) {
+        arr = data.thisMonth;
+      } else {
+        arr = data.earlier;
       }
-      return acc;
-    }, data);
+      arr.push(element);
+    });
 
-    console.log(data);
-
-    return notification;
+    return data;
   }
 }
 

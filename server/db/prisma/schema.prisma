@@ -66,7 +66,7 @@ model Comment {
   creator      User           @relation(fields: [creatorId], references: [id])
   creatorId    Int
   likes        Like[]         @relation("CommentLike")
-  Post         Post           @relation(fields: [postId], references: [id])
+  post         Post           @relation(fields: [postId], references: [id])
   postId       Int
   notification Notification[] @relation("NotificationComment")
 }
@@ -121,14 +121,14 @@ model UsersSavedPosts {
 }
 
 model Notification {
-  id         Int      @id @default(autoincrement())
-  sender     User     @relation("sent", fields: [senderId], references: [id])
-  senderId   Int
-  receiver   User     @relation("received", fields: [receiverId], references: [id])
-  receiverId Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
+  id              Int                @id @default(autoincrement())
+  sender          User               @relation("sent", fields: [senderId], references: [id])
+  senderId        Int
+  receiver        User               @relation("received", fields: [receiverId], references: [id])
+  receiverId      Int
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  status          NotificationStatus @default(UNREAD)
   postId          Int?
   commentId       Int?
   likeId          Int?
@@ -138,4 +138,9 @@ model Notification {
   like          Like?          @relation("NotificationLike", fields: [likeId], references: [id])
   comment       Comment?       @relation("NotificationComment", fields: [commentId], references: [id])
   followRequest FollowRequest? @relation("NotificationFollowRequest", fields: [followRequestId], references: [id])
+}
+
+enum NotificationStatus {
+  READ
+  UNREAD
 }

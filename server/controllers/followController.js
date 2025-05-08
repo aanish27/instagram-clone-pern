@@ -78,6 +78,15 @@ const search = [
   }),
 ];
 
+const getFollowRequests = asyncHandler(async (req, res) => {
+  try {
+    const requests = await FollowService.getFollowRequests(req.user.id);
+    return res.json(requests);
+  } catch (error) {
+    throw error;
+  }
+});
+
 module.exports = {
   sendFollowRequest,
   cancelFollowRequest,
@@ -85,4 +94,5 @@ module.exports = {
   unfollowUser,
   removeFollower,
   search,
+  getFollowRequests,
 };

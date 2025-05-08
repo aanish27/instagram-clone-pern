@@ -62,6 +62,15 @@ class FollowService {
       });
     }
   }
+
+  static async getFollowRequests(userId) {
+    return await prisma.followRequest.findMany({
+      where: {
+        followeeId: userId,
+      },
+      include: { follower: true },
+    });
+  }
 }
 
 module.exports = FollowService;

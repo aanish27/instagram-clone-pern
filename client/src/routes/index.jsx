@@ -5,7 +5,6 @@ import Explore from "../pages/Explore";
 import PostForm from "../pages/PostForm";
 import Reels from "../pages/Reels";
 import Profile from "../pages/Profile";
-import Notifications from "../pages/Notifications";
 import Messages from "../pages/Messages";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
@@ -62,7 +61,7 @@ const Routes = () => {
         {
           path: "/reels",
           element: <Reels />,
-        },  
+        },
         {
           path: "/messages",
           element: <Messages />,

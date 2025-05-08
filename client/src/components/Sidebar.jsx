@@ -17,8 +17,8 @@ import { useSelector } from "react-redux";
 import { FaRegUser } from "react-icons/fa";
 import Search from "./Search";
 import MessageList from "./MessageList";
-import Notifications from "../pages/Notifications";
-
+import NotificationPanel from "./NotificationPanel";
+import { NotificationPanelContext } from "../provider/provider";
 function Sidebar() {
   const authUser = useSelector((state) => state.auth.authUser);
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function Sidebar() {
   const [IsSearchActive, setIsSearchActive] = useState(false);
   const [IsMessageActive, setIsMessageActive] = useState(false);
   const [IsNotificationActive, setIsNotificationActive] = useState(true);
-
+  const [isShowRequests, setIsShowRequests] = useState(false);
   const handleSearchClick = () => {
     IsSearchActive ? setIsSearchActive(false) : setIsSearchActive(true);
   };
@@ -37,9 +37,11 @@ function Sidebar() {
     IsMessageActive ? setIsMessageActive(false) : setIsMessageActive(true);
   };
 
-   const handleNotificationClick = () => {
-     IsNotificationActive ? setIsNotificationActive(false) : setIsNotificationActive(true);
-   };
+  const handleNotificationClick = () => {
+    IsNotificationActive
+      ? setIsNotificationActive(false)
+      : setIsNotificationActive(true);
+  };
 
   const handlePostUploadClick = () => {
     document.getElementById("postUploadModal").showModal();
@@ -130,7 +132,10 @@ function Sidebar() {
         </div>
         {IsSearchActive ? <Search /> : ""}
         {IsMessageActive ? <MessageList /> : ""}
-        {IsNotificationActive ? <Notifications /> : ""}
+        <NotificationPanelContext.Provider
+          value={{ isShowRequests, setIsShowRequests }}>
+          {IsNotificationActive ? <NotificationPanel /> : ""}
+        </NotificationPanelContext.Provider>
       </div>
     </>
   );
