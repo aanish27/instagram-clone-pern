@@ -52,3 +52,4 @@ integrate morgan
 
 Bugs
 fix signup
+use one instance of prisma client everywhere
