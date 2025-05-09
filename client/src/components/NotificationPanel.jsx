@@ -5,17 +5,22 @@ import axios from "axios";
 import Notifications from "./Notifications";
 import { NotificationPanelContext } from "../provider/provider";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-import { useDispatch } from "react-redux";
-import { closeSidebar, expandSidebar } from "../app/features/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { closeSidebar, expandSidebar, toggleNotificationReload } from "../app/features/uiSlice";
+
 function NotificationPanel() {
   const [requests, setRequests] = useState(null);
   const { isShowRequests, setIsShowRequests } = useContext(
     NotificationPanelContext,
   );
+  const isReload = useSelector((state) => state.ui.NotificationReload);
   const dispatch = useDispatch();
+
   useEffect(() => {
+    setIsShowRequests(false);
     dispatch(closeSidebar());
 
+    dispatch(toggleNotificationReload())
     return () => {
       dispatch(expandSidebar());
     };
@@ -25,13 +30,12 @@ function NotificationPanel() {
     axios
       .get(`${serverUrl}/follow/req`, { withCredentials: true })
       .then((response) => {
-        console.log(response);
         setRequests(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [isShowRequests, isReload]);
 
   return (
     <div className="block max-h-screen w-[20vw] overflow-scroll p-3">
@@ -55,6 +59,7 @@ function NotificationPanel() {
                     username={request.follower.username}
                     name={request.follower.name}
                     avatar={request.follower.profile_pic}
+                    reqId={request.id}
                   />
                 );
               })}

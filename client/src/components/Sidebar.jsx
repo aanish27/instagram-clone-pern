@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PostUploadModal from "../modals/PostUploadModal";
 import { MdLogout } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -19,8 +19,13 @@ import Search from "./Search";
 import MessageList from "./MessageList";
 import NotificationPanel from "./NotificationPanel";
 import { NotificationPanelContext } from "../provider/provider";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 function Sidebar() {
   const authUser = useSelector((state) => state.auth.authUser);
+  const isNotificationReload = useSelector(
+    (state) => state.ui.NotificationReload,
+  );
   const navigate = useNavigate();
   const { setToken } = useAuth();
   const iconStyle = { fontSize: "25px" };
@@ -29,6 +34,25 @@ function Sidebar() {
   const [IsMessageActive, setIsMessageActive] = useState(false);
   const [IsNotificationActive, setIsNotificationActive] = useState(true);
   const [isShowRequests, setIsShowRequests] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(`${serverUrl}/notifications/count`, { withCredentials: true })
+      .then(function (response) {
+        setNotificationCount(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [isNotificationReload]);
+
+  useEffect(() => {
+    setIsSearchActive(false);
+    setIsMessageActive(false);
+    setIsNotificationActive(false);
+  }, []);
+
   const handleSearchClick = () => {
     IsSearchActive ? setIsSearchActive(false) : setIsSearchActive(true);
   };
@@ -37,7 +61,17 @@ function Sidebar() {
     IsMessageActive ? setIsMessageActive(false) : setIsMessageActive(true);
   };
 
-  const handleNotificationClick = () => {
+  const handleNotificationClick = async () => {
+    await axios
+      .patch(`${serverUrl}/notifications/read`, {}, { withCredentials: true })
+      .then((response) => {
+        setNotificationCount(0)
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     IsNotificationActive
       ? setIsNotificationActive(false)
       : setIsNotificationActive(true);
@@ -51,7 +85,7 @@ function Sidebar() {
     e.preventDefault();
 
     await axios
-      .post("http://localhost:3000/logout", {}, { withCredentials: true })
+      .post(`${serverUrl}/logout`, {}, { withCredentials: true })
       .then(function (response) {
         console.log(response.data.message);
         setToken();
@@ -96,6 +130,7 @@ function Sidebar() {
               title={"Notifications"}
               isExpanded={IsSidebarExpanded}
               onClick={handleNotificationClick}
+              notification={notificationCount}
             />
             <SideBarItem
               icon={<CgAddR style={iconStyle} />}

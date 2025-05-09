@@ -49,6 +49,7 @@ set up notifications
 liked by
 emoji picker setup
 integrate morgan
+use transactions
 
 Bugs
 fix signup

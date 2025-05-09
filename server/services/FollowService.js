@@ -10,16 +10,49 @@ class FollowService {
     });
   }
 
-  static async cancelFollowRequest(id) {
-    return await prisma.followRequest.delete({
-      where: { id: id },
+  static async rejectFollowRequest(id) {
+    await prisma.followRequest.delete({
+      where: {
+        id: id,
+      },
     });
+
+    await prisma.notification.deleteMany({
+      where: {
+        followRequestId: id,
+      },
+    });
+
+    return;
   }
 
-  static async acceptFollowRequest(data) {
-    return await prisma.follow.create({
-      data: data,
+  static async acceptFollowRequest(id) {
+    const followRequest = await prisma.followRequest.findUnique({
+      where: {
+        id: id,
+      },
     });
+
+    await prisma.follow.create({
+      data: {
+        followeeId: followRequest.followeeId,
+        followerId: followRequest.followerId,
+      },
+    });
+
+    await prisma.followRequest.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    await prisma.notification.deleteMany({
+      where: {
+        followRequestId: id,
+      },
+    });
+
+    return;
   }
 
   static async unfollowUser(id) {

@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { NotificationStatus, PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({
   errorFormat: "minimal",
   omit: {
@@ -57,6 +57,28 @@ class NotificationService {
     });
 
     return data;
+  }
+
+  static async markAsReadAll(id) {
+    await prisma.notification.updateMany({
+      where: {
+        receiverId: id,
+        status: NotificationStatus.UNREAD,
+      },
+      data: {
+        status: NotificationStatus.READ,
+      },
+    });
+    return;
+  }
+
+  static async getCount(id) {
+    return prisma.notification.count({
+      where: {
+        receiverId: id,
+        status: NotificationStatus.UNREAD,
+      },
+    });
   }
 }
 

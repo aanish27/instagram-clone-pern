@@ -36,6 +36,7 @@ function NotificationList({ notifications, period }) {
                 username={notification.sender.username}
                 name={notification.sender.name}
                 message={"requested to follow you"}
+                reqId={notification.followRequest.id}
               />
             );
           } else if (notification.comment) {

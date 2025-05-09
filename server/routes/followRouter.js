@@ -7,7 +7,7 @@ routes.get("/search", followController.search);
 routes.get("/req", followController.getFollowRequests);
 routes.post("/req", followController.sendFollowRequest);
 routes.post("/", followController.acceptFollowRequest);
-routes.delete("/req/:id", followController.cancelFollowRequest);
+routes.delete("/req/:id", followController.rejectFollowRequest);
 routes.delete("/:id", followController.unfollowUser);
 routes.delete("/remove/:id", followController.removeFollower);
 

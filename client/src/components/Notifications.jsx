@@ -22,13 +22,13 @@ function Notifications() {
     await axios
       .get(`${serverUrl}/notifications/recent`, { withCredentials: true })
       .then((response) => {
-        console.log(response.data);
         setNotifications(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   return (
     <div className="block max-h-screen w-[20vw] overflow-scroll p-3">
       <div className="text-2xl font-extrabold">Notifications</div>

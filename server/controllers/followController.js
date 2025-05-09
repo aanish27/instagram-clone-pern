@@ -18,11 +18,11 @@ const sendFollowRequest = [
   }),
 ];
 
-const cancelFollowRequest = [
+const rejectFollowRequest = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      await FollowService.cancelFollowRequest(req.body.id);
+      await FollowService.rejectFollowRequest(req.body.id);
       return res.json({ message: "Request deleted" });
     } catch (error) {
       throw error;
@@ -34,8 +34,8 @@ const acceptFollowRequest = [
   createFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      await FollowService.acceptFollowRequest(req.body);
-      return res.send("Success");
+      await FollowService.acceptFollowRequest(req.body.id);
+      return res.send("success");
     } catch (error) {
       throw error;
     }
@@ -89,7 +89,7 @@ const getFollowRequests = asyncHandler(async (req, res) => {
 
 module.exports = {
   sendFollowRequest,
-  cancelFollowRequest,
+  rejectFollowRequest,
   acceptFollowRequest,
   unfollowUser,
   removeFollower,

@@ -9,8 +9,8 @@ function SideBarItem({ title, icon, notification, path, isExpanded, onClick }) {
         <div className="relative">
           {icon}
           {notification ? (
-            <span className="absolute top-0 right-0 h-4 w-4 rounded-2xl bg-red-500 text-center text-[10px]">
-              {notification}
+            <span className="absolute top-0 right-0 h-3 w-3 rounded-2xl bg-red-500 text-center text-[8px]">
+              {notification > 99 ? "99+" : notification}
             </span>
           ) : (
             ""
