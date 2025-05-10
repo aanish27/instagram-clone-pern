@@ -2,6 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
+const eventBus = require("../shared/utils/eventBus");
+const NotificationService = require("./NotificationService");
+const UserService = require("./UserService");
 
 class PostService {
   static async getFeed(id) {
@@ -28,9 +31,29 @@ class PostService {
   }
 
   static async store(data) {
-    return await prisma.post.create({
+    const post = await prisma.post.create({
       data: data,
     });
+
+    const receivers = [];
+    const followers = await UserService.getFollowers(post.creatorId);
+
+    await Promise.all(
+      followers.map(async ({ follower }) => {
+        await NotificationService.store({
+          postId: post.id,
+          senderId: post.creatorId,
+          receiverId: follower.id,
+        });
+        receivers.push(follower.id);
+      }),
+    );
+
+    eventBus.emit("send_notification", {
+      receivers: receivers,
+    });
+
+    return post;
   }
 
   static async getSavedPosts(id) {

@@ -32,6 +32,9 @@ class NotificationService {
         comment: { include: { post: true } },
         followRequest: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const data = {

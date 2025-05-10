@@ -31,8 +31,6 @@ const followRoutes = require("./routes/followRouter");
 const likeRoutes = require("./routes/likeRouter");
 const notificationRoutes = require("./routes/notificationRouter");
 const eventBus = require("./shared/utils/eventBus");
-const NotificationService = require("./services/NotificationService");
-const UserService = require("./services/UserService");
 
 app.use("/", authRoutes);
 app.use("/user", verifyToken, userRoutes);
@@ -56,14 +54,9 @@ app.get("/notifications/connect", verifyToken, (req, res) => {
   });
 });
 
-eventBus.on("send_notification", async (data) => {
-  const followers = await UserService.getFollowers(data.senderId);
-  followers.forEach(async (follower) => {
-    const f = follower.follower.id;
-    const newData = { ...data };
-    newData.receiverId = f;
-    await NotificationService.store(newData);
-    const client = activeClients.get(f);
+eventBus.on("send_notification", async ({receivers}) => {
+  receivers.forEach(async (receiver) => {
+    const client = activeClients.get(receiver);
     if (client) {
       client.write(`data: refresh\n\n`);
     }

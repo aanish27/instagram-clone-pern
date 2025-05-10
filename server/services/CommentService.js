@@ -2,12 +2,31 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
+const eventBus = require("../shared/utils/eventBus");
+const NotificationService = require("./NotificationService");
 
 class CommentService {
   static async store(data) {
-    return await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: data,
     });
+
+    const { post } = await prisma.comment.findUnique({
+      where: { id: comment.id },
+      select: { post: true },
+    });
+
+    await NotificationService.store({
+      commentId: comment.id,
+      senderId: comment.creatorId,
+      receiverId: post.creatorId,
+    });
+
+    eventBus.emit("send_notification", {
+      receivers: [post.creatorId],
+    });
+
+    return comment;
   }
 
   static async destroy(id) {

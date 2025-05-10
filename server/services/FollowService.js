@@ -2,12 +2,31 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
+const eventBus = require("../shared/utils/eventBus");
+const NotificationService = require("./NotificationService");
 
 class FollowService {
   static async sendFollowRequest(data) {
-    return await prisma.followRequest.create({
+    const request = await prisma.followRequest.create({
       data: data,
     });
+
+    const { followee } = await prisma.followRequest.findUnique({
+      where: { id: request.id },
+      select: { followee: true },
+    });
+
+    await NotificationService.store({
+      followRequestId: request.id,
+      senderId: request.followerId,
+      receiverId: followee.id,
+    });
+
+    eventBus.emit("send_notification", {
+      receivers: [followee.id],
+    });
+
+    return request;
   }
 
   static async rejectFollowRequest(id) {

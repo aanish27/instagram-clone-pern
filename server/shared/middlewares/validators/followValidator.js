@@ -3,6 +3,7 @@ const ClientError = require("../../errors/clientError");
 const {
   destroyFollowValidationSchema,
   searchFollowValidationSchema,
+  createFollowValidationSchema,
 } = require("../../validators/follow.joi.validator");
 
 const createFollowValidator = asyncHandler(async (req, res, next) => {
@@ -10,13 +11,14 @@ const createFollowValidator = asyncHandler(async (req, res, next) => {
     throw new ClientError("Missing Body!");
   }
 
-  const { error, value } = destroyFollowValidationSchema.validate(req.body);
+  const { error, value } = createFollowValidationSchema.validate(req.body);
 
   if (error) {
     throw error;
   }
 
   req.body = value;
+  req.body.followerId = req.user.id;
   next();
 });
 

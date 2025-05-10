@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import RightSidebar from "../components/RightSidebar";
 import { useDispatch, useSelector } from "react-redux";
-// import { toggleNotificationReload } from "../app/features/uiSlice";
+import { toggleNotificationReload } from "../app/features/uiSlice";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const fetchPosts = useSelector((state) => state.post.fetchPosts);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -30,7 +30,7 @@ function Feed() {
 
     eventSource.onmessage = (event) => {
       console.log(event.data);
-      // dispatch(toggleNotificationReload())
+      dispatch(toggleNotificationReload())
     };
 
     return () => eventSource.close();

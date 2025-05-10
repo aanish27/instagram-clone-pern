@@ -17,7 +17,7 @@ const store = [
   createPostValidator,
   asyncHandler(async (req, res) => {
     try {
-      PostService.store(req.body);
+      await PostService.store(req.body);
       return res.json({ message: "New Post Shared" });
     } catch (error) {
       throw error;
