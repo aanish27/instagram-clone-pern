@@ -3,13 +3,25 @@ const { PrismaClient } = require("@prisma/client");
 const {
   createCommentValidator,
   updateCommentValidator,
-  destroyCommentByIdValidator,
 } = require("../shared/middlewares/validators/commentValidator");
 const CommentService = require("../services/CommentService");
+const { idValidator } = require("../shared/middlewares/validators/commonValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
+
+const getComments = [
+  idValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const comments = await CommentService.getComments(req.body.id);
+      return res.json(comments);
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
 
 const store = [
   createCommentValidator,
@@ -35,13 +47,13 @@ const update = [
       });
       return res.json(comment);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
 const destroy = [
-  destroyCommentByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       await CommentService.destroy(req.body.id);
@@ -52,4 +64,4 @@ const destroy = [
   }),
 ];
 
-module.exports = { store, update, destroy };
+module.exports = { store, update, destroy, getComments };

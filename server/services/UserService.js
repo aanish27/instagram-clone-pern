@@ -56,7 +56,7 @@ class UserService {
   }
 
   static async getProfile(username) {
-    return await prisma.user.findFirst({
+    return await prisma.user.findFirstOrThrow({
       where: {
         username: username,
       },
@@ -81,15 +81,6 @@ class UserService {
       where: {
         OR: [{ email: email }, { username: username }, { id: id }],
       },
-    });
-  }
-
-  static async getFollowers(userId) {
-    return await prisma.follow.findMany({
-      where: {
-        followeeId: userId,
-      },
-      select: { follower: true },
     });
   }
 }

@@ -33,7 +33,7 @@ const store = [
       });
       return res.send("Success");
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
@@ -54,7 +54,7 @@ const show = [
 
       return res.json(Story);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
@@ -71,7 +71,7 @@ const update = [
       });
       return res.json(Story);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
@@ -92,7 +92,7 @@ const destroy = [
 
       return res.json({ message: "Story deleted" });
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];

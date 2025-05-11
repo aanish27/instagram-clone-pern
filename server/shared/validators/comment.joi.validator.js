@@ -10,12 +10,7 @@ const updateCommentValidationSchema = Joi.object({
   postId: Joi.number().positive(),
 }).options({ abortEarly: false });
 
-const getCommentByIdValidationSchema = Joi.object({
-  id: Joi.number().positive().required(),
-}).options({ abortEarly: false });
-
 module.exports = {
   createCommentValidationSchema,
   updateCommentValidationSchema,
-  getCommentByIdValidationSchema,
 };

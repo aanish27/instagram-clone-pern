@@ -22,7 +22,7 @@ function Profile() {
   }, [followModalTitle, followModalContent]);
 
   const savedPosts = useMemo(() => {
-    return user.UsersSavedPosts.map((saved) => saved.post);
+    return user.savedPosts.map((saved) => saved.post);
   }, [user]);
 
   const handleTabClick = (e) => {

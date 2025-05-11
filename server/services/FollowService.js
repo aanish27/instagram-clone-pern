@@ -120,6 +120,15 @@ class FollowService {
       include: { follower: true },
     });
   }
+
+  static async getFollowers(userId) {
+    return await prisma.follow.findMany({
+      where: {
+        followeeId: userId,
+      },
+      select: { follower: true },
+    });
+  }
 }
 
 module.exports = FollowService;

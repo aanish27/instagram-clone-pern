@@ -8,6 +8,8 @@ import Avatar from "../components/Avatar";
 import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
+const storageUrl = import.meta.env.VITE_STORAGE_URL;
+const regex = /^https:\/\/picsum\.photos\/seed\//;
 
 function ViewPostModal({ post }) {
   const [comments, setComments] = useState(null);
@@ -23,7 +25,7 @@ function ViewPostModal({ post }) {
     setValue("postId", post.id);
 
     axios
-      .get(`${serverUrl}/post/comments/${post.id}`, {
+      .get(`${serverUrl}/comment/post/${post.id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -66,7 +68,14 @@ function ViewPostModal({ post }) {
         className="modal-box flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center bg-black p-0"
         onClick={(e) => e.stopPropagation()}>
         <div className="flex h-[100%] w-[100%]">
-          <img src={post.attachment} alt="" className="w-[65%]" />
+          <img
+            src={
+              regex.test(post.attachment)
+                ? post.attachment
+                : `${storageUrl}${post.attachment}`
+            }
+            className="w-[65%]"
+          />
           <div className="flex w-[100%] flex-col p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">

@@ -20,6 +20,19 @@ app.use(
     origin: process.env.CLIENT_ORIGIN,
   }),
 );
+const morgan = require("morgan");
+if (app.get("env") == "production") {
+  app.use(
+    morgan("common", {
+      skip: function (req, res) {
+        return res.statusCode < 400;
+      },
+      stream: __dirname + "/../morgan.log",
+    }),
+  );
+} else {
+  app.use(morgan("dev"));
+}
 app.use(express.static("uploads"));
 const verifyToken = require("./shared/middlewares/verifyToken");
 const authRoutes = require("./routes/authRouter");

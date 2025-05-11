@@ -1,9 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const {
   updateUserValidator,
-  getUserByIdValidator,
   searchUserValidator,
 } = require("../shared/middlewares/validators/userValidator");
+const {
+  idValidator,
+} = require("../shared/middlewares/validators/commonValidator");
 const UserService = require("../services/UserService");
 
 const getSuggestions = asyncHandler(async (req, res) => {
@@ -11,12 +13,17 @@ const getSuggestions = asyncHandler(async (req, res) => {
     const users = await UserService.getSuggestions(req);
     return res.json({ users: users });
   } catch (error) {
-    return res.json({ error: error });
+    throw error;
   }
 });
 
 const getAuth = asyncHandler(async (req, res) => {
-  return res.json(req.user);
+  try {
+    const user = await UserService.getUser(undefined, undefined, req.user.id);
+    return res.json(user);
+  } catch (error) {
+    throw error;
+  }
 });
 
 const update = [
@@ -26,13 +33,13 @@ const update = [
       const user = await UserService.update(req.params.id, req.body);
       return res.json(user);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
 const destroy = [
-  getUserByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       const user = await UserService.destroy(req.params.id);
@@ -51,7 +58,7 @@ const search = [
       const result = UserService.search(req.body.search);
       return res.json(result);
     } catch (error) {
-      return res.json(error);
+      throw error;
     }
   }),
 ];
@@ -60,13 +67,8 @@ const getProfile = [
   searchUserValidator,
   asyncHandler(async (req, res) => {
     try {
-      const result = await UserService.getProfile(req.body.search);
-
-      if (!result) {
-        return res.status(404).json({ error: "No Matching Users" });
-      }
-
-      return res.json(result);
+      const profile = await UserService.getProfile(req.body.search);
+      return res.json(profile);
     } catch (error) {
       throw error;
     }

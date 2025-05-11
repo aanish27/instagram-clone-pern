@@ -24,10 +24,6 @@ const updateUserValidationSchema = Joi.object({
   password: Joi.string().alphanum().min(8).max(30),
 }).options({ abortEarly: false });
 
-const getUserByIdValidationSchema = Joi.object({
-  id: Joi.number().positive().required(),
-}).options({ abortEarly: false });
-
 const searchUsersSchema = Joi.object({
   search: Joi.string().alphanum()
     .max(20)
@@ -37,6 +33,5 @@ const searchUsersSchema = Joi.object({
 module.exports = {
   createUserValidationSchema,
   updateUserValidationSchema,
-  getUserByIdValidationSchema,
   searchUsersSchema,
 };

@@ -23,6 +23,20 @@ saved posts - DONE
 user...data has password on the frontend - DONE
 expolore - DONE
 setup profile page - DONE
+implement follow - following - DONE
+notification + follow req accept for notifaction, use pub/sub pattern - DONE
+set up notifications - DONE
+add service layer - DONE
+use one instance of prisma client everywhere - DONE
+use one ID validation schema - DONE
+get auth and get user by id same - DONE
+followers must be in follow service - DONE
+get comments must be in comments serivice - DONE
+validators check proper usage - DONE
+throw error everywhere - DONE
+wrap prisma in try catch - UNNECESSARY
+validator - params check remove - DONE
+integrate morgan - DONE
 
 Frontend
 eliipsis for caption
@@ -34,23 +48,56 @@ design Story model
 integrate react query
 comments story model
 dark mode - light mode
-user liked posts
 
 Backend
 should nt shw user anywhere -> story , post , follow
-add service layer
 
 Features
 user chats
-implement follow - following
 role based access...user based access
-notification + follow req accept for notifaction use web sockets or use pub/sub pattern
-set up notifications
 liked by
 emoji picker setup
-integrate morgan
 use transactions
+edit profile
+edit post
+add thread and more icons - with popup
+profile pic on click upload or remove
+add other fields in post upload
+post upload feedback
+edit pop - up
+post crud
+share modal
+add comment below post
+COMMENT CRUD
+fix one story to right and have an add button...
+set up story crud
+providing your own ErrorBoundary or errorElement prop on your route.
 
 Bugs
-fix signup
-use one instance of prisma client everywhere
+fix signup 
+responsiveness fix - SIDEBAR
+multiple sidebar component can be active
+responsivenes followreqs
+post upload validation -frontend
+user not set on auth profile
+message sidebar doesnt open onclick
+view modal username
+user liked posts
+followers suggestion shouldnt shw user
+porfile componenets responsiveness
+messages load followings
+
+REFACTOR
+db intergratyy - check
+AUTH REFACTOR - USE LUCIA AUTH or passport
+config js
+loaders js
+handle erros properly
+send proper response
+remove unncessary folders
+savedPosts - seperate entity
+followRequest - seperate entity
+
+client
+use input component everywher
+use server url

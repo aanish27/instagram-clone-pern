@@ -3,10 +3,10 @@ const { PrismaClient } = require("@prisma/client");
 const {
   createPostValidator,
   updatePostValidator,
-  getPostByIdValidator,
 } = require("../shared/middlewares/validators/postValidator");
 const upload = require("../shared/middlewares/uploadMulter");
 const PostService = require("../services/PostService");
+const { idValidator } = require("../shared/middlewares/validators/commonValidator");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
@@ -35,7 +35,7 @@ const getFeed = asyncHandler(async (req, res) => {
 });
 
 const show = [
-  getPostByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       const post = await prisma.post.findUnique({
@@ -50,7 +50,7 @@ const show = [
 
       return res.json(post);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
@@ -67,13 +67,13 @@ const update = [
       });
       return res.json(post);
     } catch (error) {
-      return res.json({ error: error });
+      throw error;
     }
   }),
 ];
 
 const destroy = [
-  getPostByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       const post = await prisma.post.delete({
@@ -87,18 +87,6 @@ const destroy = [
       }
 
       return res.json({ message: "Post deleted" });
-    } catch (error) {
-      return res.json({ error: error });
-    }
-  }),
-];
-
-const getComments = [
-  getPostByIdValidator,
-  asyncHandler(async (req, res) => {
-    try {
-      const comments = await PostService.getComments(req.body.id);
-      return res.json(comments);
     } catch (error) {
       throw error;
     }
@@ -115,7 +103,7 @@ const getSavedPosts = asyncHandler(async (req, res) => {
 });
 
 const storeSavePost = [
-  getPostByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       await PostService.storeSavePost(req.user.id, req.body.postId);
@@ -127,7 +115,7 @@ const storeSavePost = [
 ];
 
 const deleteSavePost = [
-  getPostByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       await PostService.deleteSavePost(req.user.id, req.body.id);
@@ -154,7 +142,6 @@ module.exports = {
   show,
   update,
   destroy,
-  getComments,
   getSavedPosts,
   storeSavePost,
   deleteSavePost,

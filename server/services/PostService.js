@@ -1,7 +1,7 @@
 const { prisma } = require("../db/prisma/prismaClient");
 const eventBus = require("../shared/utils/eventBus");
+const FollowService = require("./FollowService");
 const NotificationService = require("./NotificationService");
-const UserService = require("./UserService");
 
 class PostService {
   static async getFeed(id) {
@@ -33,7 +33,7 @@ class PostService {
     });
 
     const receivers = [];
-    const followers = await UserService.getFollowers(post.creatorId);
+    const followers = await FollowService.getFollowers(post.creatorId);
 
     await Promise.all(
       followers.map(async ({ follower }) => {
@@ -76,21 +76,6 @@ class PostService {
   static async deleteSavePost(userId, postId) {
     return await prisma.usersSavedPosts.create({
       data: { userId: userId, postId: postId },
-    });
-  }
-
-  static async getComments(id) {
-    return await prisma.comment.findMany({
-      where: {
-        postId: id,
-      },
-      include: {
-        creator: {
-          select: {
-            username: true,
-          },
-        },
-      },
     });
   }
 

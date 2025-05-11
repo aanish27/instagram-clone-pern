@@ -7,7 +7,6 @@ routes.get("/", postController.getFeed);
 routes.get("/saved", postController.getSavedPosts);
 routes.get("/explore", postController.getExplore);
 routes.get("/:id", postController.show);
-routes.get("/comments/:id", postController.getComments);
 routes.post("/saved/:id", postController.storeSavePost);
 routes.post("/", postController.store);
 routes.put("/:id", postController.update);

@@ -26,6 +26,21 @@ class CommentService {
     return comment;
   }
 
+  static async getComments(postId) {
+    return await prisma.comment.findMany({
+      where: {
+        postId: postId,
+      },
+      include: {
+        creator: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+  }
+
   static async destroy(id) {
     return await prisma.comment.delete({
       where: {
