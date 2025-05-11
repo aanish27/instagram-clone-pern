@@ -1,7 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({
-  errorFormat: "minimal",
-});
+const { prisma } = require("../db/prisma/prismaClient");
 const eventBus = require("../shared/utils/eventBus");
 const NotificationService = require("./NotificationService");
 const UserService = require("./UserService");

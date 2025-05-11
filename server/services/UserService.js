@@ -1,15 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({
-  errorFormat: "minimal",
-  omit: {
-    user: {
-      password: true,
-      email: true,
-      bio: true,
-      phone: true,
-    },
-  },
-});
+const { prisma } = require("../db/prisma/prismaClient");
 
 class UserService {
   static async store(data) {
@@ -75,7 +64,7 @@ class UserService {
         posts: true,
         followers: { select: { follower: true } },
         followings: { select: { followee: true } },
-        UsersSavedPosts: {
+        savedPosts: {
           include: {
             post: { include: { creator: { select: { username: true } } } },
           },
