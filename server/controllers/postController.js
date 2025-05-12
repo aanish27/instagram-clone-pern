@@ -28,7 +28,7 @@ const store = [
 const getFeed = asyncHandler(async (req, res) => {
   try {
     const posts = await PostService.getFeed(req.user.id);
-    return res.json({ posts: posts });
+    return res.json(posts);
   } catch (error) {
     throw error;
   }

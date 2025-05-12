@@ -8,14 +8,13 @@ import EmojiPicker from "emoji-picker-react";
 import { CiFaceSmile } from "react-icons/ci";
 import profile_pic from "../assets/car.jpg";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { toggleFetchPosts } from "../app/features/postSlice";
 import Avatar from "../components/Avatar";
+import { useQueryClient } from "@tanstack/react-query";
 
 function PostUploadModal() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [preview, setPreview] = useState(null);
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!uploadedImage) {
@@ -59,7 +58,7 @@ function PostUploadModal() {
       })
       .then(function (response) {
         console.log(response.data.message);
-        dispatch(toggleFetchPosts());
+        queryClient.invalidateQueries({ queryKey: ["feed"] });
         document.getElementById("postUploadModal").close();
         setTimeout(() => {
           setUploadedImage(null);
