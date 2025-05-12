@@ -2,12 +2,32 @@ import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "../api/axiosInstance";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function FollowModal({ title, setFollowModalTitle, content }) {
   const [searchResult, setSearchResult] = useState(content);
   const isFollower = title === "follower" ? true : false;
   const { register, handleSubmit } = useForm();
+
+  const mutation = useMutation({
+    mutationFn: (followeeId) => {
+      return axiosInstance
+        .delete(`${serverUrl}/follow/${Number(followeeId)}`)
+        .then((res) => res.data);
+    },
+    onError: (error, variables, context) => {
+      console.log(`${error} error`);
+      console.log(`${variables} variables`);
+      console.log(`${context} context`);
+    },
+    onSuccess: (data, variables, context) => {
+      console.log(`${data} data`);
+      console.log(`${variables} variables`);
+      console.log(`${context} context`);
+    },
+  });
 
   const removeOnClick = async (e) => {
     axios
@@ -23,7 +43,17 @@ function FollowModal({ title, setFollowModalTitle, content }) {
   };
 
   const followingOnClick = (e) => {
-    console.log(e.target.dataset.id);
+    mutation.mutate(e.target.dataset.id);
+    // axios
+    //   .delete(`${serverUrl}/follow/${Number(e.target.dataset.id)}`, {
+    //     withCredentials: true,
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const handleSearch = (data) => {

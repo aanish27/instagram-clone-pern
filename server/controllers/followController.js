@@ -46,7 +46,7 @@ const unfollowUser = [
   destroyFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      await FollowService.unfollowUser(req.body.id);
+      await FollowService.unfollowUser(req.user.id, req.body.id);
       return res.json({ message: "Follow deleted" });
     } catch (error) {
       throw error;

@@ -71,12 +71,20 @@ class FollowService {
     return;
   }
 
-  static async unfollowUser(id) {
-    return await prisma.follow.delete({
+  static async unfollowUser(followerId, followeeId) {
+    const follow = await prisma.follow.findFirstOrThrow({
       where: {
-        id: id,
+        followerId: followerId,
+        followeeId: followeeId,
       },
     });
+
+    await prisma.follow.delete({
+      where: {
+        id: follow.id,
+      },
+    });
+    return;
   }
 
   static async removeFollower(followerId, userId) {
