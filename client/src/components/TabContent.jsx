@@ -23,7 +23,7 @@ function TabContent({ activeTab, posts, savedPosts }) {
   const handlePostClick = (paramsObj) => {
     const post = { ...paramsObj };
     const username = activeTab == 0 ? authUser.username : post.creator.username;
-    post["creator"] = username;
+    post["username"] = username;
     openViewPostModal(dispatch, post);
   };
 

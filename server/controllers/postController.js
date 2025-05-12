@@ -106,7 +106,7 @@ const storeSavePost = [
   idValidator,
   asyncHandler(async (req, res) => {
     try {
-      await PostService.storeSavePost(req.user.id, req.body.postId);
+      await PostService.storeSavePost(req.user.id, req.body.id);
       return res.send("success");
     } catch (error) {
       throw error;

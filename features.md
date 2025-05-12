@@ -34,9 +34,10 @@ followers must be in follow service - DONE
 get comments must be in comments serivice - DONE
 validators check proper usage - DONE
 throw error everywhere - DONE
-wrap prisma in try catch - UNNECESSARY
 validator - params check remove - DONE
 integrate morgan - DONE
+followers suggestion shouldnt shw user - DONE
+view modal username - DONE
 
 Frontend
 eliipsis for caption
@@ -74,18 +75,17 @@ set up story crud
 providing your own ErrorBoundary or errorElement prop on your route.
 
 Bugs
-fix signup 
+fix signup
 responsiveness fix - SIDEBAR
 multiple sidebar component can be active
 responsivenes followreqs
 post upload validation -frontend
 user not set on auth profile
 message sidebar doesnt open onclick
-view modal username
 user liked posts
-followers suggestion shouldnt shw user
 porfile componenets responsiveness
 messages load followings
+get suggestion query - shows followers
 
 REFACTOR
 db intergratyy - check

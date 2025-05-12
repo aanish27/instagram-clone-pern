@@ -10,7 +10,8 @@ const UserService = require("../services/UserService");
 
 const getSuggestions = asyncHandler(async (req, res) => {
   try {
-    const users = await UserService.getSuggestions(req);
+    const all = req.query.all === "true" ? true : false ;
+    const users = await UserService.getSuggestions(all , req.user.id);
     return res.json({ users: users });
   } catch (error) {
     throw error;

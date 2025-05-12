@@ -2,7 +2,6 @@ import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
-import { titleCase } from "title-case";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function FollowModal({ title, setFollowModalTitle, content }) {
@@ -50,7 +49,7 @@ function FollowModal({ title, setFollowModalTitle, content }) {
   return (
     <dialog id="followModal" className="modal">
       <div className="modal-box bg-insta-black h-[55vh] overflow-clip">
-        <h3 className="text-center text-lg">{`${titleCase(title)}s`}</h3>
+        <h3 className="text-center text-lg uppercase">{`${title}s`}</h3>
         <hr className="my-2 w-full"></hr>
         <form onSubmit={handleSubmit(handleSearch)} className="flex gap-2">
           <Input

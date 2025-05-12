@@ -7,25 +7,16 @@ class UserService {
     });
   }
 
-  static async getSuggestions(req) {
-    if (req.query.all == "true") {
-      return await prisma.user.findMany({
-        where: {
-          id: {
-            notIn: [req.user.id],
-          },
+  static async getSuggestions(takeAll , id) {
+
+    return await prisma.user.findMany({
+      where: {
+        id: {
+          notIn: [id],
         },
-      });
-    } else {
-      return await prisma.user.findMany({
-        take: 30,
-        where: {
-          id: {
-            notIn: [req.user.id],
-          },
-        },
-      });
-    }
+      },
+      ...(takeAll ? { take: 100 } : { take: 30 }),
+    });
   }
 
   static async update(id, data) {

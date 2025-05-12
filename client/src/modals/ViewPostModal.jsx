@@ -81,7 +81,7 @@ function ViewPostModal({ post }) {
               <div className="flex items-center">
                 <Avatar img={post.attachment} />
                 <div className="flex flex-col p-3">
-                  <div className="font-semibold">{post.creator}</div>
+                  <div className="font-semibold">{post.username}</div>
                 </div>
               </div>
               <IoEllipsisHorizontal />

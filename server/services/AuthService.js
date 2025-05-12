@@ -19,6 +19,7 @@ class AuthService {
 
   static async login(email, password) {
     const user = await prisma.user.findUniqueOrThrow({
+      omit: { password: false },
       where: { email: email },
     });
 
@@ -35,6 +36,7 @@ class AuthService {
       sameSite: "none",
     };
 
+    delete user.password
     const accesstoken = this.createToken(user, "6h");
 
     return [accesstoken, cookieOptions];
