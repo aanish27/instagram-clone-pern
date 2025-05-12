@@ -5,31 +5,35 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 import ViewPostModal from "../modals/ViewPostModal";
+import MoreOptionsModal from "../modals/MoreOptionsModal";
+import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 
 function MainLayout({ children }) {
   const post = useSelector((state) => state.post.viewPost);
-  const IsViewModalOpen = useSelector((state) => state.ui.IsViewModalOpen);
+  const { optionsModalProps, IsOptionsModalOpen, IsViewModalOpen } =
+    useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
   useEffect(() => {
     closeViewPostModal(dispatch);
+    dispatch(setIsOptionsModalOpen({ options: null, state: false }));
   }, []);
 
   useEffect(() => {
-    if (!post) {
-      return;
-    }
-
-    if (post && !IsViewModalOpen) {
-      return;
-    } else if (IsViewModalOpen) {
+    if (IsViewModalOpen && post) {
       document.getElementById("viewPostModal").showModal();
-      return;
     }
   }, [IsViewModalOpen, post]);
 
+  useEffect(() => {
+    if (IsOptionsModalOpen) {
+      document.getElementById("moreOptionsModal").showModal();
+    }
+  }, [IsOptionsModalOpen]);
+
   return (
     <>
+      {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsViewModalOpen && <ViewPostModal post={post} />}
       <NavbarMobile />
       <div className="flex max-h-screen items-center justify-between overflow-hidden">

@@ -7,6 +7,7 @@ import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
 import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
+import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 const storageUrl = import.meta.env.VITE_STORAGE_URL;
 const regex = /^https:\/\/picsum\.photos\/seed\//;
@@ -15,6 +16,23 @@ function ViewPostModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
   const dispatch = useDispatch();
+  const options = [
+    { title: "delete", path: "/" },
+    { title: "edit", path: "/" },
+    { title: "hide like count to others", path: "/" },
+    { title: "turn on commenting", path: "/" },
+    { title: "go to post", path: "/" },
+    { title: "share to...", path: "/" },
+    { title: "copy link", path: "/" },
+    { title: "embeded", path: "/" },
+    { title: "about this account", path: "/" },
+  ];
+
+  const handleOptionsOnClick = () => {
+    dispatch(
+      setIsOptionsModalOpen({ props: { options: options }, state: true }),
+    );
+  };
 
   useEffect(() => {
     reset();
@@ -56,6 +74,7 @@ function ViewPostModal({ post }) {
       return;
     }
     closeViewPostModal(dispatch);
+    dispatch(setIsOptionsModalOpen({ options: null, state: false }));
   };
 
   return (
@@ -84,7 +103,7 @@ function ViewPostModal({ post }) {
                   <div className="font-semibold">{post.username}</div>
                 </div>
               </div>
-              <IoEllipsisHorizontal />
+              <IoEllipsisHorizontal onClick={handleOptionsOnClick} />
             </div>
             <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />
             <div className="hide-scroll-bar flex h-full flex-col justify-between overflow-scroll">

@@ -6,7 +6,6 @@ import MainLayout from "../layouts/MainLayout";
 import RightSidebar from "../components/RightSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleNotificationReload } from "../app/features/uiSlice";
-import MoreOptionsModal from "../modals/MoreOptionsModal";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -29,8 +28,6 @@ function Feed() {
       },
     );
 
-    document.getElementById("moreOptionsModal").showModal();
-
     eventSource.onmessage = (event) => {
       console.log(event.data);
       dispatch(toggleNotificationReload());
@@ -41,7 +38,6 @@ function Feed() {
 
   return (
     <MainLayout>
-      <MoreOptionsModal />
       <main className="hide-scroll-bar my-10 max-h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[40%]">
         <StoryRow />
         <div className="flex w-full flex-col items-center justify-center md:px-20">
