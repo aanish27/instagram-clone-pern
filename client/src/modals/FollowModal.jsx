@@ -17,15 +17,11 @@ function FollowModal({ title, setFollowModalTitle, content }) {
         .delete(`${serverUrl}/follow/${Number(followeeId)}`)
         .then((res) => res.data);
     },
-    onError: (error, variables, context) => {
+  onError: (error) => {
       console.log(`${error} error`);
-      console.log(`${variables} variables`);
-      console.log(`${context} context`);
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data) => {
       console.log(`${data} data`);
-      console.log(`${variables} variables`);
-      console.log(`${context} context`);
     },
   });
 
@@ -44,16 +40,6 @@ function FollowModal({ title, setFollowModalTitle, content }) {
 
   const followingOnClick = (e) => {
     mutation.mutate(e.target.dataset.id);
-    // axios
-    //   .delete(`${serverUrl}/follow/${Number(e.target.dataset.id)}`, {
-    //     withCredentials: true,
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   const handleSearch = (data) => {
