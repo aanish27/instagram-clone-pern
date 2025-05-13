@@ -8,6 +8,10 @@ import {
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import axios from "axios";
 import { useState } from "react";
+import {
+  useSavePostMutation,
+  useUnsavePostMutation,
+} from "../hooks/Query/postQueryHooks";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function PostIconFooter({ postId, handleCommentClick }) {
@@ -15,6 +19,8 @@ function PostIconFooter({ postId, handleCommentClick }) {
   const [isSaved, setIsSaved] = useState(false);
   const [likeId, setLikeId] = useState(null);
   const iconStyle = { fontSize: "25px" };
+  const savePostMutation = useSavePostMutation();
+  const unsavePostMutation = useUnsavePostMutation();
 
   const handleLikeButtonOnclick = async () => {
     if (!isLiked) {
@@ -51,29 +57,16 @@ function PostIconFooter({ postId, handleCommentClick }) {
   };
 
   const handleSaveClick = async () => {
-    const url = `${serverUrl}/post/saved/${postId}`;
     if (!isSaved) {
-      await axios
-        .post(url, {}, { withCredentials: true })
-        .then((response) => {
+      savePostMutation.mutate(postId, {
+        onSuccess: () => {
           setIsSaved(!isSaved);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        },
+      });
     } else {
-      await axios
-        .delete(url, {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setIsSaved(!isSaved);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      unsavePostMutation.mutate(postId, {
+        onSuccess: () => setIsSaved(!isSaved),
+      });
     }
   };
 

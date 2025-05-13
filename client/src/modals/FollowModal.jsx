@@ -2,8 +2,7 @@ import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "../api/axiosInstance";
+import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function FollowModal({ title, setFollowModalTitle, content }) {
@@ -11,19 +10,7 @@ function FollowModal({ title, setFollowModalTitle, content }) {
   const isFollower = title === "follower" ? true : false;
   const { register, handleSubmit } = useForm();
 
-  const mutation = useMutation({
-    mutationFn: (followeeId) => {
-      return axiosInstance
-        .delete(`${serverUrl}/follow/${Number(followeeId)}`)
-        .then((res) => res.data);
-    },
-  onError: (error) => {
-      console.log(`${error} error`);
-    },
-    onSuccess: (data) => {
-      console.log(`${data} data`);
-    },
-  });
+  const unfollowMutation = useUnfollowUserMutation();
 
   const removeOnClick = async (e) => {
     axios
@@ -39,7 +26,7 @@ function FollowModal({ title, setFollowModalTitle, content }) {
   };
 
   const followingOnClick = (e) => {
-    mutation.mutate(e.target.dataset.id);
+    unfollowMutation.mutate(e.target.dataset.id);
   };
 
   const handleSearch = (data) => {

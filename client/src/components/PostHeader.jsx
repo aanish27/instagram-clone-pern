@@ -5,17 +5,23 @@ import Avatar from "./Avatar";
 import { useDispatch } from "react-redux";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 
-function PostHeader({ username, profile_pic }) {
+function PostHeader({ username, profile_pic , userId , postId}) {
   const dispatch = useDispatch();
   const options = [
     { title: "report", path: "/" },
-    { title: "unfollow", path: "/" },
-    { title: "add to favourites", path: "/" },
+    {
+      title: "unfollow",
+      onClick: { actionType: "unfollow", data: { followerId: userId } },
+    },
+    {
+      title: "save post",
+      onClick: { actionType: "savePost", data: { postId: postId } },
+    },
     { title: "go to post", path: "/" },
     { title: "share to...", path: "/" },
     { title: "copy link", path: "/" },
     { title: "embeded", path: "/" },
-    { title: "about this account", path: "/" },
+    { title: "about this account", path: `/${username}` },
   ];
 
   const handleOptionsOnClick = () => {

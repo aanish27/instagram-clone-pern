@@ -1,14 +1,25 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
-import { useEffect } from "react";
+import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
 
 function MoreOptionsModal({ props }) {
   const dispatch = useDispatch();
-  console.log(props);
+  const unfollowMutation = useUnfollowUserMutation();
+
+  const handleOptionClick = (option) => {
+    switch (option.actionType) {
+      case "unfollow":
+        unfollowMutation.mutate(option.data.followerId);
+        break;
+      default:
+        break;
+    }
+    modalOnClose();
+  };
 
   const modalOnClose = (e) => {
-    if (e.type == "keydown" && e.code !== "Escape") {
+    if (e && e.type == "keydown" && e.code !== "Escape") {
       return;
     }
     dispatch(setIsOptionsModalOpen({ options: null, state: false }));
@@ -38,11 +49,19 @@ function MoreOptionsModal({ props }) {
                 <li
                   key={index}
                   className="flex w-full items-center justify-center border-b-1 border-gray-600">
-                  <Link
-                    to={option.path}
-                    className="flex h-12 w-full items-center justify-center capitalize">
-                    {option.title}
-                  </Link>
+                  {option.onClick ? (
+                    <button
+                      onClick={() => handleOptionClick(option.onClick)}
+                      className="flex h-12 w-full items-center justify-center capitalize">
+                      {option.title}
+                    </button>
+                  ) : (
+                    <Link
+                      to={option.path}
+                      className="flex h-12 w-full items-center justify-center capitalize">
+                      {option.title}
+                    </Link>
+                  )}
                 </li>
               );
             })}

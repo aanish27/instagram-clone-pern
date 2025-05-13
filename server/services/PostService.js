@@ -74,8 +74,13 @@ class PostService {
   }
 
   static async deleteSavePost(userId, postId) {
-    return await prisma.usersSavedPosts.create({
-      data: { userId: userId, postId: postId },
+    return await prisma.usersSavedPosts.delete({
+      where: {
+        userId_postId: {
+          userId: userId,
+          postId: postId,
+        },
+      },
     });
   }
 

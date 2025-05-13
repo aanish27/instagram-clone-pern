@@ -1,21 +1,15 @@
 import StoryRow from "../components/StoryRow";
 import PostContainer from "../components/PostContainer";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MainLayout from "../layouts/MainLayout";
 import RightSidebar from "../components/RightSidebar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleNotificationReload } from "../app/features/uiSlice";
-import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../api/axiosInstance";
+import { usePostsQuery } from "../hooks/Query/postQueryHooks";
 
 function Feed() {
   const dispatch = useDispatch();
-  const { isError, data, error, isSuccess } = useQuery({
-    queryKey: ["feed"],
-    queryFn: () => axiosInstance.get("/post").then((res) => res.data),
-  });
-
+  const { isError, data, error, isSuccess } = usePostsQuery();
   if (isError) console.log(error);
 
   useEffect(() => {

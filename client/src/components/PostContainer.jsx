@@ -9,6 +9,8 @@ function PostContainer(post) {
         username={post.creator.username}
         created={post.createdAt}
         profile_pic={post.creator.profile_pic}
+        userId={post.creator.id}
+        postId={post.id}
       />
       <PostCard attachment={post.attachment} />
       <PostFooter
