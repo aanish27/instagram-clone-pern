@@ -74,6 +74,17 @@ class UserService {
       },
     });
   }
+
+  static async updateProfilePicture(userId, attachment) {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profile_pic: attachment,
+      },
+    });
+  }
 }
 
 module.exports = UserService;

@@ -6,13 +6,17 @@ const {
 } = require("../shared/middlewares/validators/postValidator");
 const upload = require("../shared/middlewares/uploadMulter");
 const PostService = require("../services/PostService");
-const { idValidator } = require("../shared/middlewares/validators/commonValidator");
+const {
+  idValidator,
+} = require("../shared/middlewares/validators/commonValidator");
+const setPath = require("../shared/middlewares/setPath");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
 const store = [
+  setPath("posts"),
   upload.single("attachment"),
   createPostValidator,
   asyncHandler(async (req, res) => {

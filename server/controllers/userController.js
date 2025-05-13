@@ -7,11 +7,13 @@ const {
   idValidator,
 } = require("../shared/middlewares/validators/commonValidator");
 const UserService = require("../services/UserService");
+const upload = require("../shared/middlewares/uploadMulter");
+const setPath = require("../shared/middlewares/setPath");
 
 const getSuggestions = asyncHandler(async (req, res) => {
   try {
-    const all = req.query.all === "true" ? true : false ;
-    const users = await UserService.getSuggestions(all , req.user.id);
+    const all = req.query.all === "true" ? true : false;
+    const users = await UserService.getSuggestions(all, req.user.id);
     return res.json({ users: users });
   } catch (error) {
     throw error;
@@ -76,6 +78,24 @@ const getProfile = [
   }),
 ];
 
+const updateProfilePicture = [
+  setPath("profile_pics"),
+  upload.single("profile_pic"),
+  asyncHandler(async (req, res) => {
+    try {
+      console.log(req.body);
+
+      if (!req.file) {
+        return res.status(400).send({ error: "Mutter file is required" });
+      }
+      await UserService.updateProfilePicture(req.user.id, req.file.path);
+      return res.json("success");
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
 module.exports = {
   getSuggestions,
   getAuth,
@@ -83,4 +103,6 @@ module.exports = {
   update,
   destroy,
   search,
+  updateProfilePicture,
+  // deleteProfilePicture,
 };

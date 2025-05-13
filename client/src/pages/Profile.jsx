@@ -7,6 +7,9 @@ import { useEffect, useMemo, useState } from "react";
 import TabContent from "../components/TabContent";
 import { useLoaderData } from "react-router";
 import FollowModal from "../modals/FollowModal";
+import { FaEdit } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 
 function Profile() {
   const [activeTab, setActiveTab] = useState(0);
@@ -14,6 +17,20 @@ function Profile() {
   const [followModalContent, setFollowModalContent] = useState(null);
   const tabs = ["Posts", "Saved", "Tagged"];
   const user = useLoaderData();
+  const dispatch = useDispatch();
+
+  const profilePicOptions = [
+    {
+      title: "upload photo",
+      onClick: { actionType: "uploadProfilePic", data: { userId: user.id } },
+      textColor: "text-blue-400",
+    },
+    {
+      title: "remove current photo",
+      onClick: { actionType: "removeProfilePic", data: { userId: user.id } },
+      textColor: "text-red-400",
+    },
+  ];
 
   useEffect(() => {
     if (followModalTitle && followModalContent) {
@@ -39,6 +56,15 @@ function Profile() {
     setFollowModalContent(user.followings);
   };
 
+  const handleProfilePicOnClick = () => {
+    dispatch(
+      setIsOptionsModalOpen({
+        props: { title: "change profile photo", options: profilePicOptions },
+        state: true,
+      }),
+    );
+  };
+
   return (
     <MainLayout>
       {followModalTitle && followModalContent && (
@@ -51,7 +77,14 @@ function Profile() {
       <div className="flex h-screen w-full items-center justify-center overflow-scroll">
         <div className="flex h-screen w-[50vw] flex-col gap-3">
           <div className="mt-10 flex gap-2">
-            <Avatar img={pic} size={"h-40 w-40"} />
+            <div className="group relative h-40 w-40">
+              <Avatar img={pic} size={"h-40 w-40"} />
+              <button
+                className="absolute inset-0 flex items-center justify-center rounded-full bg-white/30 text-sm text-black opacity-0 transition-opacity group-hover:opacity-100"
+                onClick={handleProfilePicOnClick}>
+                <FaEdit style={{ fontSize: "25px" }} />
+              </button>
+            </div>
             <div className="ml-[100px] flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <div>{user.username}</div>

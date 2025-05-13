@@ -8,6 +8,9 @@ routes.get("/auth", userController.getAuth);
 routes.get("/search", userController.search);
 routes.get("/profile", userController.getProfile);
 routes.put("/:id", userController.update);
+routes.patch("/profile", userController.updateProfilePicture);
+// routes.delete("/profile", userController.deleteProfilePicture);
 routes.delete("/:id", userController.destroy);
+
 
 module.exports = routes;

@@ -6,7 +6,7 @@ const {
 
 const createPostValidator = asyncHandler(async (req, res, next) => {
   if (req.file) {
-    req.body.attachment = req.file.filename;
+    req.body.attachment = req.file.path;
   }
 
   const { error, value } = createPostValidationSchema.validate(req.body);

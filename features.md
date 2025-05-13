@@ -102,3 +102,4 @@ client
 use input component everywher
 use server url
 dont use async with axios..
+use react query instead of axios
