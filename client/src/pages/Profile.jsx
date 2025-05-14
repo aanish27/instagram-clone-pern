@@ -5,7 +5,7 @@ import { RiSettings4Line } from "react-icons/ri";
 import { HiPlus } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import TabContent from "../components/TabContent";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import FollowModal from "../modals/FollowModal";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -103,7 +103,11 @@ function Profile() {
             <div className="ml-[100px] flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <div>{user.username}</div>
-                <button className="btn btn-soft h-8">edit profile</button>
+                <Link
+                  to={`/${user.username}/edit`}
+                  className="btn btn-soft h-8">
+                  Edit Profile
+                </Link>
                 <button className="btn btn-soft h-8">veiw archive</button>
                 <button>
                   <RiSettings4Line style={{ fontSize: "25px" }} />

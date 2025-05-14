@@ -46,7 +46,7 @@ const update = [
   updateUserValidator,
   asyncHandler(async (req, res) => {
     try {
-      const user = await UserService.update(req.params.id, req.body);
+      const user = await UserService.update(req.user.id, req.body);
       return res.json(user);
     } catch (error) {
       throw error;
@@ -99,7 +99,10 @@ const updateAvatar = [
       if (!req.file) {
         return res.status(400).send({ error: "Mutter file is required" });
       }
-      await UserService.updateAvatar(req.user.id, `profile_pics/${req.file.filename}`);
+      await UserService.updateAvatar(
+        req.user.id,
+        `profile_pics/${req.file.filename}`,
+      );
       return res.json("success");
     } catch (error) {
       throw error;

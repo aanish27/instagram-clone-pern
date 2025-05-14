@@ -12,13 +12,15 @@ import PrivateRoutes from "../routes/PrivateRoutes";
 import Feed from "../pages/Feed";
 import { validateUsername } from "../app/helpers";
 import { getAuthUser } from "../app/helpers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../app/features/authSlice";
 import { useEffect } from "react";
+import EditProfile from "../pages/EditProfile";
 
 const Routes = () => {
   const { token } = useAuth();
   const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth.authUser);
 
   useEffect(() => {
     if (!token) {
@@ -76,6 +78,17 @@ const Routes = () => {
             return user;
           },
           element: <Profile />,
+        },
+        {
+          path: `/${authUser.username}/edit`,
+          // loader: async ({ params }) => {
+          //   let user = await validateUsername(params.username);
+          //   if (!user) {
+          //     return redirect("/");
+          //   }
+          //   return user;
+          // },
+          element: <EditProfile />,
         },
       ],
     },

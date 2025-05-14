@@ -78,6 +78,7 @@ model User {
   bio         String?
   email       String            @unique
   phone       String
+  gender      String?
   password    String
   profile_pic String?
   posts       Post[]

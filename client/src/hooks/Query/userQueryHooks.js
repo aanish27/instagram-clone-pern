@@ -1,6 +1,29 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteAvatar, getProfile, updateAvatar } from "../../api/userApi";
+import {
+  deleteAvatar,
+  getProfile,
+  updateAvatar,
+  updateUser,
+} from "../../api/userApi";
 import { useSelector } from "react-redux";
+
+export const useUpdateUserMutation = (options = {}) => {
+  // const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateUser,
+    ...options,
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    onSuccess: (data) => {
+      console.logd(data);
+      // queryClient.invalidateQueries({
+      //   queryKey: ["profile", authUser.username],
+      // });
+    },
+  });
+};
 
 export const useUpdateAvatarMutation = (options) =>
   useAvatarMutation(updateAvatar, options);

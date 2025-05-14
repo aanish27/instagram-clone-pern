@@ -5,6 +5,9 @@ export const getProfile = (username) =>
     .get("/user/profile", { params: { search: username } })
     .then((res) => res.data);
 
+export const updateUser = (data) =>
+  axiosInstance.patch("/user", data).then((res) => res.data);
+
 export const updateAvatar = (data) =>
   axiosInstance.patch("/user/avatar", data).then((res) => res.data);
 
