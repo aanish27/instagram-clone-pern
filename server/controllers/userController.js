@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const {
   updateUserValidator,
+  getUserByUsernameValidator,
   searchUserValidator,
 } = require("../shared/middlewares/validators/userValidator");
 const {
@@ -28,6 +29,18 @@ const getAuth = asyncHandler(async (req, res) => {
     throw error;
   }
 });
+
+const getUser = [
+  getUserByUsernameValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      const user = await UserService.getUser(req.body.search);
+      return res.json(user);
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
 
 const update = [
   updateUserValidator,
@@ -78,17 +91,15 @@ const getProfile = [
   }),
 ];
 
-const updateProfilePicture = [
+const updateAvatar = [
   setPath("profile_pics"),
   upload.single("profile_pic"),
   asyncHandler(async (req, res) => {
     try {
-      console.log(req.body);
-
       if (!req.file) {
         return res.status(400).send({ error: "Mutter file is required" });
       }
-      await UserService.updateProfilePicture(req.user.id, req.file.path);
+      await UserService.updateAvatar(req.user.id, `profile_pics/${req.file.filename}`);
       return res.json("success");
     } catch (error) {
       throw error;
@@ -96,13 +107,23 @@ const updateProfilePicture = [
   }),
 ];
 
+const deleteAvatar = asyncHandler(async (req, res) => {
+  try {
+    await UserService.updateAvatar(req.user.id, null);
+    return res.json("deleted");
+  } catch (error) {
+    throw error;
+  }
+});
+
 module.exports = {
   getSuggestions,
   getAuth,
   getProfile,
+  getUser,
   update,
   destroy,
   search,
-  updateProfilePicture,
-  // deleteProfilePicture,
+  updateAvatar,
+  deleteAvatar,
 };

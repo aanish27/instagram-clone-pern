@@ -3,13 +3,15 @@ import MainLayout from "../layouts/MainLayout";
 import pic from "../assets/car.jpg";
 import { RiSettings4Line } from "react-icons/ri";
 import { HiPlus } from "react-icons/hi2";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TabContent from "../components/TabContent";
 import { useLoaderData } from "react-router";
 import FollowModal from "../modals/FollowModal";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
+import { useGetProfileQuery } from "../hooks/Query/userQueryHooks";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Profile() {
   const [activeTab, setActiveTab] = useState(0);
@@ -18,19 +20,7 @@ function Profile() {
   const tabs = ["Posts", "Saved", "Tagged"];
   const user = useLoaderData();
   const dispatch = useDispatch();
-
-  const profilePicOptions = [
-    {
-      title: "upload photo",
-      onClick: { actionType: "uploadProfilePic", data: { userId: user.id } },
-      textColor: "text-blue-400",
-    },
-    {
-      title: "remove current photo",
-      onClick: { actionType: "removeProfilePic", data: { userId: user.id } },
-      textColor: "text-red-400",
-    },
-  ];
+  const { isError, data, error, isPending } = useGetProfileQuery(user.username);
 
   useEffect(() => {
     if (followModalTitle && followModalContent) {
@@ -38,9 +28,31 @@ function Profile() {
     }
   }, [followModalTitle, followModalContent]);
 
-  const savedPosts = useMemo(() => {
-    return user.savedPosts.map((saved) => saved.post);
-  }, [user]);
+  if (isPending || isError) {
+    return <span>Loading...</span>;
+  }
+
+  const profilePicOptions = [
+    {
+      title: "upload photo",
+      onClick: {
+        actionType: "updateAvatar",
+        data: { username: user.username },
+      },
+      textColor: "text-blue-400",
+    },
+    {
+      title: "remove current photo",
+      onClick: {
+        actionType: "deleteAvatar",
+        data: { username: user.username },
+      },
+      textColor: "text-red-400",
+    },
+  ];
+
+  const profile = data;
+  const savedPosts = profile.savedPosts.map((saved) => saved.post);
 
   const handleTabClick = (e) => {
     setActiveTab(Number(e.target.dataset.tab));
@@ -48,12 +60,12 @@ function Profile() {
 
   const followersOnClick = () => {
     setFollowModalTitle("follower");
-    setFollowModalContent(user.followers);
+    setFollowModalContent(profile.followers);
   };
 
   const followingsOnClick = () => {
     setFollowModalTitle("following");
-    setFollowModalContent(user.followings);
+    setFollowModalContent(profile.followings);
   };
 
   const handleProfilePicOnClick = () => {
@@ -78,7 +90,10 @@ function Profile() {
         <div className="flex h-screen w-[50vw] flex-col gap-3">
           <div className="mt-10 flex gap-2">
             <div className="group relative h-40 w-40">
-              <Avatar img={pic} size={"h-40 w-40"} />
+              <Avatar
+                img={`${serverUrl}/${profile.profile_pic}`}
+                size={"h-40 w-40"}
+              />
               <button
                 className="absolute inset-0 flex items-center justify-center rounded-full bg-white/30 text-sm text-black opacity-0 transition-opacity group-hover:opacity-100"
                 onClick={handleProfilePicOnClick}>
@@ -96,25 +111,27 @@ function Profile() {
               </div>
               <div className="flex justify-between">
                 <div className="text-gray-400">
-                  <span className="pr-1 text-white">{user._count.posts}</span>
+                  <span className="pr-1 text-white">
+                    {profile._count.posts}
+                  </span>
                   posts
                 </div>
                 <div className="text-gray-400" onClick={followersOnClick}>
                   <span className="pr-1 text-white">
-                    {user._count.followers}
+                    {profile._count.followers}
                   </span>
                   followers
                 </div>
                 <div className="text-gray-400" onClick={followingsOnClick}>
                   <span className="pr-1 text-white">
-                    {user._count.followings}
+                    {profile._count.followings}
                   </span>
                   followings
                 </div>
               </div>
               <div className="mt-6">
-                {user.name}
-                <div>{user.bio}</div>
+                {profile.name}
+                <div>{profile.bio}</div>
               </div>
             </div>
           </div>
@@ -146,7 +163,7 @@ function Profile() {
           </div>
           <TabContent
             activeTab={activeTab}
-            posts={user.posts}
+            posts={profile.posts}
             savedPosts={savedPosts}
           />
         </div>

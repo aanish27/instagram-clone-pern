@@ -2,25 +2,37 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
-import Input from "../components/Input";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useRef } from "react";
+import {
+  useDeleteAvatarMutation,
+  useUpdateAvatarMutation,
+} from "../hooks/Query/userQueryHooks";
 
 function MoreOptionsModal({ props }) {
   const dispatch = useDispatch();
   const unfollowMutation = useUnfollowUserMutation();
+  const avatarRef = useRef(null);
+  const updateAvatarMutation = useUpdateAvatarMutation();
+  const deleteAvatarMutation = useDeleteAvatarMutation();
+
   const handleOptionClick = (option) => {
     switch (option.actionType) {
       case "unfollow":
         unfollowMutation.mutate(option.data.followerId);
         break;
+      case "updateAvatar":
+        avatarRef.current.click();
+        break;
+      case "deleteAvatar":
+        deleteAvatarMutation.mutate();
+        break;
       default:
         break;
     }
-    modalOnClose();
+
+    if (option.actionType != "updateAvatar") modalOnClose();
   };
 
-  const { register, handleSubmit } = useForm();
   const modalOnClose = (e) => {
     if (e && e.type == "keydown" && e.code !== "Escape") {
       return;
@@ -28,29 +40,16 @@ function MoreOptionsModal({ props }) {
     dispatch(setIsOptionsModalOpen({ options: null, state: false }));
   };
 
-  const handleProfileUpdate = async (data) => {
+  const handleAvatarUpdate = async (e) => {
     const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (key === "profile_pic") {
-        const file = value?.[0];
-        if (file) {
-          formData.append(key, file); 
-        }
-      } else {
-        formData.append(key, value);
-      }
+    const file = e.target.files[0];
+    if (!file) return;
+    formData.append("profile_pic", file);
+    updateAvatarMutation.mutate(formData, {
+      onSuccess: () => {
+        modalOnClose();
+      },
     });
-
-    await axios
-      .patch("http://localhost:3000/user/profile", formData, {
-        withCredentials: true,
-      })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
   return (
@@ -72,22 +71,11 @@ function MoreOptionsModal({ props }) {
                   key={index}
                   className="flex w-full items-center justify-center border-b-1 border-gray-600">
                   {option.onClick ? (
-                    option.onClick.actionType === "uploadProfilePic" ? (
-                      <form onSubmit={handleSubmit(handleProfileUpdate)}>
-                        <Input
-                          register={register}
-                          type={"file"}
-                          name={"profile_pic"}
-                        />
-                        <button>submit</button>
-                      </form>
-                    ) : (
-                      <button
-                        onClick={() => handleOptionClick(option.onClick)}
-                        className={`flex h-12 w-full items-center justify-center capitalize ${option.textColor ? `${option.textColor} font-semibold` : ""}`}>
-                        {option.title}
-                      </button>
-                    )
+                    <button
+                      onClick={() => handleOptionClick(option.onClick)}
+                      className={`flex h-12 w-full items-center justify-center capitalize ${option.textColor ? `${option.textColor} font-semibold` : ""}`}>
+                      {option.title}
+                    </button>
                   ) : (
                     <Link
                       to={option.path}
@@ -98,6 +86,13 @@ function MoreOptionsModal({ props }) {
                 </li>
               );
             })}
+          <input
+            type="file"
+            name="profile_pic"
+            ref={avatarRef}
+            className="hidden"
+            onChange={handleAvatarUpdate}
+          />
           <li
             className="flex w-full items-center justify-center"
             onClick={modalOnClose}>

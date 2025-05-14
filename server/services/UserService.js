@@ -7,8 +7,7 @@ class UserService {
     });
   }
 
-  static async getSuggestions(takeAll , id) {
-
+  static async getSuggestions(takeAll, id) {
     return await prisma.user.findMany({
       where: {
         id: {
@@ -75,7 +74,7 @@ class UserService {
     });
   }
 
-  static async updateProfilePicture(userId, attachment) {
+  static async updateAvatar(userId, attachment) {
     await prisma.user.update({
       where: {
         id: userId,

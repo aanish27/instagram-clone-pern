@@ -28,7 +28,7 @@ const Routes = () => {
     getAuthUser().then((user) => {
       dispatch(setAuthUser(user));
     });
-  }, []);
+  }, [token]);
 
   const routesForPublic = [
     {

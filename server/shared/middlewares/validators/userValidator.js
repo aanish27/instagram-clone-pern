@@ -38,8 +38,20 @@ const searchUserValidator = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const getUserByUsernameValidator = asyncHandler(async (req, res, next) => {
+  const { error, value } = searchUsersSchema.validate(req.params);
+
+  if (error) {
+    throw error;
+  }
+
+  req.body = value;
+  next();
+});
+
 module.exports = {
   createUserValidator,
   updateUserValidator,
   searchUserValidator,
+  getUserByUsernameValidator,
 };

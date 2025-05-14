@@ -7,9 +7,10 @@ routes.get("/", userController.getSuggestions);
 routes.get("/auth", userController.getAuth);
 routes.get("/search", userController.search);
 routes.get("/profile", userController.getProfile);
+routes.get("/:search", userController.getUser);
 routes.put("/:id", userController.update);
-routes.patch("/profile", userController.updateProfilePicture);
-// routes.delete("/profile", userController.deleteProfilePicture);
+routes.patch("/avatar", userController.updateAvatar);
+routes.delete("/avatar", userController.deleteAvatar);
 routes.delete("/:id", userController.destroy);
 
 
