@@ -1,5 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
+export const getAuthUser = () =>
+  axiosInstance.get("/user/auth").then((res) => res.data);
+
 export const getProfile = (username) =>
   axiosInstance
     .get("/user/profile", { params: { search: username } })

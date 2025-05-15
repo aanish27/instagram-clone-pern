@@ -15,18 +15,6 @@ export const validateUsername = async (search) => {
   }
 };
 
-export const getAuthUser = async () => {
-  try {
-    const { data } = await axios.get(`${serverUrl}/user/auth`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
-
 export const openViewPostModal = (dispatch, post) => {
   dispatch(setViewPost(post));
   dispatch(setIsViewModalOpen(true));

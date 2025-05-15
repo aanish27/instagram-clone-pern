@@ -7,6 +7,7 @@ const prisma = new PrismaClient({
       email: true,
       bio: true,
       phone: true,
+      gender: true,
     },
   },
 });

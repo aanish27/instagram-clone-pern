@@ -11,26 +11,25 @@ import SignUp from "../pages/SignUp";
 import PrivateRoutes from "../routes/PrivateRoutes";
 import Feed from "../pages/Feed";
 import { validateUsername } from "../app/helpers";
-import { getAuthUser } from "../app/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../app/features/authSlice";
 import { useEffect } from "react";
 import EditProfile from "../pages/EditProfile";
+import { useGetAuthQuery } from "../hooks/Query/userQueryHooks";
 
 const Routes = () => {
   const { token } = useAuth();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.authUser);
+  const { data, isSuccess } = useGetAuthQuery(token, {
+    skip: !token,
+  });
 
   useEffect(() => {
-    if (!token) {
-      return;
+    if (isSuccess && data) {
+      dispatch(setAuthUser(data));
     }
-
-    getAuthUser().then((user) => {
-      dispatch(setAuthUser(user));
-    });
-  }, [token]);
+  }, [isSuccess, data, dispatch]);
 
   const routesForPublic = [
     {
@@ -80,14 +79,7 @@ const Routes = () => {
           element: <Profile />,
         },
         {
-          path: `/${authUser.username}/edit`,
-          // loader: async ({ params }) => {
-          //   let user = await validateUsername(params.username);
-          //   if (!user) {
-          //     return redirect("/");
-          //   }
-          //   return user;
-          // },
+          path: authUser ? `/${authUser.username}/edit` : "/",
           element: <EditProfile />,
         },
       ],

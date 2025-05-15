@@ -18,6 +18,9 @@ function EditProfile() {
     setValue("bio", user.bio);
     setValue("name", user.name);
     setValue("username", user.username);
+    setValue("email", user.email);
+    setValue("gender", user.gender);
+    setValue("phone", user.phone);
 
     return () => {
       reset();
@@ -98,14 +101,6 @@ function EditProfile() {
               />
             </div>
             <div className="flex flex-col gap-3">
-              <div className="font-semibold">Email</div>
-              <input
-                type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("email")}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">username</div>
               <input
                 type="text"
@@ -130,20 +125,30 @@ function EditProfile() {
               />
             </div>
             <div className="flex flex-col gap-3">
+              <div className="font-semibold">Gender</div>
+              <select
+                className="select w-full rounded-xl bg-transparent"
+                {...register("gender")}>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="font-semibold">Email</div>
+              <input
+                type="text"
+                className="input bg-insta-black w-full rounded-xl"
+                {...register("email")}
+              />
+            </div>
+            <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">phone</div>
               <input
                 type="text"
                 className="input bg-insta-black w-full rounded-xl"
                 {...register("phone")}
               />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold">Gender</div>
-              <select className="input w-full rounded-xl bg-transparent">
-                <option className="male">Male</option>
-                <option className="female">Female</option>
-                <option className="other">Other</option>
-              </select>
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold">

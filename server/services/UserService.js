@@ -68,6 +68,7 @@ class UserService {
 
   static async getUser(username = "", email = "", id = 0) {
     return await prisma.user.findFirst({
+      omit: { phone: false, email: false, bio: false, gender: false },
       where: {
         OR: [{ email: email }, { username: username }, { id: id }],
       },
