@@ -38,41 +38,44 @@ validator - params check remove - DONE
 integrate morgan - DONE
 followers suggestion shouldnt shw user - DONE
 view modal username - DONE
+profile pic on click upload or remove - DONE
+edit profile - DONE
+user not set on auth profile - DONE
+edit post - DONE
+post crud - DONE
+COMMENT CRUD - DONE
+integrate react query - DONE
 
 Frontend
-eliipsis for caption
-more button on post
-username overflow on story
-set up form validation using react-form-hook
-set up success messages - toast / anything
-design Story model
-integrate react query
-comments story model
-dark mode - light mode
+eliipsis for caption - 1
+more button on post - 2
+username overflow on story - 2
+set up form validation using react-form-hook - 3
+set up success messages - toast / anything - 3
+design Story model - 3
+comments story model - 3
+dark mode - light mode - 3
 
 Backend
 should nt shw user anywhere -> story , post , follow
 
+1 - easy
+2 - mid
+3 - hard
+
 Features
-user chats
-role based access...user based access
-liked by
-emoji picker setup
-use transactions
-edit profile
-edit post
-add thread and more icons - with popup
-profile pic on click upload or remove
-add other fields in post upload
-post upload feedback
-edit pop - up
-post crud
-share modal
-add comment below post
-COMMENT CRUD
-fix one story to right and have an add button...
-set up story crud
-providing your own ErrorBoundary or errorElement prop on your route.
+role based access...user based access 3
+liked by - 2
+
+use transactions 1
+add other fields in post upload 1 - this
+add comment below post - 1 - this
+post upload feedback - 2
+share modal - 2 - this
+fix one story to right and have an add button... - 2 - this
+add thread and more icons - with popup 2 - this
+set up story crud - 3
+providing your own ErrorBoundary or errorElement prop on your route. - 1
 
 Bugs
 fix signup
@@ -80,16 +83,18 @@ responsiveness fix - SIDEBAR
 multiple sidebar component can be active
 responsivenes followreqs
 post upload validation -frontend
-user not set on auth profile
 message sidebar doesnt open onclick
 user liked posts
 porfile componenets responsiveness
 messages load followings
 get suggestion query - shows followers
+cant remove bio
+profile not realoding when post delted
+viewpostmodal - doesnt shw user avatar
 
 REFACTOR
 db intergratyy - check
-AUTH REFACTOR - USE LUCIA AUTH or passport
+AUTH REFACTOR - USE LUCIA AUTH or passport or JWT with refersh token
 config js
 loaders js
 handle erros properly
@@ -97,9 +102,13 @@ send proper response
 remove unncessary folders
 savedPosts - seperate entity
 followRequest - seperate entity
+getUserByUsername validator
+modal layout
 
 client
 use input component everywher
 use server url
 dont use async with axios..
 use react query instead of axios
+more options modal
+view post modal
