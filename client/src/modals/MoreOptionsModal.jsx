@@ -12,6 +12,8 @@ import {
 } from "../hooks/Query/userQueryHooks";
 import { useDeletePostMutation } from "../hooks/Query/postQueryHooks";
 import { closeViewPostModal } from "../app/helpers";
+import { useDeleteCommentMutation } from "../hooks/Query/commentQueryHooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 function MoreOptionsModal({ props }) {
   const [propss, setProps] = useState(props);
@@ -21,6 +23,8 @@ function MoreOptionsModal({ props }) {
   const updateAvatarMutation = useUpdateAvatarMutation();
   const deleteAvatarMutation = useDeleteAvatarMutation();
   const deletePostMutation = useDeletePostMutation();
+  const deleteCommentMutation = useDeleteCommentMutation(); //postId i want to pass here
+  const queryClient = useQueryClient();
 
   const handleOptionClick = (option) => {
     switch (option.actionType) {
@@ -62,7 +66,16 @@ function MoreOptionsModal({ props }) {
         break;
       case "confirmDeletePost":
         deletePostMutation.mutate(option.data.id);
-        closeViewPostModal(dispatch)
+        closeViewPostModal(dispatch);
+        break;
+      case "deleteComment":
+        deleteCommentMutation.mutate(option.data.commentId, {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ["post/comments", option.data.postId],
+            });
+          },
+        });
         break;
       default:
         break;

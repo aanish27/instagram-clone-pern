@@ -2,13 +2,15 @@ import { CiFaceSmile } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
 import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import {
+  useGetCommentsQuery,
+  useStoreCommentMutation,
+} from "../hooks/Query/commentQueryHooks";
 const storageUrl = import.meta.env.VITE_STORAGE_URL;
 const regex = /^https:\/\/picsum\.photos\/seed\//;
 
@@ -16,6 +18,7 @@ function ViewPostModal({ post }) {
   const [comments, setComments] = useState(null);
   const { register, handleSubmit, setValue, reset, setFocus } = useForm();
   const dispatch = useDispatch();
+  const storeCommentMutation = useStoreCommentMutation(post.id);
   const options = [
     {
       title: "edit",
@@ -34,45 +37,53 @@ function ViewPostModal({ post }) {
     { title: "about this account", path: "/" },
   ];
 
+  useEffect(() => {
+    setValue("postId", post.id);
+  }, []);
+
+  const { isSuccess, data } = useGetCommentsQuery(post.id);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setComments(data);
+    }
+  }, [isSuccess, data]);
+
   const handleOptionsOnClick = () => {
     dispatch(
       setIsOptionsModalOpen({ props: { options: options }, state: true }),
     );
   };
 
-  useEffect(() => {
-    reset();
-    fetchComments();
-  }, []);
-
-  function fetchComments() {
-    setValue("postId", post.id);
-
-    axios
-      .get(`${serverUrl}/comment/post/${post.id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setComments(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   const handleCommentSubmitClick = (data) => {
-    axios
-      .post(`${serverUrl}/comment`, data, {
-        withCredentials: true,
-      })
-      .then((response) => {
+    storeCommentMutation.mutate(data, {
+      onSuccess: () => {
         reset();
-        fetchComments();
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      },
+    });
+  };
+
+  const handleCommentDeleteClick = (e) => {
+    dispatch(
+      setIsOptionsModalOpen({
+        props: {
+          options: [
+            {
+              title: "delete",
+              onClick: {
+                actionType: "deleteComment",
+                data: {
+                  commentId: e.target.dataset.id,
+                  postId: post.id,
+                },
+              },
+              textColor: "text-red-400",
+            },
+          ],
+        },
+        state: true,
+      }),
+    );
   };
 
   const modalOnClose = (e) => {
@@ -121,12 +132,20 @@ function ViewPostModal({ post }) {
                         className="flex items-center gap-3 py-2"
                         key={comment.id}>
                         <Avatar img={post.attachment} />
-                        <p className="font-extralight">
+                        <div className="font-extralight">
                           <span className="mr-2 font-semibold">
                             {comment.creator.username}
                           </span>
                           {comment.text}
-                        </p>
+                          <div className="flex gap-3 text-xs text-gray-400">
+                            <div>2hrs Ago</div>
+                            <div
+                              onClick={handleCommentDeleteClick}
+                              data-id={comment.id}>
+                              Delete
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
@@ -144,7 +163,6 @@ function ViewPostModal({ post }) {
                 <div className="flex items-center justify-center py-1">
                   <CiFaceSmile />
                   <form
-                    action=""
                     className="flex w-full"
                     onSubmit={handleSubmit(handleCommentSubmitClick)}>
                     <input
