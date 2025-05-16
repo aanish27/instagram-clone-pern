@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require("@prisma/client");
 const {
   createPostValidator,
   updatePostValidator,
@@ -10,10 +9,6 @@ const {
   idValidator,
 } = require("../shared/middlewares/validators/commonValidator");
 const setPath = require("../shared/middlewares/setPath");
-
-const prisma = new PrismaClient({
-  errorFormat: "minimal",
-});
 
 const store = [
   setPath("posts"),
@@ -56,7 +51,7 @@ const update = [
   asyncHandler(async (req, res) => {
     try {
       await PostService.update(req.params.id, req.body);
-      return res.json('success');
+      return res.json("success");
     } catch (error) {
       throw error;
     }
@@ -67,16 +62,7 @@ const destroy = [
   idValidator,
   asyncHandler(async (req, res) => {
     try {
-      const post = await prisma.post.delete({
-        where: {
-          id: parseInt(req.params.id),
-        },
-      });
-
-      if (!post) {
-        return res.json({ error: "Posy not found" });
-      }
-
+      await PostService.delete(req.body.id);
       return res.json({ message: "Post deleted" });
     } catch (error) {
       throw error;

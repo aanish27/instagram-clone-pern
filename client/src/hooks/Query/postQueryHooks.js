@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  deletePost,
   getPost,
   getPosts,
   savePost,
@@ -43,6 +44,25 @@ export const useUpdatePostMutation = (options = {}) => {
 
   return useMutation({
     mutationFn: savePost,
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["profile", user.username],
+      });
+      console.log(data);
+    },
+    ...options,
+  });
+};
+
+export const useDeletePostMutation = (options = {}) => {
+  const user = useSelector((state) => state.auth.authUser);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deletePost,
     onError: (error) => {
       console.log(`${error} error`);
     },

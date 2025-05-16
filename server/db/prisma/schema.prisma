@@ -66,7 +66,7 @@ model Comment {
   creator      User           @relation(fields: [creatorId], references: [id])
   creatorId    Int
   likes        Like[]         @relation("CommentLike")
-  post         Post           @relation(fields: [postId], references: [id])
+  post         Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId       Int
   notification Notification[] @relation("NotificationComment")
 }
@@ -106,7 +106,7 @@ model Like {
   storyId   Int?
   commentId Int?
 
-  post         Post?          @relation("PostLike", fields: [postId], references: [id])
+  post         Post?          @relation("PostLike", fields: [postId], references: [id], onDelete: Cascade)
   story        Story?         @relation("StoryLike", fields: [storyId], references: [id])
   comment      Comment?       @relation("CommentLike", fields: [commentId], references: [id])
   notification Notification[] @relation("NotificationLike")
@@ -115,7 +115,7 @@ model Like {
 model UsersSavedPosts {
   user   User @relation(fields: [userId], references: [id])
   userId Int
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
 
   @@id([userId, postId])
@@ -135,7 +135,7 @@ model Notification {
   likeId          Int?
   followRequestId Int?
 
-  post          Post?          @relation("NotificationPost", fields: [postId], references: [id])
+  post          Post?          @relation("NotificationPost", fields: [postId], references: [id], onDelete: Cascade)
   like          Like?          @relation("NotificationLike", fields: [likeId], references: [id])
   comment       Comment?       @relation("NotificationComment", fields: [commentId], references: [id])
   followRequest FollowRequest? @relation("NotificationFollowRequest", fields: [followRequestId], references: [id])

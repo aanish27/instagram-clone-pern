@@ -101,6 +101,14 @@ class PostService {
     });
   }
 
+  static async delete(id) {
+    return await prisma.post.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
+
   static async getExplore(id) {
     return await prisma.post.findMany({
       where: {

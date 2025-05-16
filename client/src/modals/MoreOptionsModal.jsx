@@ -5,18 +5,22 @@ import {
   setIsPostEditModalOpen,
 } from "../app/features/uiSlice";
 import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   useDeleteAvatarMutation,
   useUpdateAvatarMutation,
 } from "../hooks/Query/userQueryHooks";
+import { useDeletePostMutation } from "../hooks/Query/postQueryHooks";
+import { closeViewPostModal } from "../app/helpers";
 
 function MoreOptionsModal({ props }) {
+  const [propss, setProps] = useState(props);
   const dispatch = useDispatch();
   const unfollowMutation = useUnfollowUserMutation();
   const avatarRef = useRef(null);
   const updateAvatarMutation = useUpdateAvatarMutation();
   const deleteAvatarMutation = useDeleteAvatarMutation();
+  const deletePostMutation = useDeletePostMutation();
 
   const handleOptionClick = (option) => {
     switch (option.actionType) {
@@ -30,7 +34,6 @@ function MoreOptionsModal({ props }) {
         deleteAvatarMutation.mutate();
         break;
       case "editPost":
-        console.log("yeo");
         dispatch(
           setIsPostEditModalOpen({
             props: {
@@ -41,12 +44,37 @@ function MoreOptionsModal({ props }) {
           }),
         );
         break;
+      case "deletePost":
+        setProps({
+          title: "Delte Post",
+          subtitle: " confrim delte post",
+          options: [
+            {
+              title: "delete",
+              onClick: {
+                actionType: "confirmDeletePost",
+                data: { id: option.data.id },
+              },
+              textColor: "text-red-400",
+            },
+          ],
+        });
+        break;
+      case "confirmDeletePost":
+        deletePostMutation.mutate(option.data.id);
+        closeViewPostModal(dispatch)
+        break;
       default:
         break;
     }
 
-    if (option.actionType != "updateAvatar" || option.actionType != "editPost")
+    if (
+      option.actionType !== "updateAvatar" &&
+      option.actionType !== "editPost" &&
+      option.actionType !== "deletePost"
+    ) {
       modalOnClose();
+    }
   };
 
   const modalOnClose = (e) => {
@@ -72,16 +100,16 @@ function MoreOptionsModal({ props }) {
     <dialog id="moreOptionsModal" className="modal" onKeyDown={modalOnClose}>
       <div className="modal-box m-0 p-0">
         <ul className="menu bg-insta-black rounded-box m-0 flex h-full w-full items-center justify-center p-0">
-          {props.title && (
+          {propss.title && (
             <li className="flex h-15 w-full flex-col items-center justify-center border-b-1 border-gray-600 text-lg capitalize">
-              {props.title}
-              {props.subtitle && (
-                <span className="text-xs text-gray-500">{props.subtitle}</span>
+              {propss.title}
+              {propss.subtitle && (
+                <span className="text-xs text-gray-500">{propss.subtitle}</span>
               )}
             </li>
           )}
-          {props.options &&
-            props.options.map((option, index) => {
+          {propss.options &&
+            propss.options.map((option, index) => {
               return (
                 <li
                   key={index}
