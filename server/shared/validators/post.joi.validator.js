@@ -6,8 +6,8 @@ const createPostValidationSchema = Joi.object({
 }).options({ abortEarly: false });
 
 const updatePostValidationSchema = Joi.object({
+  id: Joi.number().positive().required(),
   caption: Joi.string().min(3).max(100),
-  // attachment: Joi.string().min(6).max(100),
 }).options({ abortEarly: false });
 
 module.exports = {

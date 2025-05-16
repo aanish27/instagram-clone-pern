@@ -18,7 +18,10 @@ function ViewPostModal({ post }) {
   const dispatch = useDispatch();
   const options = [
     { title: "delete", path: "/" },
-    { title: "edit", path: "/" },
+    {
+      title: "edit",
+      onClick: { actionType: "editPost", data: { id: post.id } },
+    },
     { title: "hide like count to others", path: "/" },
     { title: "turn on commenting", path: "/" },
     { title: "go to post", path: "/" },

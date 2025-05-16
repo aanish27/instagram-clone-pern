@@ -1,6 +1,9 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
-import { setIsOptionsModalOpen } from "../app/features/uiSlice";
+import {
+  setIsOptionsModalOpen,
+  setIsPostEditModalOpen,
+} from "../app/features/uiSlice";
 import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
 import { useRef } from "react";
 import {
@@ -26,11 +29,24 @@ function MoreOptionsModal({ props }) {
       case "deleteAvatar":
         deleteAvatarMutation.mutate();
         break;
+      case "editPost":
+        console.log("yeo");
+        dispatch(
+          setIsPostEditModalOpen({
+            props: {
+              isEdit: true,
+              id: option.data.id,
+            },
+            state: true,
+          }),
+        );
+        break;
       default:
         break;
     }
 
-    if (option.actionType != "updateAvatar") modalOnClose();
+    if (option.actionType != "updateAvatar" || option.actionType != "editPost")
+      modalOnClose();
   };
 
   const modalOnClose = (e) => {

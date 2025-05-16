@@ -38,19 +38,11 @@ const getFeed = asyncHandler(async (req, res) => {
   }
 });
 
-const show = [
+const getPost = [
   idValidator,
   asyncHandler(async (req, res) => {
     try {
-      const post = await prisma.post.findUnique({
-        where: {
-          id: parseInt(req.body.id),
-        },
-      });
-
-      if (!post) {
-        return res.json({ error: "Post not found" });
-      }
+      const post = await PostService.getPost(req.body.id);
 
       return res.json(post);
     } catch (error) {
@@ -63,13 +55,8 @@ const update = [
   updatePostValidator,
   asyncHandler(async (req, res) => {
     try {
-      const post = await prisma.post.update({
-        where: {
-          id: parseInt(req.params.id),
-        },
-        data: req.body,
-      });
-      return res.json(post);
+      await PostService.update(req.params.id, req.body);
+      return res.json('success');
     } catch (error) {
       throw error;
     }
@@ -142,8 +129,8 @@ const getExplore = asyncHandler(async (req, res) => {
 module.exports = {
   getFeed,
   getExplore,
+  getPost,
   store,
-  show,
   update,
   destroy,
   getSavedPosts,

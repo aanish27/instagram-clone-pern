@@ -6,28 +6,29 @@ import { MdOutlinePhotoLibrary } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { CiFaceSmile } from "react-icons/ci";
-import profile_pic from "../assets/car.jpg";
-import axios from "axios";
 import Avatar from "../components/Avatar";
-import { useQueryClient } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { removeEmptyFields } from "../app/helpers";
+import { IoClose } from "react-icons/io5";
+import {
+  useGetPostQuery,
+  useStorePostMutation,
+  useUpdatePostMutation,
+} from "../hooks/Query/postQueryHooks";
+import {
+  setIsPostEditModalOpen,
+  setIsPostUploadModalOpen,
+} from "../app/features/uiSlice";
 
-function PostUploadModal() {
+function PostUploadModal({ props }) {
+  const { isEdit } = props;
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (!uploadedImage) {
-      setPreview(null);
-      reset();
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(uploadedImage);
-    setPreview(objectUrl);
-    setValue("attachment", uploadedImage);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [uploadedImage]);
+  const [post, setPost] = useState(null);
+  const [preview, setPreview] = useState();
+  const authUser = useSelector((state) => state.auth.authUser);
+  const storePostMutation = useStorePostMutation();
+  const updatePostMutation = useUpdatePostMutation();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -35,8 +36,18 @@ function PostUploadModal() {
     formState: { errors },
     setValue,
     watch,
-    reset,
   } = useForm();
+
+  const { data, isSuccess } = useGetPostQuery(props.id, {
+    enabled: isEdit,
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setPost(data);
+      setValue("caption", data.caption);
+    }
+  }, [isSuccess, data, setValue]);
 
   const onDrop = useCallback((acceptedFiles) => {
     setUploadedImage(acceptedFiles[0]);
@@ -46,57 +57,89 @@ function PostUploadModal() {
     onDrop,
   });
 
-  const handlePostUpload = async (data) => {
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+  useEffect(() => {
+    if (!uploadedImage) {
+      setPreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(uploadedImage);
+    setPreview(objectUrl);
+    setValue("attachment", uploadedImage);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [uploadedImage]);
 
-    await axios
-      .post("http://localhost:3000/post", formData, {
-        withCredentials: true,
-      })
-      .then(function (response) {
-        console.log(response.data.message);
-        queryClient.invalidateQueries({ queryKey: ["feed"] });
-        document.getElementById("postUploadModal").close();
-        setTimeout(() => {
-          setUploadedImage(null);
-        }, 1000);
-      })
-      .catch(function (error) {
-        console.log(error);
+  const handlePostUpload = (data) => {
+    if (!isEdit) {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
       });
+      storePostMutation.mutate(formData, {
+        onSuccess: () => {
+          setUploadedImage(null);
+          dispatch(setIsPostUploadModalOpen(false));
+        },
+      });
+    } else {
+      removeEmptyFields(data);
+      updatePostMutation.mutate(post && post.id, data, {
+        onSuccess: () => {
+          setUploadedImage(null);
+          dispatch(setIsPostEditModalOpen({ state: false, props: null }));
+        },
+      });
+    }
   };
 
   const handleGoBackClick = () => {
-    setUploadedImage(null);
+    if (!isEdit) {
+      setUploadedImage(null);
+    } else {
+      dispatch(setIsPostEditModalOpen({ state: false, props: null }));
+    }
+  };
+
+  const modalOnClose = (e) => {
+    if (e && e.type == "keydown" && e.code !== "Escape") {
+      return;
+    }
+    if (!isEdit) {
+      dispatch(setIsPostUploadModalOpen(false));
+    } else {
+      dispatch(setIsPostEditModalOpen({ state: false, props: null }));
+    }
   };
 
   return (
-    <dialog id="postUploadModal" className="modal backdrop-blur">
-      {uploadedImage != null ? (
+    <dialog
+      id="postUploadModal"
+      className="modal backdrop-blur"
+      onKeyDown={modalOnClose}>
+      {uploadedImage != null || isEdit ? (
         <div className="modal-box bg-insta-black flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center p-0">
           <div className="flex w-[100%] justify-between bg-black p-2">
             <button onClick={handleGoBackClick}>
-              <FaArrowLeft />
+              {isEdit ? <IoClose /> : <FaArrowLeft />}
             </button>
-            <h2>Create new Post</h2>
+            <h2>{isEdit ? "Edit Post" : "Create new Post"}</h2>
             <button
               type="submit"
               form="postUploadForm"
               className="font-semibold text-blue-500">
-              Share
+              {isEdit ? "Update" : "Share"}
             </button>
           </div>
           <div className="flex h-[100%] w-[100%]">
-            <img src={preview} alt="" className="w-[65%]" />
+            <img
+              src={isEdit ? (post ? post.attachment : "") : preview}
+              className="w-[65%]"
+            />
             <div className="flex w-[100%] flex-col p-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Avatar img={profile_pic} />
+                  <Avatar img={authUser.profile_pic} />
                   <div className="flex flex-col p-3">
-                    <div className="font-semibold">Aanish</div>
+                    <div className="font-semibold">{authUser.username}</div>
                   </div>
                 </div>
               </div>
@@ -118,11 +161,13 @@ function PostUploadModal() {
                     {watch("caption") ? `${watch("caption").length} / 200` : ""}
                   </div>
                 </div>
-                <input
-                  type="file"
-                  className="hidden"
-                  {...register("attachment")}
-                />
+                {!isEdit && (
+                  <input
+                    type="file"
+                    className="hidden"
+                    {...register("attachment")}
+                  />
+                )}
               </form>
             </div>
           </div>
@@ -149,11 +194,7 @@ function PostUploadModal() {
           </div>
         </div>
       )}
-      {/* <form method="dialog" className="modal-backdrop">
-          <button className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">
-            ✕
-          </button>T
-        </form> */}
+      <form method="dialog" className="modal-backdrop"></form>
     </dialog>
   );
 }

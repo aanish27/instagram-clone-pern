@@ -6,6 +6,8 @@ const initialState = {
   IsSidebarExpanded: true,
   NotificationReload: true,
   optionsModalProps: null,
+  IsPostUploadModalOpen: false,
+  PostEditModalProps: null,
 };
 
 export const uiSlice = createSlice({
@@ -28,6 +30,17 @@ export const uiSlice = createSlice({
       state.IsOptionsModalOpen = action.payload.state;
       state.optionsModalProps = action.payload.props;
     },
+    setIsPostUploadModalOpen: (state, action) => {
+      state.IsPostUploadModalOpen = action.payload;
+      state.PostEditModalProps = {
+        isEdit: false,
+        id: null,
+      };
+    },
+    setIsPostEditModalOpen: (state, action) => {
+      state.IsPostUploadModalOpen = action.payload.state;
+      state.PostEditModalProps = action.payload.props;
+    },
   },
 });
 
@@ -37,6 +50,8 @@ export const {
   closeSidebar,
   toggleNotificationReload,
   setIsOptionsModalOpen,
+  setIsPostUploadModalOpen,
+  setIsPostEditModalOpen,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

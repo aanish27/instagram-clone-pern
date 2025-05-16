@@ -20,10 +20,10 @@ export const useGetAuthQuery = (options = {}) => {
   return useQuery({
     queryKey: ["authUser"],
     queryFn: getAuthUser,
-    ...options,
     onError: (error) => {
       console.log(`${error} error`);
     },
+    ...options,
   });
 };
 

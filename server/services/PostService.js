@@ -84,6 +84,23 @@ class PostService {
     });
   }
 
+  static async getPost(id) {
+    return await prisma.post.findFirst({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  static async update(id, data) {
+    return await prisma.post.update({
+      where: {
+        id: Number(id),
+      },
+      data: data,
+    });
+  }
+
   static async getExplore(id) {
     return await prisma.post.findMany({
       where: {

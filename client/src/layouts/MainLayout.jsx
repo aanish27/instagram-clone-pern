@@ -6,17 +6,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 import ViewPostModal from "../modals/ViewPostModal";
 import MoreOptionsModal from "../modals/MoreOptionsModal";
-import { setIsOptionsModalOpen } from "../app/features/uiSlice";
+import {
+  setIsOptionsModalOpen,
+  setIsPostUploadModalOpen,
+} from "../app/features/uiSlice";
+import PostUploadModal from "../modals/PostUploadModal";
 
 function MainLayout({ children }) {
   const post = useSelector((state) => state.post.viewPost);
-  const { optionsModalProps, IsOptionsModalOpen, IsViewModalOpen } =
-    useSelector((state) => state.ui);
+  const {
+    optionsModalProps,
+    IsOptionsModalOpen,
+    IsViewModalOpen,
+    IsPostUploadModalOpen,
+    PostEditModalProps,
+  } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
   useEffect(() => {
     closeViewPostModal(dispatch);
     dispatch(setIsOptionsModalOpen({ options: null, state: false }));
+    dispatch(setIsPostUploadModalOpen(false));
   }, []);
 
   useEffect(() => {
@@ -31,10 +41,17 @@ function MainLayout({ children }) {
     }
   }, [IsOptionsModalOpen]);
 
+  useEffect(() => {
+    if (IsPostUploadModalOpen) {
+      document.getElementById("postUploadModal").showModal();
+    }
+  }, [IsPostUploadModalOpen]);
+
   return (
     <>
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsViewModalOpen && <ViewPostModal post={post} />}
+      {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
       <NavbarMobile />
       <div className="flex max-h-screen items-center justify-between overflow-hidden">
         <Sidebar />

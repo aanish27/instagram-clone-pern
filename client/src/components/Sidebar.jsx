@@ -11,14 +11,14 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import PostUploadModal from "../modals/PostUploadModal";
 import { MdLogout } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaRegUser } from "react-icons/fa";
 import Search from "./Search";
 import MessageList from "./MessageList";
 import NotificationPanel from "./NotificationPanel";
 import { NotificationPanelContext } from "../provider/provider";
+import { setIsPostUploadModalOpen } from "../app/features/uiSlice";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Sidebar() {
@@ -35,6 +35,7 @@ function Sidebar() {
   const [IsNotificationActive, setIsNotificationActive] = useState(true);
   const [isShowRequests, setIsShowRequests] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
@@ -65,7 +66,7 @@ function Sidebar() {
     await axios
       .patch(`${serverUrl}/notifications/read`, {}, { withCredentials: true })
       .then((response) => {
-        setNotificationCount(0)
+        setNotificationCount(0);
         console.log(response);
       })
       .catch((error) => {
@@ -75,10 +76,6 @@ function Sidebar() {
     IsNotificationActive
       ? setIsNotificationActive(false)
       : setIsNotificationActive(true);
-  };
-
-  const handlePostUploadClick = () => {
-    document.getElementById("postUploadModal").showModal();
   };
 
   const handleLogoutClick = async (e) => {
@@ -99,80 +96,79 @@ function Sidebar() {
   };
 
   return (
-    <>
-      <PostUploadModal />
-      <div className="hidden min-h-screen text-white md:flex">
-        <div className="border-r-2 border-gray-900 p-5">
-          {/* <BrandName /> */}
-          <div className="pt-10">
-            <SideBarItem
-              icon={<GoHomeFill style={iconStyle} />}
-              title={"Home"}
-              notification={10}
-              path={"/"}
-              isExpanded={IsSidebarExpanded}
-            />
-            <SideBarItem
-              icon={<IoSearch style={iconStyle} />}
-              title={"Search"}
-              // path={"/search"}
-              isExpanded={IsSidebarExpanded}
-              onClick={handleSearchClick}
-            />
-            <SideBarItem
-              icon={<IoCompassOutline style={iconStyle} />}
-              title={"Explore"}
-              path={"/explore"}
-              isExpanded={IsSidebarExpanded}
-            />
-            <SideBarItem
-              icon={<FiHeart style={iconStyle} />}
-              title={"Notifications"}
-              isExpanded={IsSidebarExpanded}
-              onClick={handleNotificationClick}
-              notification={notificationCount}
-            />
-            <SideBarItem
-              icon={<CgAddR style={iconStyle} />}
-              title={"Post"}
-              isExpanded={IsSidebarExpanded}
-              onClick={handlePostUploadClick}
-            />
-            <SideBarItem
-              icon={<AiOutlineMessage style={iconStyle} />}
-              title={"Message"}
-              path={"/messages"}
-              isExpanded={IsSidebarExpanded}
-              onClick={handleMessageClick}
-            />
-            <SideBarItem
-              icon={<LuVideotape style={iconStyle} />}
-              title={"Reels"}
-              path={"/reels"}
-              isExpanded={IsSidebarExpanded}
-            />
-            <SideBarItem
-              icon={<FaRegUser style={iconStyle} />}
-              title={"Profile"}
-              path={authUser ? `/${authUser.username}` : ""}
-              isExpanded={IsSidebarExpanded}
-            />
-            <SideBarItem
-              icon={<MdLogout style={iconStyle} />}
-              title={"Logout"}
-              onClick={handleLogoutClick}
-              isExpanded={IsSidebarExpanded}
-            />
-          </div>
+    <div className="hidden min-h-screen text-white md:flex">
+      <div className="border-r-2 border-gray-900 p-5">
+        {/* <BrandName /> */}
+        <div className="pt-10">
+          <SideBarItem
+            icon={<GoHomeFill style={iconStyle} />}
+            title={"Home"}
+            notification={10}
+            path={"/"}
+            isExpanded={IsSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<IoSearch style={iconStyle} />}
+            title={"Search"}
+            // path={"/search"}
+            isExpanded={IsSidebarExpanded}
+            onClick={handleSearchClick}
+          />
+          <SideBarItem
+            icon={<IoCompassOutline style={iconStyle} />}
+            title={"Explore"}
+            path={"/explore"}
+            isExpanded={IsSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<FiHeart style={iconStyle} />}
+            title={"Notifications"}
+            isExpanded={IsSidebarExpanded}
+            onClick={handleNotificationClick}
+            notification={notificationCount}
+          />
+          <SideBarItem
+            icon={<CgAddR style={iconStyle} />}
+            title={"Post"}
+            isExpanded={IsSidebarExpanded}
+            onClick={() => {
+              dispatch(setIsPostUploadModalOpen(true));
+            }}
+          />
+          <SideBarItem
+            icon={<AiOutlineMessage style={iconStyle} />}
+            title={"Message"}
+            path={"/messages"}
+            isExpanded={IsSidebarExpanded}
+            onClick={handleMessageClick}
+          />
+          <SideBarItem
+            icon={<LuVideotape style={iconStyle} />}
+            title={"Reels"}
+            path={"/reels"}
+            isExpanded={IsSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<FaRegUser style={iconStyle} />}
+            title={"Profile"}
+            path={authUser ? `/${authUser.username}` : ""}
+            isExpanded={IsSidebarExpanded}
+          />
+          <SideBarItem
+            icon={<MdLogout style={iconStyle} />}
+            title={"Logout"}
+            onClick={handleLogoutClick}
+            isExpanded={IsSidebarExpanded}
+          />
         </div>
-        {IsSearchActive ? <Search /> : ""}
-        {IsMessageActive ? <MessageList /> : ""}
-        <NotificationPanelContext.Provider
-          value={{ isShowRequests, setIsShowRequests }}>
-          {IsNotificationActive ? <NotificationPanel /> : ""}
-        </NotificationPanelContext.Provider>
       </div>
-    </>
+      {IsSearchActive ? <Search /> : ""}
+      {IsMessageActive ? <MessageList /> : ""}
+      <NotificationPanelContext.Provider
+        value={{ isShowRequests, setIsShowRequests }}>
+        {IsNotificationActive ? <NotificationPanel /> : ""}
+      </NotificationPanelContext.Provider>
+    </div>
   );
 }
 

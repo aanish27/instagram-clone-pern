@@ -21,8 +21,8 @@ const Routes = () => {
   const { token } = useAuth();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.authUser);
-  const { data, isSuccess } = useGetAuthQuery(token, {
-    skip: !token,
+  const { data, isSuccess } = useGetAuthQuery({
+    enabled: !!token,
   });
 
   useEffect(() => {
