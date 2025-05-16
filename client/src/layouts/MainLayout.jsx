@@ -11,6 +11,7 @@ import {
   setIsPostUploadModalOpen,
 } from "../app/features/uiSlice";
 import PostUploadModal from "../modals/PostUploadModal";
+import ShareModal from "../modals/ShareModal";
 
 function MainLayout({ children }) {
   const post = useSelector((state) => state.post.viewPost);
@@ -20,6 +21,7 @@ function MainLayout({ children }) {
     IsViewModalOpen,
     IsPostUploadModalOpen,
     PostEditModalProps,
+    IsShareModalOpen,
   } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
@@ -47,8 +49,15 @@ function MainLayout({ children }) {
     }
   }, [IsPostUploadModalOpen]);
 
+  useEffect(() => {
+    if (IsShareModalOpen) {
+      document.getElementById("shareModal").showModal();
+    }
+  }, [IsShareModalOpen]);
+
   return (
     <>
+      {IsShareModalOpen && <ShareModal />}
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsViewModalOpen && <ViewPostModal post={post} />}
       {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}

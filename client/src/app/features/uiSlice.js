@@ -8,6 +8,7 @@ const initialState = {
   optionsModalProps: null,
   IsPostUploadModalOpen: false,
   PostEditModalProps: null,
+  IsShareModalOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -41,6 +42,9 @@ export const uiSlice = createSlice({
       state.IsPostUploadModalOpen = action.payload.state;
       state.PostEditModalProps = action.payload.props;
     },
+    setIsShareModalOpen: (state, action) => {
+      state.IsShareModalOpen = action.payload;
+    },
   },
 });
 
@@ -52,6 +56,7 @@ export const {
   setIsOptionsModalOpen,
   setIsPostUploadModalOpen,
   setIsPostEditModalOpen,
+  setIsShareModalOpen,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

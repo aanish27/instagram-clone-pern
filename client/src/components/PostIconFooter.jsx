@@ -12,6 +12,8 @@ import {
   useSavePostMutation,
   useUnsavePostMutation,
 } from "../hooks/Query/postQueryHooks";
+import { useDispatch } from "react-redux";
+import { setIsShareModalOpen } from "../app/features/uiSlice";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function PostIconFooter({ postId, handleCommentClick }) {
@@ -21,6 +23,7 @@ function PostIconFooter({ postId, handleCommentClick }) {
   const iconStyle = { fontSize: "25px" };
   const savePostMutation = useSavePostMutation();
   const unsavePostMutation = useUnsavePostMutation();
+  const dispatch = useDispatch();
 
   const handleLikeButtonOnclick = async () => {
     if (!isLiked) {
@@ -70,6 +73,10 @@ function PostIconFooter({ postId, handleCommentClick }) {
     }
   };
 
+  const handleShareClick = () => {
+    dispatch(setIsShareModalOpen(true));
+  };
+
   return (
     <div className="flex items-center justify-between py-2">
       <div className="flex gap-3">
@@ -83,7 +90,7 @@ function PostIconFooter({ postId, handleCommentClick }) {
         <button onClick={handleCommentClick}>
           <FaRegComment style={iconStyle} className="scale-x-[-1]" />
         </button>
-        <IoPaperPlaneOutline style={iconStyle} />
+        <IoPaperPlaneOutline style={iconStyle} onClick={handleShareClick} />
       </div>
       <button onClick={handleSaveClick}>
         {isSaved ? (
