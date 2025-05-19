@@ -46,6 +46,7 @@ post crud - DONE
 COMMENT CRUD - DONE
 integrate react query - DONE
 share modal - DONE
+add thread and more icons - with popup - DONE
 
 Frontend
 eliipsis for caption - 1
@@ -73,7 +74,6 @@ add other fields in post upload 1 - this
 add comment below post - 1 - this
 post upload feedback - 2
 fix one story to right and have an add button... - 2 - this
-add thread and more icons - with popup 2 - this
 set up story crud - 3
 providing your own ErrorBoundary or errorElement prop on your route. - 1
 

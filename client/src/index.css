@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    light,
+    black --prefersdark;
+}
 
 @theme {
   --color-insta-black: #2d2b2c;
@@ -18,10 +22,6 @@
 .hide-scroll-bar {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none;
-}
-
-body {
-  background-color: black;
 }
 
 .noto-sans-jp-body {

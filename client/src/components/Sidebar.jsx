@@ -19,6 +19,8 @@ import MessageList from "./MessageList";
 import NotificationPanel from "./NotificationPanel";
 import { NotificationPanelContext } from "../provider/provider";
 import { setIsPostUploadModalOpen } from "../app/features/uiSlice";
+import SidebarMenu from "./SidebarMenu";
+import { FaThreads } from "react-icons/fa6";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Sidebar() {
@@ -96,72 +98,84 @@ function Sidebar() {
   };
 
   return (
-    <div className="hidden min-h-screen text-white md:flex">
-      <div className="border-r-2 border-gray-900 p-5">
-        {/* <BrandName /> */}
-        <div className="pt-10">
+    <div className="hidden min-h-screen text-white md:flex md:justify-between">
+      <div className="flex flex-col justify-between border-r-2 border-gray-900 p-5">
+        <div className="flex flex-col gap-6">
+          <BrandName />
+          <div className="">
+            <SideBarItem
+              icon={<GoHomeFill style={iconStyle} />}
+              title={"Home"}
+              notification={10}
+              path={"/"}
+              isExpanded={IsSidebarExpanded}
+            />
+            <SideBarItem
+              icon={<IoSearch style={iconStyle} />}
+              title={"Search"}
+              // path={"/search"}
+              isExpanded={IsSidebarExpanded}
+              onClick={handleSearchClick}
+            />
+            <SideBarItem
+              icon={<IoCompassOutline style={iconStyle} />}
+              title={"Explore"}
+              path={"/explore"}
+              isExpanded={IsSidebarExpanded}
+            />
+            <SideBarItem
+              icon={<FiHeart style={iconStyle} />}
+              title={"Notifications"}
+              isExpanded={IsSidebarExpanded}
+              onClick={handleNotificationClick}
+              notification={notificationCount}
+            />
+            <SideBarItem
+              icon={<CgAddR style={iconStyle} />}
+              title={"Post"}
+              isExpanded={IsSidebarExpanded}
+              onClick={() => {
+                dispatch(setIsPostUploadModalOpen(true));
+              }}
+            />
+            <SideBarItem
+              icon={<AiOutlineMessage style={iconStyle} />}
+              title={"Message"}
+              path={"/messages"}
+              isExpanded={IsSidebarExpanded}
+              onClick={handleMessageClick}
+            />
+            <SideBarItem
+              icon={<LuVideotape style={iconStyle} />}
+              title={"Reels"}
+              path={"/reels"}
+              isExpanded={IsSidebarExpanded}
+            />
+            <SideBarItem
+              icon={<FaRegUser style={iconStyle} />}
+              title={"Profile"}
+              path={authUser ? `/${authUser.username}` : ""}
+              isExpanded={IsSidebarExpanded}
+            />
+            <SideBarItem
+              icon={<MdLogout style={iconStyle} />}
+              title={"Logout"}
+              onClick={handleLogoutClick}
+              isExpanded={IsSidebarExpanded}
+            />
+          </div>
+        </div>
+        <div>
           <SideBarItem
-            icon={<GoHomeFill style={iconStyle} />}
-            title={"Home"}
-            notification={10}
-            path={"/"}
-            isExpanded={IsSidebarExpanded}
-          />
-          <SideBarItem
-            icon={<IoSearch style={iconStyle} />}
-            title={"Search"}
-            // path={"/search"}
-            isExpanded={IsSidebarExpanded}
-            onClick={handleSearchClick}
-          />
-          <SideBarItem
-            icon={<IoCompassOutline style={iconStyle} />}
-            title={"Explore"}
-            path={"/explore"}
-            isExpanded={IsSidebarExpanded}
-          />
-          <SideBarItem
-            icon={<FiHeart style={iconStyle} />}
-            title={"Notifications"}
-            isExpanded={IsSidebarExpanded}
-            onClick={handleNotificationClick}
-            notification={notificationCount}
-          />
-          <SideBarItem
-            icon={<CgAddR style={iconStyle} />}
-            title={"Post"}
-            isExpanded={IsSidebarExpanded}
-            onClick={() => {
-              dispatch(setIsPostUploadModalOpen(true));
-            }}
-          />
-          <SideBarItem
-            icon={<AiOutlineMessage style={iconStyle} />}
-            title={"Message"}
-            path={"/messages"}
-            isExpanded={IsSidebarExpanded}
-            onClick={handleMessageClick}
-          />
-          <SideBarItem
-            icon={<LuVideotape style={iconStyle} />}
-            title={"Reels"}
-            path={"/reels"}
-            isExpanded={IsSidebarExpanded}
-          />
-          <SideBarItem
-            icon={<FaRegUser style={iconStyle} />}
-            title={"Profile"}
-            path={authUser ? `/${authUser.username}` : ""}
-            isExpanded={IsSidebarExpanded}
-          />
-          <SideBarItem
-            icon={<MdLogout style={iconStyle} />}
-            title={"Logout"}
+            icon={<FaThreads style={iconStyle} />}
+            title={"Threads"}
             onClick={handleLogoutClick}
             isExpanded={IsSidebarExpanded}
           />
+          <SidebarMenu isExpanded={IsSidebarExpanded} />
         </div>
       </div>
+
       {IsSearchActive ? <Search /> : ""}
       {IsMessageActive ? <MessageList /> : ""}
       <NotificationPanelContext.Provider
