@@ -1,65 +1,41 @@
 import Avatar from "../components/Avatar";
-import profile_pic from "../assets/avatar.jpg";
 import { RiLinkM } from "react-icons/ri";
 import { FaFacebook, FaFacebookMessenger, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { FaThreads } from "react-icons/fa6";
 import Input from "../components/Input";
-import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setIsShareModalOpen } from "../app/features/uiSlice";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import { useGetConnectionsQuery } from "../hooks/Query/followQueryHooks";
+import { useForm } from "react-hook-form";
 
 function ShareModal() {
-  const { register, handleSubmit } = useForm();
-  const [followers, setFollowers] = useState(null);
+  const { register } = useForm();
+  const [connections, setConnections] = useState(null);
   const dispatch = useDispatch();
+  const { data, isSuccess } = useGetConnectionsQuery();
 
   useEffect(() => {
-    // axios
-    //   .get(`${serverUrl}/follow/search`, {
-    //     params: "",
-    //     withCredentials: true,
-    //   })
-    //   .then((response) => {
-    //     setFollowers(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  });
-
-  const handleSearch = (data) => {
-    axios
-      .get(`${serverUrl}/follow/search`, {
-        params: data,
-        withCredentials: true,
-      })
-      .then((response) => {
-        setFollowers(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    if (data && isSuccess) {
+      setConnections(data);
+    }
+  }, [isSuccess, data]);
 
   const modalOnClose = (e) => {
-    if (e && e.type == "keydown" && e.code !== "Escape") {
+    if (e.type == "keydown" && e.code !== "Escape") {
       return;
     }
     dispatch(setIsShareModalOpen(false));
   };
 
   return (
-    <dialog id="shareModal" className="modal" onClick={modalOnClose}>
+    <dialog id="shareModal" className="modal" onKeyDown={modalOnClose}>
       <div className="modal-box bg-insta-black overflow-clip">
         <h3 className="text-center text-lg capitalize">share</h3>
         <hr className="my-2 w-full"></hr>
-
         <div className="flex flex-col gap-3">
-          <form onSubmit={handleSubmit(handleSearch)} className="flex gap-2">
+          <form className="flex gap-2">
             <Input
               register={register}
               type={"text"}
@@ -71,39 +47,18 @@ function ShareModal() {
             />
             <button> Search</button>
           </form>
-          {/* {searchResult &&
-            searchResult.map((data) => {
-              return (
-                */}
           <div className="flex h-[25vh] max-h-[20vh] flex-wrap items-center justify-between gap-4 overflow-scroll overflow-x-hidden">
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
-            <Avatar size={"h-20 w-20"} img={profile_pic} />
+            {connections &&
+              connections.map((connection) => {
+                return (
+                  <Avatar
+                    key={connection.id}
+                    size={"h-20 w-20"}
+                    img={connection.profile_pic}
+                  />
+                );
+              })}
           </div>
-          {/* );
-            })} */}
         </div>
         <div className="flex justify-between gap-4">
           <div className="flex flex-col items-center justify-center">

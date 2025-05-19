@@ -1,6 +1,7 @@
 const { prisma } = require("../db/prisma/prismaClient");
 const eventBus = require("../shared/utils/eventBus");
 const NotificationService = require("./NotificationService");
+const _ = require("lodash");
 
 class FollowService {
   static async sendFollowRequest(data) {
@@ -136,6 +137,25 @@ class FollowService {
       },
       select: { follower: true },
     });
+  }
+
+  static async getConnections(userId) {
+    let connections = await prisma.follow.findMany({
+      where: {
+        OR: [{ followeeId: userId }, { followerId: userId }],
+      },
+      select: { id: true, followee: true, follower: true },
+    });
+
+    connections = connections.map((connection) => {
+      if (connection.follower.id == userId) {
+        return connection.followee;
+      } else {
+        return connection.follower;
+      }
+    });
+
+    return _.uniqBy(connections, "id");
   }
 }
 

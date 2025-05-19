@@ -45,6 +45,7 @@ edit post - DONE
 post crud - DONE
 COMMENT CRUD - DONE
 integrate react query - DONE
+share modal - DONE
 
 Frontend
 eliipsis for caption - 1
@@ -71,7 +72,6 @@ use transactions 1
 add other fields in post upload 1 - this
 add comment below post - 1 - this
 post upload feedback - 2
-share modal - 2 - this
 fix one story to right and have an add button... - 2 - this
 add thread and more icons - with popup 2 - this
 set up story crud - 3

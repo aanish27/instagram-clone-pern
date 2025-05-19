@@ -87,6 +87,15 @@ const getFollowRequests = asyncHandler(async (req, res) => {
   }
 });
 
+const getConnections = asyncHandler(async (req, res) => {
+  try {
+    const connections = await FollowService.getConnections(req.user.id);
+    return res.json(connections);
+  } catch (error) {
+    throw error;
+  }
+});
+
 module.exports = {
   sendFollowRequest,
   rejectFollowRequest,
@@ -95,4 +104,5 @@ module.exports = {
   removeFollower,
   search,
   getFollowRequests,
+  getConnections,
 };
