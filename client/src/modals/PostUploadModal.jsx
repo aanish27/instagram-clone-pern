@@ -9,7 +9,9 @@ import { CiFaceSmile } from "react-icons/ci";
 import Avatar from "../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { removeEmptyFields } from "../app/helpers";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoLocationOutline } from "react-icons/io5";
+import { LuContactRound } from "react-icons/lu";
+import { FaChevronDown } from "react-icons/fa";
 import {
   useGetPostQuery,
   useStorePostMutation,
@@ -169,6 +171,20 @@ function PostUploadModal({ props }) {
                   />
                 )}
               </form>
+              <div className="my-5 flex flex-col gap-5">
+                <div className="flex justify-between">
+                  <div>Add Location</div>
+                  <IoLocationOutline className="text-2xl" />
+                </div>
+                <div className="flex justify-between">
+                  <div>Add Collaborators</div>
+                  <LuContactRound className="text-2xl" />
+                </div>
+                <div className="flex justify-between">
+                  <div>Accessibility</div>
+                  <FaChevronDown className="text-2xl" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

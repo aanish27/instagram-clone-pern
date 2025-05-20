@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import PostIconFooter from "./PostIconFooter";
 import { openViewPostModal } from "../app/helpers";
+import CommentForm from "../forms/CommentForm";
 
 function PostFooter({ username, caption, id, attachment }) {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ function PostFooter({ username, caption, id, attachment }) {
         <b>{username}</b> {caption}
         <span className="text-gray-400"> more</span>{" "}
       </div>
+      <CommentForm postId={id} />
     </>
   );
 }

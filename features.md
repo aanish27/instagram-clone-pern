@@ -47,6 +47,9 @@ COMMENT CRUD - DONE
 integrate react query - DONE
 share modal - DONE
 add thread and more icons - with popup - DONE
+dark mode - light mode - DONE
+add other fields in post upload - DONE
+add comment below post - DONE
 
 Frontend
 eliipsis for caption - 1
@@ -54,28 +57,27 @@ more button on post - 2
 username overflow on story - 2
 set up form validation using react-form-hook - 3
 set up success messages - toast / anything - 3
-design Story model - 3
-comments story model - 3
-dark mode - light mode - 3
 
 Backend
 should nt shw user anywhere -> story , post , follow
 
 1 - easy
 2 - mid
-3 - hard
+3 - too much wrk
 
 Features
 role based access...user based access 3
 liked by - 2
 
 use transactions 1
-add other fields in post upload 1 - this
-add comment below post - 1 - this
 post upload feedback - 2
 fix one story to right and have an add button... - 2 - this
-set up story crud - 3
 providing your own ErrorBoundary or errorElement prop on your route. - 1
+
+Later - Maintenance - Before May End
+design Story model - 3
+comments story model - 3
+set up story crud - 3
 
 Bugs
 fix signup
@@ -91,6 +93,7 @@ get suggestion query - shows followers
 cant remove bio
 profile not realoding when post delted
 viewpostmodal - doesnt shw user avatar
+light mode - light mode theme set
 
 REFACTOR
 db intergratyy - check

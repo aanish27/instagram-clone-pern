@@ -7,18 +7,15 @@ import Avatar from "../components/Avatar";
 import { useDispatch } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
-import {
-  useGetCommentsQuery,
-  useStoreCommentMutation,
-} from "../hooks/Query/commentQueryHooks";
+import { useGetCommentsQuery } from "../hooks/Query/commentQueryHooks";
+import CommentForm from "../forms/CommentForm";
 const storageUrl = import.meta.env.VITE_STORAGE_URL;
 const regex = /^https:\/\/picsum\.photos\/seed\//;
 
 function ViewPostModal({ post }) {
   const [comments, setComments] = useState(null);
-  const { register, handleSubmit, setValue, reset, setFocus } = useForm();
+  const { setFocus } = useForm();
   const dispatch = useDispatch();
-  const storeCommentMutation = useStoreCommentMutation(post.id);
   const options = [
     {
       title: "edit",
@@ -37,10 +34,6 @@ function ViewPostModal({ post }) {
     { title: "about this account", path: "/" },
   ];
 
-  useEffect(() => {
-    setValue("postId", post.id);
-  }, []);
-
   const { isSuccess, data } = useGetCommentsQuery(post.id);
 
   useEffect(() => {
@@ -53,14 +46,6 @@ function ViewPostModal({ post }) {
     dispatch(
       setIsOptionsModalOpen({ props: { options: options }, state: true }),
     );
-  };
-
-  const handleCommentSubmitClick = (data) => {
-    storeCommentMutation.mutate(data, {
-      onSuccess: () => {
-        reset();
-      },
-    });
   };
 
   const handleCommentDeleteClick = (e) => {
@@ -162,24 +147,7 @@ function ViewPostModal({ post }) {
                 <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />
                 <div className="flex items-center justify-center py-1">
                   <CiFaceSmile />
-                  <form
-                    className="flex w-full"
-                    onSubmit={handleSubmit(handleCommentSubmitClick)}>
-                    <input
-                      type="text"
-                      {...register("text", { required: true })}
-                      className="w-full px-1 focus:outline-0"
-                    />
-
-                    <input
-                      type="text"
-                      hidden
-                      {...register("postId", { required: true })}
-                    />
-                    <button className="ml-auto font-semibold text-blue-400">
-                      Post
-                    </button>
-                  </form>
+                  <CommentForm postId={post.id} />
                 </div>
               </div>
             </div>
