@@ -56,10 +56,9 @@ function FollowModal({ title, setFollowModalTitle, content }) {
         <hr className="my-2 w-full"></hr>
         <form onSubmit={handleSubmit(handleSearch)} className="flex gap-2">
           <Input
-            register={register}
+            register={register(isFollower ? title : "followee")}
             type={"text"}
             placeholder={"Search"}
-            name={isFollower ? title : "followee"}
             className={
               "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
             }

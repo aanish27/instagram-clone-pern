@@ -37,10 +37,9 @@ function ShareModal() {
         <div className="flex flex-col gap-3">
           <form className="flex gap-2">
             <Input
-              register={register}
+              register={register("followee")}
               type={"text"}
               placeholder={"Search"}
-              name={"followee"}
               className={
                 "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
               }

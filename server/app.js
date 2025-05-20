@@ -107,7 +107,7 @@ app.use((err, req, res, next) => {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === "P2002") {
       return res.status(409).json({
-        message: `Unique constraint failed on the ${err.meta.modalName}`,
+        message: { error: "Unique constraint failed", field: err.meta.target },
       });
     }
 

@@ -35,8 +35,8 @@ function Login() {
         navigate("/", { replace: true });
         console.log(data);
       },
-      onError: (error) => {
-        switch (error.status) {
+      onError: ({status}) => {
+        switch (status) {
           case 404:
             setErrMessage("Invalid username or password. Please try again");
             break;

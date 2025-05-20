@@ -130,8 +130,7 @@ function Messages() {
             onSubmit={handleSubmit(handleSendText)}
             className="flex w-full items-center justify-center gap-2">
             <Input
-              register={register}
-              name={"text"}
+              register={register("text")}
               className={"grow rounded-full px-3"}
               type={"text"}
             />

@@ -38,16 +38,14 @@ function Search() {
   };
 
   return (
-    <div
-      className="block max-h-screen w-[20vw] p-5">
+    <div className="block max-h-screen w-[20vw] p-5">
       <div className="text-2xl font-extrabold">Search</div>
       <div className="mt-5">
         <form onSubmit={handleSubmit(handleSearch)}>
           <Input
-            register={register}
+            register={register("search")}
             type={"text"}
             placeholder={"Search"}
-            name={"search"}
             className={
               "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
             }
