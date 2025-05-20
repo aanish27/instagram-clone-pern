@@ -1,8 +1,11 @@
-import { RouterProvider, createBrowserRouter, redirect } from "react-router";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+  redirect,
+} from "react-router";
 import { useAuth } from "../provider/authProvider";
-import Static from "../pages/Static";
 import Explore from "../pages/Explore";
-import PostForm from "../pages/PostForm";
 import Reels from "../pages/Reels";
 import Profile from "../pages/Profile";
 import Messages from "../pages/Messages";
@@ -34,7 +37,7 @@ const Routes = () => {
   const routesForPublic = [
     {
       path: "*",
-      element: <Static />,
+      element: <Navigate to="/" />,
     },
   ];
 
@@ -50,10 +53,6 @@ const Routes = () => {
         {
           path: "/explore",
           element: <Explore />,
-        },
-        {
-          path: "/post/new",
-          element: <PostForm />,
         },
         {
           path: "/logout",
