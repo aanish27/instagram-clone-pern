@@ -3,10 +3,22 @@ import {
   deleteAvatar,
   getAuthUser,
   getProfile,
+  getSuggestions,
   updateAvatar,
   updateUser,
 } from "../../api/userApi";
 import { useSelector } from "react-redux";
+
+export const useGetSuggestionsQuery = (limit, options = {}) => {
+  return useQuery({
+    queryKey: ["getSuggestions", limit],
+    queryFn: () => getSuggestions(limit),
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    ...options,
+  });
+};
 
 export const useGetProfileQuery = (username, options = {}) => {
   return useQuery({

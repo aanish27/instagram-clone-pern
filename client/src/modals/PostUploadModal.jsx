@@ -22,6 +22,7 @@ import {
   setIsPostEditModalOpen,
   setIsPostUploadModalOpen,
 } from "../app/features/uiSlice";
+import Input from "../components/Input";
 
 function PostUploadModal({ props }) {
   const { isEdit } = props;
@@ -165,10 +166,10 @@ function PostUploadModal({ props }) {
                   </div>
                 </div>
                 {!isEdit && (
-                  <input
+                  <Input
+                    register={register("attachment")}
                     type="file"
                     className="hidden"
-                    {...register("attachment")}
                   />
                 )}
               </form>

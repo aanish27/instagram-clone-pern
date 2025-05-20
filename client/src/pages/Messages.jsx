@@ -32,7 +32,7 @@ function Messages() {
   } = useForm();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io(serverUrl);
 
     return () => {
       socketRef.current.disconnect();

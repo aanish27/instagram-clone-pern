@@ -7,14 +7,14 @@ class UserService {
     });
   }
 
-  static async getSuggestions(takeAll, id) {
+  static async getSuggestions(limit, id) {
     return await prisma.user.findMany({
       where: {
         id: {
           notIn: [id],
         },
       },
-      ...(takeAll ? { take: 100 } : { take: 30 }),
+      ...(limit ? { take: 100 } : { take: 30 }),
     });
   }
 

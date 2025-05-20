@@ -1,34 +1,27 @@
 import { useEffect, useState } from "react";
-import profile_pic from "../assets/car.jpg";
 import FooterLink from "./FooterLink";
 import RightSidebarItem from "./RightSidebarItem";
-import axios from "axios";
+import { useGetSuggestionsQuery } from "../hooks/Query/userQueryHooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 function RightSidebar() {
+  const queryClient = useQueryClient();
   const [followSuggestions, setFollowSuggestions] = useState([]);
   const [isAll, setIsAll] = useState(false);
+  const { isSuccess, data } = useGetSuggestionsQuery(isAll);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/user", {
-        params: {
-          all: isAll,
-        },
-        withCredentials: true,
-      })
-      .then(function (response) {
-        setFollowSuggestions(response.data.users);
-      })
-      .catch(function (e) {
-        console.log(e);
-      });
-  }, [isAll]);
+    if (isSuccess && data) {
+      setFollowSuggestions(data);
+    }
+  }, [isSuccess, data]);
 
   const handleSeeAllClick = () => {
     if (isAll) {
       return;
     }
 
+    queryClient.invalidateQueries({ queryKey: ["getSuggestions"] });
     setIsAll(true);
   };
 

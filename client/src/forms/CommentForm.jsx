@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useStoreCommentMutation } from "../hooks/Query/commentQueryHooks";
 import { useEffect } from "react";
+import Input from "../components/Input";
 
 function CommentForm({ postId }) {
   const { handleSubmit, register, resetField, setValue } = useForm();
@@ -22,14 +23,17 @@ function CommentForm({ postId }) {
     <form
       className="flex w-full"
       onSubmit={handleSubmit(handleCommentSubmitClick)}>
-      <input
+      <Input
+        register={register("text", { required: true })}
         type="text"
-        {...register("text", { required: true })}
-        className="w-full px-1 placeholder:text-xs focus:outline-0"
-        placeholder="Type Comment"
+        className="w-full border-none bg-transparent p-0 placeholder:text-xs focus:outline-0"
+        placeholder={"Type Comment"}
       />
-
-      <input type="text" hidden {...register("postId", { required: true })} />
+      <Input
+        type="text"
+        hidden={true}
+        register={register("postId", { required: true })}
+      />
       <button className="ml-auto font-semibold text-blue-400">Post</button>
     </form>
   );

@@ -1,5 +1,10 @@
 import axiosInstance from "./axiosInstance";
 
+export const getSuggestions = (limit) =>
+  axiosInstance
+    .get("/user", { params: { all: limit } })
+    .then((res) => res.data);
+
 export const getAuthUser = () =>
   axiosInstance.get("/user/auth").then((res) => res.data);
 

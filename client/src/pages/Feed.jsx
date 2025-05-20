@@ -6,6 +6,7 @@ import RightSidebar from "../components/RightSidebar";
 import { useDispatch } from "react-redux";
 import { toggleNotificationReload } from "../app/features/uiSlice";
 import { usePostsQuery } from "../hooks/Query/postQueryHooks";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Feed() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function Feed() {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      "http://localhost:3000/notifications/connect",
+      `${serverUrl}/notifications/connect`,
       {
         withCredentials: true,
       },

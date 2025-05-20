@@ -1,29 +1,31 @@
 import axios from "axios";
 import { useState } from "react";
 import Avatar from "./Avatar";
+import {
+  useDeleteFollowReqMutation,
+  useSendFollowReqMutation,
+} from "../hooks/Query/followQueryHooks";
 
 function RightSidebarItem({ url, action, user }) {
   const [isReqSent, setReqSent] = useState(false);
   const [reqId, setReqId] = useState(null);
-  const handleFollowButtonOnclick = async (e) => {
+  const sendReqMutation = useSendFollowReqMutation();
+  const deleteReqMutation = useDeleteFollowReqMutation; // implemnet tmrw
+
+  const handleFollowButtonOnclick = (e) => {
     const id = e.target.getAttribute("data-followee-id");
     if (!isReqSent) {
-      await axios
-        .post(
-          "http://localhost:3000/follow/req",
-          { followeeId: id },
-          { withCredentials: true },
-        )
-        .then((response) => {
-          setReqSent(!isReqSent);
-          setReqId(response.data.id);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      sendReqMutation.mutate(
+        { followeeId: id },
+        {
+          onSuccess: ({ id }) => {
+            setReqSent(!isReqSent);
+            setReqId(id);
+          },
+        },
+      );
     } else {
-      await axios
+      axios
         .delete(`http://localhost:3000/follow/req/${reqId}`, {
           withCredentials: true,
         })

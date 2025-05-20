@@ -13,9 +13,9 @@ const setPath = require("../shared/middlewares/setPath");
 
 const getSuggestions = asyncHandler(async (req, res) => {
   try {
-    const all = req.query.all === "true" ? true : false;
-    const users = await UserService.getSuggestions(all, req.user.id);
-    return res.json({ users: users });
+    const limit = req.query.all === "true" ? true : false;
+    const users = await UserService.getSuggestions(limit, req.user.id);
+    return res.json(users);
   } catch (error) {
     throw error;
   }
