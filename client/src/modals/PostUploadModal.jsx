@@ -12,6 +12,7 @@ import { removeEmptyFields } from "../app/helpers";
 import { IoClose, IoLocationOutline } from "react-icons/io5";
 import { LuContactRound } from "react-icons/lu";
 import { FaChevronDown } from "react-icons/fa";
+import Hint from "../components/Hint";
 import {
   useGetPostQuery,
   useStorePostMutation,
@@ -151,7 +152,7 @@ function PostUploadModal({ props }) {
                 className="w-[100%]">
                 <textarea
                   className="h-35 w-[100%]"
-                  {...register("caption")}></textarea>
+                  {...register("caption", { maxLength: 200 })}></textarea>
                 <div className="flex items-center justify-between">
                   <div className="">
                     <CiFaceSmile className="" />
@@ -171,6 +172,7 @@ function PostUploadModal({ props }) {
                   />
                 )}
               </form>
+              {errors?.caption && <Hint message={errors.caption.message} />}
               <div className="my-5 flex flex-col gap-5">
                 <div className="flex justify-between">
                   <div>Add Location</div>

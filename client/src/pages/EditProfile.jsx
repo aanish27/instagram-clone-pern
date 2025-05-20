@@ -6,13 +6,21 @@ import { useForm } from "react-hook-form";
 import { useUpdateUserMutation } from "../hooks/Query/userQueryHooks";
 import { useEffect } from "react";
 import { removeEmptyFields } from "../app/helpers";
+import Input from "../components/Input";
+import Hint from "../components/Hint";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function EditProfile() {
   const user = useSelector((state) => state.auth.authUser);
   const dispatch = useDispatch();
   const userUpdateMutation = useUpdateUserMutation();
-  const { register, setValue, handleSubmit, reset } = useForm();
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     setValue("bio", user.bio);
@@ -92,37 +100,45 @@ function EditProfile() {
             onSubmit={handleSubmit(handleUserUpdateSubmit)}
             className="flex flex-col gap-10">
             <div className="flex flex-col gap-3">
-              <div className="font-semibold">webite</div>
-              <input
+              <div className="font-semibold">website</div>
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                name="website"
-                disabled
+                register={register("website")}
+                disable={true}
               />
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">username</div>
-              <input
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("username")}
+                placeholder="Username"
+                register={register("username", {
+                  required: "Username cannot be empty",
+                })}
               />
+              {errors && errors.username && (
+                <Hint message={errors.username.message} />
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">name</div>
-              <input
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("name")}
+                placeholder="Name"
+                register={register("name", {
+                  required: "Name cannot be empty.",
+                })}
               />
+              {errors && errors.name && <Hint message={errors.name.message} />}
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">Bio</div>
-              <input
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("bio")}
+                placeholder="Bio"
+                register={register("bio", { maxLength: 100 })}
               />
+              {errors && errors.bio && <Hint message={errors.bio.message} />}
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold">Gender</div>
@@ -136,19 +152,37 @@ function EditProfile() {
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold">Email</div>
-              <input
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("email")}
+                placeholder="Email"
+                register={register("email", {
+                  required: "Email cannot be empty",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email format",
+                  },
+                })}
               />
+              {errors && errors.email && (
+                <Hint message={errors.email.message} />
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold capitalize">phone</div>
-              <input
+              <Input
                 type="text"
-                className="input bg-insta-black w-full rounded-xl"
-                {...register("phone")}
+                placeholder="Phone"
+                register={register("phone", {
+                  required: "Phone number cannot be empty",
+                  pattern: {
+                    value: /^[0-9]{10,15}$/,
+                    message: "Enter a valid phone number",
+                  },
+                })}
               />
+              {errors && errors.phone && (
+                <Hint message={errors.phone.message} />
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <div className="font-semibold">

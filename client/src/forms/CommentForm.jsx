@@ -3,7 +3,7 @@ import { useStoreCommentMutation } from "../hooks/Query/commentQueryHooks";
 import { useEffect } from "react";
 
 function CommentForm({ postId }) {
-  const { handleSubmit, register, reset, setValue } = useForm();
+  const { handleSubmit, register, resetField, setValue } = useForm();
   const storeCommentMutation = useStoreCommentMutation(postId);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function CommentForm({ postId }) {
   const handleCommentSubmitClick = (data) => {
     storeCommentMutation.mutate(data, {
       onSuccess: () => {
-        reset();
+        resetField("text");
       },
     });
   };
