@@ -1,5 +1,4 @@
 import { FaFacebook } from "react-icons/fa";
-import Divider from "../components/Divider";
 import Input from "../components/Input";
 import AuthLayout from "../layouts/AuthLayout";
 import { useState } from "react";
@@ -90,7 +89,7 @@ function SignUp() {
             Sign Up
           </button>
         </form>
-        <Divider text={"OR"} />
+        <div className="divider px-8">OR</div>
         <div className="flex items-center gap-2 font-semibold text-blue-500">
           <FaFacebook className="text-2xl" />
           <span>Log In with Facebook</span>

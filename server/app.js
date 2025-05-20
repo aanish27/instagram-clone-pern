@@ -44,6 +44,7 @@ const followRoutes = require("./routes/followRouter");
 const likeRoutes = require("./routes/likeRouter");
 const notificationRoutes = require("./routes/notificationRouter");
 const eventBus = require("./shared/utils/eventBus");
+const { Prisma } = require("@prisma/client");
 
 app.use("/", authRoutes);
 app.use("/user", verifyToken, userRoutes);
@@ -67,7 +68,7 @@ app.get("/notifications/connect", verifyToken, (req, res) => {
   });
 });
 
-eventBus.on("send_notification", async ({receivers}) => {
+eventBus.on("send_notification", async ({ receivers }) => {
   receivers.forEach(async (receiver) => {
     const client = activeClients.get(receiver);
     if (client) {
@@ -100,8 +101,39 @@ io.on("connection", (socket) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(err.message);
-  res.status(500).json(err.message);
+  console.error(err);
+
+  // Prisma known errors
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") {
+      return res.status(409).json({
+        message: `Unique constraint failed on the ${err.meta.modalName}`,
+      });
+    }
+
+    if (err.code === "P2025") {
+      return res.status(404).json({
+        message: "Record not found.",
+      });
+    }
+
+    // Handle other known codes
+    return res.status(400).json({
+      message: "Database error: " + err.message,
+    });
+  }
+
+  // Prisma validation errors
+  if (err instanceof Prisma.PrismaClientValidationError) {
+    return res.status(400).json({
+      message: "Invalid input data.",
+    });
+  }
+
+  // Any other unknown errors
+  res.status(500).json({
+    message: "Something went wrong. Please try again later.",
+  });
 });
 
 server.listen(process.env.PORT || 3000, () => {

@@ -1,62 +1,52 @@
 import { FaFacebook } from "react-icons/fa6";
 import Input from "../components/Input";
-import Divider from "../components/Divider";
 import AuthLayout from "../layouts/AuthLayout";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAuth } from "../provider/authProvider";
 import Cookies from "js-cookie";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import { useLoginMutation } from "../hooks/Query/authQueryHooks";
+import Hint from "../components/Hint";
 
 function Login() {
   const env = import.meta.env.VITE_ENVIRONMENT;
-
   const { setToken } = useAuth();
   const navigate = useNavigate();
-
-  // const [formData, setFormData] = useState({
-  //   email: env == "local" ? "admin@example.com" : "",
-  //   password: env == "local" ? "password" : "",
-  // });
+  const [errMessage, setErrMessage] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+  const loginMutation = useLoginMutation();
 
   useEffect(() => {
     setValue("email", env == "local" ? "admin@example.com" : "");
     setValue("password", env == "local" ? "password" : "");
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
-  console.log(watch("email"));
-
-  const handleLogin = async (data) => {
-    console.log(data);
-
-    await axios
-      .post("http://localhost:3000/login", data, { withCredentials: true })
-      .then(function (response) {
-        console.log(response.data.message);
+  const handleLogin = (data) => {
+    loginMutation.mutate(data, {
+      onSuccess: (data) => {
         setToken(Cookies.get("accessToken"));
-        console.log(Cookies.get("accessToken"), "Login");
         navigate("/", { replace: true });
-      })
-      .catch(function (error) {
-        console.log(error.response.data.error);
-      });
+        console.log(data);
+      },
+      onError: (error) => {
+        switch (error.status) {
+          case 404:
+            setErrMessage("Invalid username or password. Please try again");
+            break;
+          default:
+            setErrMessage("Internal Server Error. Please try again Later");
+            break;
+        }
+      },
+    });
   };
-
-  // controlled inpput
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevState) => ({ ...prevState, [name]: value }));
-  // };
 
   return (
     <AuthLayout>
@@ -66,31 +56,43 @@ function Login() {
           onSubmit={handleSubmit(handleLogin)}
           className="m-1 flex w-full flex-col px-8">
           <Input
-            register={register}
-            type={"text"}
+            register={register("email", {
+              required: "Please Enter Your Email",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Please Enter A Valid Email!",
+              },
+            })}
+            type={"email"}
             placeholder={"Email"}
-            name={"email"}
-            // value={formData.email}
           />
+          {errors && errors.email && <Hint message={errors.email.message} />}
           <Input
-            register={register}
+            register={register("password", {
+              required: "Please Enter Your Password",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+            })}
             type={"text"}
             placeholder={"Password"}
-            name={"password"}
-            // value={formData.password}
           />
+          {errors && errors.password && (
+            <Hint message={errors.password.message} />
+          )}
           <button className="my-3 rounded-lg bg-[#0096FF] p-1 hover:bg-blue-500">
             Log in
           </button>
         </form>
-        <Divider text={"OR"} />
+        <div className="divider px-8">OR</div>
         <div className="flex items-center gap-2 font-semibold text-blue-500">
           <FaFacebook className="text-2xl" />
           <span>Log In with Facebook</span>
         </div>
+        {errMessage && <Hint message={errMessage} />}
         <div className="text-sm">Forgot Passowrd?</div>
       </div>
-
       <div className="my-2 w-full py-4 text-center text-sm md:border-1 md:border-[#343434]">
         Dont Have and Account?
         <Link to="/signup" className="ms-2 text-blue-500">
