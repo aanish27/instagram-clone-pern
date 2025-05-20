@@ -35,7 +35,7 @@ function Login() {
         navigate("/", { replace: true });
         console.log(data);
       },
-      onError: ({status}) => {
+      onError: ({ status }) => {
         switch (status) {
           case 404:
             setErrMessage("Invalid username or password. Please try again");
@@ -54,7 +54,7 @@ function Login() {
         <div className="cookie-regular text-6xl">Instagram</div>
         <form
           onSubmit={handleSubmit(handleLogin)}
-          className="m-1 flex w-full flex-col px-8">
+          className="m-1 flex w-full flex-col gap-3 px-8">
           <Input
             register={register("email", {
               required: "Please Enter Your Email",

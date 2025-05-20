@@ -4,7 +4,7 @@ const gender = ["male", "female", "others"];
 const createUserValidationSchema = Joi.object({
   name: Joi.string().min(3).required(),
   username: Joi.string().alphanum().min(6).max(20).required(),
-  bio: Joi.string().min(6).max(100),
+  bio: Joi.string().max(100),
   email: Joi.string().email().required(),
   gender: Joi.string().valid(...gender),
   phone: Joi.string()
@@ -17,7 +17,7 @@ const createUserValidationSchema = Joi.object({
 const updateUserValidationSchema = Joi.object({
   name: Joi.string().min(3),
   username: Joi.string().alphanum().min(6).max(20),
-  bio: Joi.string().min(6).max(100),
+  bio: Joi.string().max(100),
   email: Joi.string().email(),
   gender: Joi.string().valid(...gender),
   phone: Joi.string()

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { removeEmptyFields } from "../app/helpers";
 import Input from "../components/Input";
 import Hint from "../components/Hint";
+import { Bounce, toast } from "react-toastify";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function EditProfile() {
@@ -20,6 +21,7 @@ function EditProfile() {
     handleSubmit,
     reset,
     formState: { errors },
+    setError
   } = useForm();
 
   useEffect(() => {
@@ -65,7 +67,39 @@ function EditProfile() {
 
   const handleUserUpdateSubmit = (data) => {
     removeEmptyFields(data);
-    userUpdateMutation.mutate(data);
+    userUpdateMutation.mutate(data, {
+      onError: ({ response, status }) => {
+        console.log(response.data.message.field);
+        switch (status) {
+          case 409:
+            if (response.data.message.field == "username") {
+              setError("username", {
+                type: "custom",
+                message: "Username Already Taken. Try Another",
+              });
+            } else if (response.data.message.field == "email") {
+              setError("email", {
+                type: "custom",
+                message: "A user with this email has been already registered",
+              });
+            }
+            break;
+          default:
+            toast.error("Internal Server Error. Please try again Later", {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: Bounce,
+            });
+            break;
+        }
+      },
+    });
   };
 
   return (
@@ -114,6 +148,7 @@ function EditProfile() {
                 placeholder="Username"
                 register={register("username", {
                   required: "Username cannot be empty",
+                  minLength: 6,
                 })}
               />
               {errors && errors.username && (

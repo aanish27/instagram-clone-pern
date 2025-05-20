@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { useSignupMutation } from "../hooks/Query/authQueryHooks";
 import Hint from "../components/Hint";
+import { Bounce, toast } from "react-toastify";
 
 function SignUp() {
   const {
@@ -20,6 +21,17 @@ function SignUp() {
   const handleRegister = (data) => {
     signupMutaion.mutate(data, {
       onSuccess: () => {
+        toast.success("User registered successfully. Please login.", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
         navigate("/login", { replace: true });
       },
       onError: ({ response, status }) => {
@@ -55,7 +67,7 @@ function SignUp() {
         </div>
         <form
           onSubmit={handleSubmit(handleRegister)}
-          className="m-1 flex w-full flex-col gap-1 px-8">
+          className="m-1 flex w-full flex-col gap-3 px-8">
           <Input
             type="text"
             placeholder="Name"
@@ -67,6 +79,7 @@ function SignUp() {
             placeholder="Username"
             register={register("username", {
               required: "Please enter a username",
+              minLength: 6,
             })}
           />
           {errors && errors.username && (
