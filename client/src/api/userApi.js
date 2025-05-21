@@ -1,5 +1,8 @@
 import axiosInstance from "./axiosInstance";
 
+export const  getUser = (username) =>
+  axiosInstance.get(`/user/${username}`).then((res) => res.data);
+
 export const getSuggestions = (limit) =>
   axiosInstance
     .get("/user", { params: { all: limit } })

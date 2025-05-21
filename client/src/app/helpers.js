@@ -1,14 +1,10 @@
-import axios from "axios";
 import { setIsViewModalOpen } from "./features/uiSlice";
 import { setViewPost } from "./features/postSlice";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import { getUser } from "../api/userApi";
 
-export const validateUsername = async (search) => {
+export const validateUsername = async (username) => {
   try {
-    const { data } = await axios.get(`${serverUrl}/user/${search}`, {
-      withCredentials: true,
-    });
-    return data;
+    return getUser(username);
   } catch (error) {
     console.log(error);
     return false;

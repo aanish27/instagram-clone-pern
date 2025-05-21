@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import Avatar from "./Avatar";
 import {
@@ -10,7 +9,7 @@ function RightSidebarItem({ url, action, user }) {
   const [isReqSent, setReqSent] = useState(false);
   const [reqId, setReqId] = useState(null);
   const sendReqMutation = useSendFollowReqMutation();
-  const deleteReqMutation = useDeleteFollowReqMutation; // implemnet tmrw
+  const deleteReqMutation = useDeleteFollowReqMutation();
 
   const handleFollowButtonOnclick = (e) => {
     const id = e.target.getAttribute("data-followee-id");
@@ -25,17 +24,11 @@ function RightSidebarItem({ url, action, user }) {
         },
       );
     } else {
-      axios
-        .delete(`http://localhost:3000/follow/req/${reqId}`, {
-          withCredentials: true,
-        })
-        .then((response) => {
+      deleteReqMutation.mutate(reqId, {
+        onSuccess: () => {
           setReqSent(!isReqSent);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        },
+      });
     }
   };
 
