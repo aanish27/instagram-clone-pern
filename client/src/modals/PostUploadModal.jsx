@@ -9,7 +9,7 @@ import { CiFaceSmile } from "react-icons/ci";
 import Avatar from "../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { removeEmptyFields } from "../app/helpers";
-import { IoClose, IoLocationOutline } from "react-icons/io5";
+import { IoLocationOutline } from "react-icons/io5";
 import { LuContactRound } from "react-icons/lu";
 import { FaChevronDown } from "react-icons/fa";
 import Hint from "../components/Hint";
@@ -23,6 +23,7 @@ import {
   setIsPostUploadModalOpen,
 } from "../app/features/uiSlice";
 import Input from "../components/Input";
+import PostUploadModalHeader from "../components/PostUploadModalHeader";
 
 function PostUploadModal({ props }) {
   const { isEdit } = props;
@@ -30,9 +31,13 @@ function PostUploadModal({ props }) {
   const [post, setPost] = useState(null);
   const [preview, setPreview] = useState();
   const authUser = useSelector((state) => state.auth.authUser);
-  const storePostMutation = useStorePostMutation();
-  const updatePostMutation = useUpdatePostMutation();
+  const { mutate: storePostMutation, isPending: storeIsPending } =
+    useStorePostMutation();
+  const { mutate: updatePostMutation, isPending: updateIsPending } =
+    useUpdatePostMutation();
+  const isPending = updateIsPending || storeIsPending;
   const dispatch = useDispatch();
+  const [isSucceeded, setIsSucceeded] = useState(false);
 
   const {
     register,
@@ -49,6 +54,7 @@ function PostUploadModal({ props }) {
   useEffect(() => {
     if (isSuccess && data) {
       setPost(data);
+      setPreview(data.attachment);
       setValue("caption", data.caption);
     }
   }, [isSuccess, data, setValue]);
@@ -63,7 +69,6 @@ function PostUploadModal({ props }) {
 
   useEffect(() => {
     if (!uploadedImage) {
-      setPreview(null);
       return;
     }
     const objectUrl = URL.createObjectURL(uploadedImage);
@@ -73,44 +78,42 @@ function PostUploadModal({ props }) {
   }, [uploadedImage]);
 
   const handlePostUpload = (data) => {
+    setPreview(null);
     if (!isEdit) {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
+        if (value.length === 0) return;
         formData.append(key, value);
       });
-      storePostMutation.mutate(formData, {
+      removeEmptyFields(formData);
+      storePostMutation(formData, {
         onSuccess: () => {
-          setUploadedImage(null);
-          dispatch(setIsPostUploadModalOpen(false));
+          setIsSucceeded(true);
         },
       });
     } else {
       removeEmptyFields(data);
-      updatePostMutation.mutate(post && post.id, data, {
+      updatePostMutation(post && post.id, data, {
         onSuccess: () => {
-          setUploadedImage(null);
-          dispatch(setIsPostEditModalOpen({ state: false, props: null }));
+          setIsSucceeded(true);
         },
       });
     }
   };
 
-  const handleGoBackClick = () => {
-    if (!isEdit) {
-      setUploadedImage(null);
-    } else {
-      dispatch(setIsPostEditModalOpen({ state: false, props: null }));
-    }
+  const removeAttachment = () => {
+    setUploadedImage(null);
+    setPreview(null);
   };
 
   const modalOnClose = (e) => {
     if (e && e.type == "keydown" && e.code !== "Escape") {
       return;
     }
-    if (!isEdit) {
-      dispatch(setIsPostUploadModalOpen(false));
-    } else {
+    if (isEdit) {
       dispatch(setIsPostEditModalOpen({ state: false, props: null }));
+    } else {
+      dispatch(setIsPostUploadModalOpen(false));
     }
   };
 
@@ -119,26 +122,16 @@ function PostUploadModal({ props }) {
       id="postUploadModal"
       className="modal backdrop-blur"
       onKeyDown={modalOnClose}>
-      {uploadedImage != null || isEdit ? (
-        <div className="modal-box bg-insta-black flex h-[80vh] w-[60vw] max-w-[100vw] flex-col items-center justify-center p-0">
-          <div className="flex w-[100%] justify-between bg-black p-2">
-            <button onClick={handleGoBackClick}>
-              {isEdit ? <IoClose /> : <FaArrowLeft />}
-            </button>
-            <h2>{isEdit ? "Edit Post" : "Create new Post"}</h2>
-            <button
-              type="submit"
-              form="postUploadForm"
-              className="font-semibold text-blue-500">
-              {isEdit ? "Update" : "Share"}
-            </button>
-          </div>
-          <div className="flex h-[100%] w-[100%]">
-            <img
-              src={isEdit ? (post ? post.attachment : "") : preview}
-              className="w-[65%]"
-            />
-            <div className="flex w-[100%] flex-col p-2">
+      {preview ? (
+        <div className="modal-box bg-insta-black flex min-h-[80vh] max-w-[60vw] flex-col p-0">
+          <PostUploadModalHeader
+            handleGoBackClick={isEdit ? modalOnClose : removeAttachment}
+            isEdit={isEdit}
+            showButton={true}
+          />
+          <div className="flex">
+            <img src={preview} className="h-auto w-[65%]" />
+            <div className="flex w-full flex-col p-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Avatar img={authUser.profile_pic} />
@@ -150,9 +143,9 @@ function PostUploadModal({ props }) {
               <form
                 id="postUploadForm"
                 onSubmit={handleSubmit(handlePostUpload)}
-                className="w-[100%]">
+                className="w-full">
                 <textarea
-                  className="h-35 w-[100%]"
+                  className="h-35 w-full"
                   {...register("caption", { maxLength: 200 })}></textarea>
                 <div className="flex items-center justify-between">
                   <div className="">
@@ -192,25 +185,46 @@ function PostUploadModal({ props }) {
           </div>
         </div>
       ) : (
-        <div className="modal-box bg-insta-black flex flex-col items-center justify-center">
-          <h2>Create new Post</h2>
-          <hr className="m-1 w-100"></hr>
-          <div {...getRootProps()} className="h-100 w-100">
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <div className="flex items-center justify-center">
-                <p>Drag photos here</p>
+        <div className="modal-box bg-insta-black flex min-h-[50vh] max-w-[25vw] flex-col items-center p-0">
+          <PostUploadModalHeader handleGoBackClick={modalOnClose} />
+          {isPending && (
+            <div className="flex grow items-center justify-center">
+              <span className="loading loading-spinner loading-xl"></span>
+            </div>
+          )}
+          {isSucceeded && (
+            <div className="flex grow items-center justify-center">
+              <div
+                className="radial-progress text-green-400"
+                style={{
+                  "--value": "100",
+                  "--size": "15rem",
+                  "--thickness": "1rem",
+                }}
+                aria-valuenow={100}
+                role="progressbar">
+                Success
               </div>
-            ) : (
-              <div className="flex h-100 flex-col items-center justify-center gap-3">
-                <MdOutlinePhotoLibrary className="text-6xl" />
-                <p className="text-xl">Drag photos here</p>
-                <button className="btn btn-primary">
-                  Select from computer
-                </button>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
+          {!uploadedImage && !isSucceeded && !isPending &&  (
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <div className="flex items-center justify-center">
+                  <p>Drag photos here</p>
+                </div>
+              ) : (
+                <div className="flex h-100 flex-col items-center justify-center gap-3">
+                  <MdOutlinePhotoLibrary className="text-6xl" />
+                  <p className="text-xl">Drag photos here</p>
+                  <button className="btn btn-primary">
+                    Select from computer
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
       <form method="dialog" className="modal-backdrop"></form>

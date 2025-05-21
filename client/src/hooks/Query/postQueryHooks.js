@@ -26,13 +26,15 @@ export const useGetPostQuery = (id, options = {}) => {
 };
 
 export const useStorePostMutation = (options = {}) => {
+  const user = useSelector((state) => state.auth.authUser);
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: storePost,
-    onError: (error) => {
-      console.log(`${error} error`);
-    },
-    onSuccess: (data) => {
-      console.log(`${data} data`);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["profile", user.username],
+      });
     },
     ...options,
   });
@@ -44,14 +46,10 @@ export const useUpdatePostMutation = (options = {}) => {
 
   return useMutation({
     mutationFn: savePost,
-    onError: (error) => {
-      console.log(`${error} error`);
-    },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["profile", user.username],
       });
-      console.log(data);
     },
     ...options,
   });
@@ -63,14 +61,10 @@ export const useDeletePostMutation = (options = {}) => {
 
   return useMutation({
     mutationFn: deletePost,
-    onError: (error) => {
-      console.log(`${error} error`);
-    },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["profile", user.username],
       });
-      console.log(data);
     },
     ...options,
   });
