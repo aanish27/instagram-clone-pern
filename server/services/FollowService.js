@@ -5,103 +5,128 @@ const _ = require("lodash");
 
 class FollowService {
   static async sendFollowRequest(data) {
-    const request = await prisma.followRequest.create({
-      data: data,
-    });
+    return prisma.$transaction(async (tx) => {
+      const request = await tx.followRequest.create({
+        data: data,
+      });
 
-    const { followee } = await prisma.followRequest.findUnique({
-      where: { id: request.id },
-      select: { followee: true },
-    });
+      const { followee } = await tx.followRequest.findUniqueOrThrow({
+        where: { id: request.id },
+        select: { followee: true },
+      });
 
-    await NotificationService.store({
-      followRequestId: request.id,
-      senderId: request.followerId,
-      receiverId: followee.id,
-    });
+      await NotificationService.store({
+        followRequestId: request.id,
+        senderId: request.followerId,
+        receiverId: followee.id,
+      });
 
-    eventBus.emit("send_notification", {
-      receivers: [followee.id],
-    });
+      eventBus.emit("send_notification", {
+        receivers: [followee.id],
+      });
 
-    return request;
+      return request;
+    });
   }
 
   static async rejectFollowRequest(id) {
-    await prisma.followRequest.delete({
-      where: {
-        id: id,
-      },
-    });
+    await prisma.$transaction([
+      prisma.followRequest.delete({
+        where: {
+          id: id,
+        },
+      }),
 
-    await prisma.notification.deleteMany({
-      where: {
-        followRequestId: id,
-      },
-    });
+      prisma.notification.deleteMany({
+        where: {
+          followRequestId: id,
+        },
+      }),
+    ]);
 
     return;
   }
 
   static async acceptFollowRequest(id) {
-    const followRequest = await prisma.followRequest.findUnique({
-      where: {
-        id: id,
-      },
-    });
+    return prisma.$transaction(async (tx) => {
+      const followRequest = await tx.followRequest.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+      });
 
-    await prisma.follow.create({
-      data: {
-        followeeId: followRequest.followeeId,
-        followerId: followRequest.followerId,
-      },
-    });
+      await tx.follow.create({
+        data: {
+          followeeId: followRequest.followeeId,
+          followerId: followRequest.followerId,
+        },
+      });
 
-    await prisma.followRequest.delete({
-      where: {
-        id: id,
-      },
-    });
+      await tx.followRequest.delete({
+        where: {
+          id: id,
+        },
+      });
 
-    await prisma.notification.deleteMany({
-      where: {
-        followRequestId: id,
-      },
+      await tx.notification.deleteMany({
+        where: {
+          followRequestId: id,
+        },
+      });
     });
-
-    return;
   }
 
   static async unfollowUser(followerId, followeeId) {
-    const follow = await prisma.follow.findFirstOrThrow({
-      where: {
-        followerId: followerId,
-        followeeId: followeeId,
-      },
+    await prisma.$transaction(async (tx) => {
+      const follow = await tx.follow.findFirstOrThrow({
+        where: {
+          followerId: followerId,
+          followeeId: followeeId,
+        },
+      });
+
+      await tx.follow.delete({
+        where: {
+          id: follow.id,
+        },
+      });
     });
 
-    await prisma.follow.delete({
-      where: {
-        id: follow.id,
-      },
-    });
     return;
   }
 
   static async removeFollower(followerId, userId) {
-    const follow = await prisma.follow.findFirstOrThrow({
-      where: {
-        followerId: followerId,
-        followeeId: userId,
-      },
-    });
+    return prisma.$transaction(async (tx) => {
+      const follow = await tx.follow.findFirstOrThrow({
+        where: {
+          followerId: followerId,
+          followeeId: userId,
+        },
+      });
 
-    return await prisma.follow.delete({
-      where: { id: follow.id },
+      return await tx.follow.delete({
+        where: { id: follow.id },
+      });
     });
   }
 
   static async search(req) {
+    // return await prisma.follow.findMany({
+    //   where: {
+    //     followee: {
+    //       username: req.query.followee
+    //         ? { startsWith: req.body.followee }
+    //         : req.user.username,
+    //     },
+    //     follower: {
+    //       username: req.query.followee
+    //         ? req.user.username
+    //         : { startsWith: req.body.follower },
+    //     },
+    //   },
+    //   include: { followee: true },
+    // });
+
     if (req.query.followee) {
       return await prisma.follow.findMany({
         where: {

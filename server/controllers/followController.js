@@ -4,6 +4,9 @@ const {
   destroyFollowValidator,
   searchFollowValidator,
 } = require("../shared/middlewares/validators/followValidator");
+const {
+  idValidator,
+} = require("../shared/middlewares/validators/commonValidator");
 const FollowService = require("../services/FollowService");
 
 const sendFollowRequest = [
@@ -31,7 +34,7 @@ const rejectFollowRequest = [
 ];
 
 const acceptFollowRequest = [
-  createFollowValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
       await FollowService.acceptFollowRequest(req.body.id);
@@ -70,8 +73,8 @@ const search = [
   searchFollowValidator,
   asyncHandler(async (req, res) => {
     try {
-      const user = FollowService.search(req);
-      return res.json(user);
+      const users = await FollowService.search(req);
+      return res.json(users);
     } catch (error) {
       throw error;
     }

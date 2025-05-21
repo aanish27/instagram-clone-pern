@@ -130,6 +130,13 @@ app.use((err, req, res, next) => {
     });
   }
 
+  // Joi validation errors
+  if (err?.isJoi) {
+    return res.status(400).json({
+      erros: err.details,
+    });
+  }
+
   // Any other unknown errors
   res.status(500).json({
     message: "Something went wrong. Please try again later.",
