@@ -28,29 +28,34 @@ class PostService {
   }
 
   static async store(data) {
-    const post = await prisma.post.create({
-      data: data,
+    return prisma.$transaction(async (tx) => {
+      const post = await tx.post.create({
+        data: data,
+      });
+
+      const receivers = [];
+      const followers = await FollowService.getFollowers(post.creatorId);
+
+      await Promise.all(
+        followers.map(async ({ follower }) => {
+          await NotificationService.store(
+            {
+              postId: post.id,
+              senderId: post.creatorId,
+              receiverId: follower.id,
+            },
+            tx,
+          );
+          receivers.push(follower.id);
+        }),
+      );
+
+      eventBus.emit("send_notification", {
+        receivers: receivers,
+      });
+
+      return post;
     });
-
-    const receivers = [];
-    const followers = await FollowService.getFollowers(post.creatorId);
-
-    await Promise.all(
-      followers.map(async ({ follower }) => {
-        await NotificationService.store({
-          postId: post.id,
-          senderId: post.creatorId,
-          receiverId: follower.id,
-        });
-        receivers.push(follower.id);
-      }),
-    );
-
-    eventBus.emit("send_notification", {
-      receivers: receivers,
-    });
-
-    return post;
   }
 
   static async getSavedPosts(id) {

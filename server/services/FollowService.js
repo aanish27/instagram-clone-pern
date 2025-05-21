@@ -15,11 +15,14 @@ class FollowService {
         select: { followee: true },
       });
 
-      await NotificationService.store({
-        followRequestId: request.id,
-        senderId: request.followerId,
-        receiverId: followee.id,
-      });
+      await NotificationService.store(
+        {
+          followRequestId: request.id,
+          senderId: request.followerId,
+          receiverId: followee.id,
+        },
+        tx,
+      );
 
       eventBus.emit("send_notification", {
         receivers: [followee.id],

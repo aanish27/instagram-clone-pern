@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    console.log(req);
     
     if (!whitelist.includes(file.mimetype)) {
       return cb(new Error("file is not allowed"));

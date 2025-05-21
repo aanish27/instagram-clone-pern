@@ -14,11 +14,14 @@ class CommentService {
         select: { post: true },
       });
 
-      await NotificationService.store({
-        commentId: comment.id,
-        senderId: comment.creatorId,
-        receiverId: post.creatorId,
-      });
+      await NotificationService.store(
+        {
+          commentId: comment.id,
+          senderId: comment.creatorId,
+          receiverId: post.creatorId,
+        },
+        tx,
+      );
 
       eventBus.emit("send_notification", {
         receivers: [post.creatorId],

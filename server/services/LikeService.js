@@ -5,20 +5,23 @@ const NotificationService = require("./NotificationService");
 class LikeService {
   static async store(data) {
     return prisma.$transaction(async (tx) => {
-      const like = await prisma.like.create({
+      const like = await tx.like.create({
         data: data,
       });
 
-      const { post } = await prisma.like.findUniqueOrThrow({
+      const { post } = await tx.like.findUniqueOrThrow({
         where: { id: like.id },
         select: { post: true },
       });
 
-      await NotificationService.store({
-        likeId: like.id,
-        senderId: like.creatorId,
-        receiverId: post.creatorId,
-      });
+      await NotificationService.store(
+        {
+          likeId: like.id,
+          senderId: like.creatorId,
+          receiverId: post.creatorId,
+        },
+        tx,
+      );
 
       eventBus.emit("send_notification", {
         receivers: [post.creatorId],

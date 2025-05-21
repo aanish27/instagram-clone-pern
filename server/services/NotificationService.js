@@ -3,8 +3,9 @@ const { NotificationStatus } = require("@prisma/client");
 const { format, isThisMonth, isThisWeek, isToday } = require("date-fns");
 
 class NotificationService {
-  static async store(data) {
-    const notification = await prisma.notification.create({
+  // tx is a prisma transaction instance
+  static async store(data, tx) {
+    const notification = await tx.notification.create({
       data: data,
     });
     return notification;
