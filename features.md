@@ -50,13 +50,18 @@ add thread and more icons - with popup - DONE
 dark mode - light mode - DONE
 add other fields in post upload - DONE
 add comment below post - DONE
+fix signup - DONE
+set up form validation using react-form-hook - DONE
+set up success messages - toast / anything - DONE
+use input component everywher - DONE
+use server url - DONE
+use transactions - DONE
+messages load connections - DONE
 
 Frontend
 eliipsis for caption - 1
 more button on post - 2
 username overflow on story - 2
-set up form validation using react-form-hook - 3
-set up success messages - toast / anything - 3
 
 Backend
 should nt shw user anywhere -> story , post , follow
@@ -68,9 +73,8 @@ should nt shw user anywhere -> story , post , follow
 Features
 role based access...user based access 3
 liked by - 2
-
-use transactions 1
-post upload feedback - 2
+google auth - 3
+post upload feedback 
 fix one story to right and have an add button... - 2 - this
 providing your own ErrorBoundary or errorElement prop on your route. - 1
 
@@ -80,7 +84,6 @@ comments story model - 3
 set up story crud - 3
 
 Bugs
-fix signup
 responsiveness fix - SIDEBAR
 multiple sidebar component can be active
 responsivenes followreqs
@@ -88,7 +91,6 @@ post upload validation -frontend
 message sidebar doesnt open onclick
 user liked posts
 porfile componenets responsiveness
-messages load followings
 get suggestion query - shows followers
 cant remove bio
 profile not realoding when post delted
@@ -101,7 +103,7 @@ AUTH REFACTOR - USE LUCIA AUTH or passport or JWT with refersh token
 config js
 loaders js
 handle erros properly
-send proper response
+send proper response - no success message , status code only
 remove unncessary folders
 savedPosts - seperate entity
 followRequest - seperate entity
@@ -109,9 +111,7 @@ getUserByUsername validator
 modal layout
 
 client
-use input component everywher
-use server url
-dont use async with axios..
 use react query instead of axios
 more options modal
 view post modal
+better folder structure
