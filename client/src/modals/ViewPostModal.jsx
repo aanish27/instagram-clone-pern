@@ -1,10 +1,9 @@
 import { CiFaceSmile } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { IoEllipsisHorizontal } from "react-icons/io5";
-import { useEffect, useState } from "react";
 import PostIconFooter from "../components/PostIconFooter";
 import Avatar from "../components/Avatar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 import { useGetCommentsQuery } from "../hooks/Query/commentQueryHooks";
@@ -14,20 +13,10 @@ const storageUrl = import.meta.env.VITE_STORAGE_URL;
 const regex = /^https:\/\/picsum\.photos\/seed\//;
 
 function ViewPostModal({ post }) {
-  const [comments, setComments] = useState(null);
+  const authUser = useSelector((state) => state.auth.authUser);
   const { setFocus } = useForm();
   const dispatch = useDispatch();
   const options = [
-    {
-      title: "edit",
-      onClick: { actionType: "editPost", data: { id: post.id } },
-    },
-    {
-      title: "delete",
-      onClick: { actionType: "deletePost", data: { id: post.id } },
-    },
-    { title: "hide like count to others", path: "/" },
-    { title: "turn on commenting", path: "/" },
     { title: "go to post", path: "/" },
     { title: "share to...", path: "/" },
     { title: "copy link", path: "/" },
@@ -35,15 +24,23 @@ function ViewPostModal({ post }) {
     { title: "about this account", path: "/" },
   ];
 
-  const { isSuccess, data } = useGetCommentsQuery(post.id);
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      setComments(data);
-    }
-  }, [isSuccess, data]);
+  const { isSuccess, data: comments } = useGetCommentsQuery(post.id);
 
   const handleOptionsOnClick = () => {
+    if (authUser.id == post.creator.id) {
+      options.unshift(
+        {
+          title: "edit",
+          onClick: { actionType: "editPost", data: { id: post.id } },
+        },
+        {
+          title: "delete",
+          onClick: { actionType: "deletePost", data: { id: post.id } },
+        },
+        { title: "hide like count to others", path: "/" },
+        { title: "turn on commenting", path: "/" },
+      );
+    }
     dispatch(
       setIsOptionsModalOpen({ props: { options: options }, state: true }),
     );
@@ -101,9 +98,9 @@ function ViewPostModal({ post }) {
           <div className="flex w-[100%] flex-col p-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Avatar img={post.attachment} />
+                <Avatar img={post.creator.profile_pic} />
                 <div className="flex flex-col p-3">
-                  <div className="font-semibold">{post.username}</div>
+                  <div className="font-semibold">{post.creator.username}</div>
                 </div>
               </div>
               <IoEllipsisHorizontal onClick={handleOptionsOnClick} />
@@ -111,13 +108,14 @@ function ViewPostModal({ post }) {
             <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />
             <div className="hide-scroll-bar flex h-full flex-col justify-between overflow-scroll">
               <div className="max-[80%] mt-1 overflow-y-scroll">
-                {comments &&
+                {isSuccess &&
+                  comments &&
                   comments.map((comment) => {
                     return (
                       <div
                         className="flex items-center gap-3 py-2"
                         key={comment.id}>
-                        <Avatar img={post.attachment} />
+                        <Avatar img={comment.creator.profile_pic} />
                         <div className="font-extralight">
                           <span className="mr-2 font-semibold">
                             {comment.creator.username}

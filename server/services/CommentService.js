@@ -37,12 +37,7 @@ class CommentService {
         postId: postId,
       },
       include: {
-        creator: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
+        creator: true,
       },
     });
   }

@@ -13,13 +13,7 @@ function PostContainer(post) {
         postId={post.id}
       />
       <PostCard attachment={post.attachment} />
-      <PostFooter
-        username={post.creator.username}
-        caption={post.caption}
-        likes={post._count.likes}
-        id={post.id}
-        attachment={post.attachment}
-      />
+      <PostFooter post={post} />
     </div>
   );
 }

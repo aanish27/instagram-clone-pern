@@ -51,12 +51,12 @@ class UserService {
         username: username,
       },
       include: {
-        posts: true,
+        posts: { include: { creator: true } },
         followers: { select: { follower: true } },
         followings: { select: { followee: true } },
         savedPosts: {
           include: {
-            post: { include: { creator: { select: { username: true } } } },
+            post: { include: { creator: true } },
           },
         },
         _count: {

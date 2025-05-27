@@ -20,9 +20,7 @@ function Explore() {
       });
   }, []);
 
-  const handlePostClick = (paramsObj) => {
-    const post = { ...paramsObj };
-    post["creator"] = post.creator.username;
+  const handlePostClick = (post) => {
     openViewPostModal(dispatch, post);
   };
 
