@@ -21,7 +21,11 @@ function Profile() {
   const tabs = ["Posts", "Saved", "Tagged"];
   const user = useLoaderData();
   const dispatch = useDispatch();
-  const { isError, data, error, isPending } = useGetProfileQuery(user.username);
+  const {
+    isError,
+    data: profile,
+    isPending,
+  } = useGetProfileQuery(user.username);
 
   useEffect(() => {
     if (followModalTitle && followModalContent) {
@@ -52,7 +56,6 @@ function Profile() {
     },
   ];
 
-  const profile = data;
   const savedPosts = profile.savedPosts.map((saved) => saved.post);
 
   const handleTabClick = (e) => {

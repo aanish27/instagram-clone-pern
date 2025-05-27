@@ -16,15 +16,7 @@ function PostFooter({ post }) {
         handleCommentClick={handleCommentClick}
         postId={post.id}
       />
-      <div>
-        {/* username={post.creator.username}
-        caption={post.caption}
-        likes={post._count.likes}
-        id={post.id}
-        attachment={post.attachment} */}
-        {/* <b>{likeCount} </b>likes */}
-        27 likes
-      </div>
+      <div>{post._count.likes} Likes</div>
       <div>
         <b>{post.creator.username}</b> {post.caption}
         <span className="text-gray-400"> more</span>

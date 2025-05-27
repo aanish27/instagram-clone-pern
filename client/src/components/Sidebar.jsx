@@ -101,7 +101,7 @@ function Sidebar() {
     <div className="hidden min-h-screen text-white md:flex md:justify-between">
       <div className="flex flex-col justify-between border-r-2 border-gray-900 p-5">
         <div className="flex flex-col gap-6">
-          <BrandName />
+          <BrandName isExpanded={IsSidebarExpanded} />
           <div className="">
             <SideBarItem
               icon={<GoHomeFill style={iconStyle} />}
