@@ -9,6 +9,7 @@ import { closeViewPostModal } from "../app/helpers";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 import { useGetCommentsQuery } from "../hooks/Query/commentQueryHooks";
 import CommentForm from "../forms/CommentForm";
+import IfAuthUser from "../app/helpers/IfAuthUser";
 const storageUrl = import.meta.env.VITE_STORAGE_URL;
 const regex = /^https:\/\/picsum\.photos\/seed\//;
 
@@ -124,11 +125,13 @@ function ViewPostModal({ post }) {
                           {comment.text}
                           <div className="flex gap-3 text-xs text-gray-400">
                             <div>2hrs Ago</div>
-                            <div
-                              onClick={handleCommentDeleteClick}
-                              data-id={comment.id}>
-                              Delete
-                            </div>
+                            <IfAuthUser userId={comment.creator.id}>
+                              <div
+                                onClick={handleCommentDeleteClick}
+                                data-id={comment.id}>
+                                Delete
+                              </div>
+                            </IfAuthUser>
                           </div>
                         </div>
                       </div>

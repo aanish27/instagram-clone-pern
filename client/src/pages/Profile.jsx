@@ -11,6 +11,7 @@ import { FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 import { useGetProfileQuery } from "../hooks/Query/userQueryHooks";
+import IfAuthUser from "../app/helpers/IfAuthUser";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Profile() {
@@ -94,24 +95,28 @@ function Profile() {
                 img={`${serverUrl}/${profile.profile_pic}`}
                 size={"h-40 w-40"}
               />
-              <button
-                className="absolute inset-0 flex items-center justify-center rounded-full bg-white/30 text-sm text-black opacity-0 transition-opacity group-hover:opacity-100"
-                onClick={handleProfilePicOnClick}>
-                <FaEdit style={{ fontSize: "25px" }} />
-              </button>
+              <IfAuthUser userId={user.id}>
+                <button
+                  className="absolute inset-0 flex items-center justify-center rounded-full bg-white/30 text-sm text-black opacity-0 transition-opacity group-hover:opacity-100"
+                  onClick={handleProfilePicOnClick}>
+                  <FaEdit style={{ fontSize: "25px" }} />
+                </button>
+              </IfAuthUser>
             </div>
             <div className="ml-[100px] flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <div>{user.username}</div>
-                <Link
-                  to={`/${user.username}/edit`}
-                  className="btn btn-soft h-8">
-                  Edit Profile
-                </Link>
-                <button className="btn btn-soft h-8">veiw archive</button>
-                <button>
-                  <RiSettings4Line style={{ fontSize: "25px" }} />
-                </button>
+                <IfAuthUser userId={user.id}>
+                  <Link
+                    to={`/${user.username}/edit`}
+                    className="btn btn-soft h-8">
+                    Edit Profile
+                  </Link>
+                  <button className="btn btn-soft h-8">veiw archive</button>
+                  <button>
+                    <RiSettings4Line style={{ fontSize: "25px" }} />
+                  </button>
+                </IfAuthUser>
               </div>
               <div className="flex justify-between">
                 <div className="text-gray-400">

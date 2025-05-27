@@ -39,6 +39,7 @@ class CommentService {
       include: {
         creator: {
           select: {
+            id: true,
             username: true,
           },
         },
