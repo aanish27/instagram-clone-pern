@@ -1,11 +1,14 @@
-import './App.css'
+import AuthProvider from "./provider/authProvider";
+import Routes from "./routes";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
-    <>
-      <div className='flex justify-center align-items-center bg-sky-950'>Is the template Working </div>
-    </>
-  )
+    <AuthProvider>
+      <ToastContainer />
+      <Routes />
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

@@ -4,8 +4,10 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import eslintConfigPrettier from 'eslint-config-prettier';
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default [
+  ...pluginQuery.configs['flat/recommended'],
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
@@ -30,6 +32,7 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
+      "react/prop-types": 0,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

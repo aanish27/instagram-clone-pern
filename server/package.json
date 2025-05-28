@@ -11,17 +11,32 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.3.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-async-handler": "^1.2.0",
-    "pg": "^8.13.3"
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
+    "pg": "^8.13.3",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
+    "@faker-js/faker": "^9.6.0",
     "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "globals": "^15.15.0",
     "prettier": "3.5.1",
     "prisma": "^6.3.1"
+  },
+  "prisma": {
+    "schema": "db/prisma/schema.prisma",
+    "seed": "node db/prisma/seed.js"
   }
 }
