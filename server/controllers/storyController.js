@@ -5,19 +5,16 @@ const {
   updateStoryValidator,
   getStoryByIdValidator,
 } = require("../shared/middlewares/validators/storyValidator");
+const StoryService = require("../services/StoryService");
 
 const prisma = new PrismaClient({
   errorFormat: "minimal",
 });
 
-const index = asyncHandler(async (req, res) => {
+const getFeed = asyncHandler(async (req, res) => {
   try {
-    const stories = await prisma.story.findMany({
-      include: {
-        creator: true,
-      },
-    });
-    return res.json({ stories: stories });
+    const stories = await StoryService.getFeed(req.user.id);
+    return res.json(stories);
   } catch (error) {
     throw error;
   }
@@ -97,4 +94,4 @@ const destroy = [
   }),
 ];
 
-module.exports = { index, store, show, update, destroy };
+module.exports = { getFeed, store, show, update, destroy };

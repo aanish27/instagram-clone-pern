@@ -9,6 +9,8 @@ const initialState = {
   IsPostUploadModalOpen: false,
   PostEditModalProps: null,
   IsShareModalOpen: false,
+  IsStoryModalOpen: false,
+  StoryId: null,
 };
 
 export const uiSlice = createSlice({
@@ -45,6 +47,10 @@ export const uiSlice = createSlice({
     setIsShareModalOpen: (state, action) => {
       state.IsShareModalOpen = action.payload;
     },
+    setIsStoryModalOpen: (state, action) => {
+      state.IsStoryModalOpen = action.payload.state;
+      state.StoryId = action.payload.id;
+    },
   },
 });
 
@@ -57,6 +63,7 @@ export const {
   setIsPostUploadModalOpen,
   setIsPostEditModalOpen,
   setIsShareModalOpen,
+  setIsStoryModalOpen,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

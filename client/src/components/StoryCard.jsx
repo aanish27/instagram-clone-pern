@@ -1,13 +1,12 @@
-import { useContext } from "react";
-import { StoryModalContext } from "../provider/provider";
 import Avatar from "./Avatar";
+import { useDispatch } from "react-redux";
+import { setIsStoryModalOpen } from "../app/features/uiSlice";
 
 function StoryCard({ story }) {
-  const [StoryModal, setStoryModal] = useContext(StoryModalContext);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    setStoryModal(story);
-    document.getElementById("storyModal").showModal();
+    dispatch(setIsStoryModalOpen({ state: true, id: story.id }));
   };
 
   return (
@@ -17,7 +16,7 @@ function StoryCard({ story }) {
       <Avatar
         isStory={true}
         size={"h-16 w-16 md:h-15 md:w-15"}
-        img={story.attachment}
+        img={story.creator.profile_pic}
         ringSize={"h-17 w-16 md:h-16"}
       />
       <span className="w-[100%] overflow-hidden whitespace-nowrap">

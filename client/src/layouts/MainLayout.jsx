@@ -12,6 +12,7 @@ import {
 } from "../app/features/uiSlice";
 import PostUploadModal from "../modals/PostUploadModal";
 import ShareModal from "../modals/ShareModal";
+import StoryModal from "../modals/StoryModal";
 
 function MainLayout({ children }) {
   const post = useSelector((state) => state.post.viewPost);
@@ -22,6 +23,7 @@ function MainLayout({ children }) {
     IsPostUploadModalOpen,
     PostEditModalProps,
     IsShareModalOpen,
+    IsStoryModalOpen,
   } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
@@ -55,12 +57,22 @@ function MainLayout({ children }) {
     }
   }, [IsShareModalOpen]);
 
+  useEffect(() => {
+    if (IsStoryModalOpen) {
+      document.getElementById("storyModal").showModal();
+    } else {
+      document.getElementById("storyModal").close();
+    }
+  }, [IsStoryModalOpen]);
+
   return (
     <>
       {IsShareModalOpen && <ShareModal />}
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsViewModalOpen && <ViewPostModal post={post} />}
       {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
+      {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
+      <StoryModal />
       <NavbarMobile />
       <div className="flex max-h-screen items-center justify-between overflow-hidden">
         <Sidebar />
