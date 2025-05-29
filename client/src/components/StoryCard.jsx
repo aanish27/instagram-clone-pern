@@ -1,49 +1,15 @@
-import { useDispatch } from "react-redux";
 import Avatar from "./Avatar";
 import { IoEllipsisHorizontal } from "react-icons/io5";
-import { IoPaperPlaneOutline } from "react-icons/io5";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { setIsShareModalOpen } from "../app/features/uiSlice";
 import {
   useStoreStoryLikeMutation,
   useUnlikeStoryMutation,
 } from "../hooks/Query/likeQueryHooks";
-import { useState } from "react";
+import LikeButton from "./LikeButton";
+import ShareButton from "./ShareButton";
 
 function StoryCard({ id, profile_pic, username, attachment }) {
-  const dispatch = useDispatch();
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeId, setLikeId] = useState(null);
   const storeLikeMutation = useStoreStoryLikeMutation();
   const unlikeMutation = useUnlikeStoryMutation();
-
-  const handleShareClick = () => {
-    dispatch(setIsShareModalOpen(true));
-  };
-
-  const handleLikeButtonOnclick = async () => {
-    if (!isLiked) {
-      storeLikeMutation.mutate(
-        {
-          entityId: id,
-          entity: "POST",
-        },
-        {
-          onSuccess: (data) => {
-            setIsLiked(!isLiked);
-            setLikeId(data.id);
-          },
-        },
-      );
-    } else {
-      unlikeMutation.mutate(Number(likeId), {
-        onSuccess: () => {
-          setIsLiked(!isLiked);
-          setLikeId(null);
-        },
-      });
-    }
-  };
 
   return (
     <div className="bg-insta-black flex h-full w-[25vw] flex-col justify-between">
@@ -62,14 +28,13 @@ function StoryCard({ id, profile_pic, username, attachment }) {
           type="text"
           className="w-[300px] rounded-2xl border-2 px-4 py-1"
         />
-        <button onClick={handleLikeButtonOnclick} data-like-id={likeId}>
-          {isLiked ? (
-            <FaHeart className="text-2xl text-red-500" />
-          ) : (
-            <FaRegHeart className="text-2xl" />
-          )}
-        </button>
-        <IoPaperPlaneOutline className="text-2xl" onClick={handleShareClick} />
+        <LikeButton
+          likeMutation={storeLikeMutation}
+          unlikeMutation={unlikeMutation}
+          entity={"STORY"}
+          entityId={id}
+        />
+        <ShareButton />
       </div>
     </div>
   );

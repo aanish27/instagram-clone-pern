@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import PostIconFooter from "./PostIconFooter";
+import PostFooterIcons from "./PostFooterIcons";
 import { openViewPostModal } from "../app/helpers";
 import CommentForm from "../forms/CommentForm";
 
@@ -12,7 +12,7 @@ function PostFooter({ post }) {
 
   return (
     <>
-      <PostIconFooter
+      <PostFooterIcons
         handleCommentClick={handleCommentClick}
         postId={post.id}
       />

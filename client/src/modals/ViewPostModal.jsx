@@ -1,7 +1,7 @@
 import { CiFaceSmile } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { IoEllipsisHorizontal } from "react-icons/io5";
-import PostIconFooter from "../components/PostIconFooter";
+import PostFooterIcons from "../components/PostFooterIcons";
 import Avatar from "../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { closeViewPostModal } from "../app/helpers";
@@ -138,7 +138,7 @@ function ViewPostModal({ post }) {
               </div>
               <div>
                 <hr className="dark:bg-insta-black h-px border-0 bg-gray-200" />
-                <PostIconFooter
+                <PostFooterIcons
                   postId={post.id}
                   handleCommentClick={() => {
                     setFocus("text");
