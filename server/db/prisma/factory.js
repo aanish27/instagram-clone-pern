@@ -25,10 +25,10 @@ const userSeeder = () => {
 const postSeeder = () => {
   return {
     caption: faker.internet.emoji(),
-    creatorId: faker.number.int({ min: 1, max: 30 }),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
     attachment: faker.image.urlPicsumPhotos({
-      height: 450,
-      width: 450,
+      height: 1080,
+      width: 1080,
       grayscale: false,
       blur: 0,
     }),
@@ -37,58 +37,63 @@ const postSeeder = () => {
 
 const storySeeder = () => {
   return {
-    creatorId: faker.number.int({ min: 1, max: 30 }),
-    attachment: faker.image.urlPicsumPhotos(),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
+    attachment: faker.image.urlPicsumPhotos({
+      height: 1080,
+      width: 1080,
+      grayscale: false,
+      blur: 0,
+    }),
   };
 };
 
 const followRequestSeeder = () => {
   return {
-    followerId: faker.number.int({ min: 1, max: 30 }),
-    followeeId: faker.number.int({ min: 1, max: 30 }),
+    followerId: faker.number.int({ min: 1, max: 1000 }),
+    followeeId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const followSeeder = () => {
   return {
-    followerId: faker.number.int({ min: 1, max: 30 }),
-    followeeId: faker.number.int({ min: 1, max: 30 }),
+    followerId: faker.number.int({ min: 1, max: 1000 }),
+    followeeId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const commentSeeder = () => {
   return {
     text: faker.book.title(),
-    creatorId: faker.number.int({ min: 1, max: 30 }),
-    postId: faker.number.int({ min: 1, max: 20 }),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
+    postId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const postLikeSeeder = () => {
   return {
-    creatorId: faker.number.int({ min: 1, max: 30 }),
-    postId: faker.number.int({ min: 1, max: 20 }),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
+    postId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const commentLikeSeeder = () => {
   return {
-    creatorId: faker.number.int({ min: 1, max: 30 }),
-    commentId: faker.number.int({ min: 1, max: 20 }),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
+    commentId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const storyLikeSeeder = () => {
   return {
-    creatorId: faker.number.int({ min: 1, max: 30 }),
-    storyId: faker.number.int({ min: 1, max: 20 }),
+    creatorId: faker.number.int({ min: 1, max: 1000 }),
+    storyId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 
 const usersSavedPostsSeeder = () => {
   return {
-    userId: faker.number.int({ min: 1, max: 30 }),
-    postId: faker.number.int({ min: 1, max: 20 }),
+    userId: faker.number.int({ min: 1, max: 1000 }),
+    postId: faker.number.int({ min: 1, max: 1000 }),
   };
 };
 

@@ -17,64 +17,69 @@ const {
 
 async function main() {
   //default user
-  // await prisma.user.create({
-  //   data: {
-  //     name: "admin",
-  //     username: "admin99",
-  //     bio: "mysterio",
-  //     email: "admin@example.com",
-  //     phone: "947677632",
-  //     password: "$2b$10$yEMGpvDukKwlHOFK7Ls7uOoph8RhLdlD.nrdgGhWg5BqdPmGoPgbq", //password
-  //   },
-  // });
+  await prisma.user.create({
+    data: {
+      name: "admin",
+      username: "admin99",
+      bio: "mysterio",
+      email: "admin@example.com",
+      phone: "947677632",
+      password: "$2b$10$yEMGpvDukKwlHOFK7Ls7uOoph8RhLdlD.nrdgGhWg5BqdPmGoPgbq", //password
+    },
+  });
 
   await prisma.user.createMany({
-    data: factory(30, userSeeder),
+    data: factory(1000, userSeeder),
     skipDuplicates: true,
   });
 
   await prisma.post.createMany({
-    data: factory(30, postSeeder),
+    data: factory(1000, postSeeder),
     skipDuplicates: true,
   });
 
   await prisma.follow.createMany({
-    data: factory(30, followSeeder),
+    data: factory(10000, followSeeder),
     skipDuplicates: true,
   });
 
   await prisma.followRequest.createMany({
-    data: factory(30, followRequestSeeder),
+    data: factory(1000, followRequestSeeder),
     skipDuplicates: true,
   });
 
   await prisma.comment.createMany({
-    data: factory(30, commentSeeder),
+    data: factory(100000, commentSeeder),
     skipDuplicates: true,
   });
 
   await prisma.story.createMany({
-    data: factory(30, storySeeder),
+    data: factory(1000, storySeeder),
     skipDuplicates: true,
   });
 
   await prisma.like.createMany({
-    data: factory(30, postLikeSeeder),
+    data: factory(10000, postLikeSeeder),
     skipDuplicates: true,
   });
 
   await prisma.like.createMany({
-    data: factory(30, commentLikeSeeder),
+    data: factory(10000, commentLikeSeeder),
     skipDuplicates: true,
   });
 
   await prisma.like.createMany({
-    data: factory(30, storyLikeSeeder),
+    data: factory(10000, storyLikeSeeder),
     skipDuplicates: true,
   });
 
   await prisma.usersSavedPosts.createMany({
-    data: factory(100, usersSavedPostsSeeder),
+    data: factory(10000, usersSavedPostsSeeder),
+    skipDuplicates: true,
+  });
+
+  await prisma.notification.createMany({
+    data: factory(10000, usersSavedPostsSeeder),
     skipDuplicates: true,
   });
 }
