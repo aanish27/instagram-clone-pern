@@ -1,15 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const {
   createLikeValidator,
-  destroyLikeValidator,
 } = require("../shared/middlewares/validators/likeValidator");
+const {
+  idValidator,
+} = require("../shared/middlewares/validators/commonValidator");
 const LikeService = require("../services/LikeService");
 
-const store = [
+const storePostLike = [
   createLikeValidator,
   asyncHandler(async (req, res) => {
     try {
-      const like = await LikeService.store(req.body);
+      const like = await LikeService.storeLike(req.body);
       return res.json({ id: like.id });
     } catch (error) {
       throw error;
@@ -17,11 +19,23 @@ const store = [
   }),
 ];
 
-const destroy = [
-  destroyLikeValidator,
+const storeStoryLike = [
+  createLikeValidator,
   asyncHandler(async (req, res) => {
     try {
-      await LikeService.destroy(req.body.id);
+      const like = await LikeService.storeLike(req.body);
+      return res.json({ id: like.id });
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
+const destroyPostLike = [
+  idValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      await LikeService.unlike(req.body.id);
       return res.json({ message: "Like deleted" });
     } catch (error) {
       throw error;
@@ -29,4 +43,21 @@ const destroy = [
   }),
 ];
 
-module.exports = { store, destroy };
+const destroyStoryLike = [
+  idValidator,
+  asyncHandler(async (req, res) => {
+    try {
+      await LikeService.unlike(req.body.id);
+      return res.json({ message: "Like deleted" });
+    } catch (error) {
+      throw error;
+    }
+  }),
+];
+
+module.exports = {
+  storePostLike,
+  storeStoryLike,
+  destroyPostLike,
+  destroyStoryLike,
+};

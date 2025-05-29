@@ -1,4 +1,4 @@
-import StoryCard from "./StoryCard";
+import StoryAvatar from "./StoryAvatar";
 import { useGetStories } from "../hooks/Query/storyQueryHooks";
 
 function StoryRow() {
@@ -8,7 +8,7 @@ function StoryRow() {
     <div className="hide-scroll-bar flex min-w-full shrink-0 gap-2 overflow-x-scroll md:w-full md:gap-4">
       {isSuccess &&
         stories?.map((story) => {
-          return <StoryCard key={story.id} story={story} />;
+          return <StoryAvatar key={story.id} story={story} />;
         })}
     </div>
   );

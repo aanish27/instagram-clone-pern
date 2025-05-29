@@ -5,11 +5,6 @@ const createLikeValidationSchema = Joi.object({
   entityId: Joi.number().positive().required(),
 }).options({ abortEarly: false });
 
-const destroyLikeValidationSchema = Joi.object({
-  id: Joi.number().positive().required(),
-}).options({ abortEarly: false });
-
 module.exports = {
   createLikeValidationSchema,
-  destroyLikeValidationSchema,
 };

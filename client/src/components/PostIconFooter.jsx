@@ -6,7 +6,6 @@ import {
   FaRegHeart,
 } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
-import axios from "axios";
 import { useState } from "react";
 import {
   useSavePostMutation,
@@ -14,7 +13,10 @@ import {
 } from "../hooks/Query/postQueryHooks";
 import { useDispatch } from "react-redux";
 import { setIsShareModalOpen } from "../app/features/uiSlice";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import {
+  useStorePostLikeMutation,
+  useUnlikePostMutation,
+} from "../hooks/Query/likeQueryHooks";
 
 function PostIconFooter({ postId, handleCommentClick }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -24,38 +26,30 @@ function PostIconFooter({ postId, handleCommentClick }) {
   const savePostMutation = useSavePostMutation();
   const unsavePostMutation = useUnsavePostMutation();
   const dispatch = useDispatch();
+  const storeLikeMutation = useStorePostLikeMutation();
+  const unlikeMutation = useUnlikePostMutation();
 
   const handleLikeButtonOnclick = async () => {
     if (!isLiked) {
-      await axios
-        .post(
-          `${serverUrl}/like`,
-          {
-            entityId: postId,
-            entity: "POST",
+      storeLikeMutation.mutate(
+        {
+          entityId: postId,
+          entity: "POST",
+        },
+        {
+          onSuccess: (data) => {
+            setIsLiked(!isLiked);
+            setLikeId(data.id);
           },
-          { withCredentials: true },
-        )
-        .then((response) => {
-          setIsLiked(!isLiked);
-          setLikeId(response.data.id);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        },
+      );
     } else {
-      await axios
-        .delete(`${serverUrl}/like/${Number(likeId)}`, {
-          withCredentials: true,
-        })
-        .then((response) => {
+      unlikeMutation.mutate(Number(likeId), {
+        onSuccess: () => {
           setIsLiked(!isLiked);
-          // setLikeCount(likeCount + 1);
           setLikeId(null);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        },
+      });
     }
   };
 

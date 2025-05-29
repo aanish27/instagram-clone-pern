@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const {
   createLikeValidationSchema,
-  destroyLikeValidationSchema,
 } = require("../../validators/like.joi.validator");
 
 const createLikeValidator = asyncHandler(async (req, res, next) => {
@@ -34,17 +33,6 @@ const createLikeValidator = asyncHandler(async (req, res, next) => {
   next();
 });
 
-const destroyLikeValidator = asyncHandler(async (req, res, next) => {
-  const { error, value } = destroyLikeValidationSchema.validate(req.params);
-  if (error) {
-    throw error;
-  }
-
-  req.body = value;
-  next();
-});
-
 module.exports = {
   createLikeValidator,
-  destroyLikeValidator,
 };

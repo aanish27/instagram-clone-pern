@@ -3,35 +3,37 @@ const eventBus = require("../shared/utils/eventBus");
 const NotificationService = require("./NotificationService");
 
 class LikeService {
-  static async store(data) {
+  static async storeLike(data) {
     return prisma.$transaction(async (tx) => {
       const like = await tx.like.create({
         data: data,
       });
 
-      const { post } = await tx.like.findUniqueOrThrow({
+      const { post, story, comment } = await tx.like.findUniqueOrThrow({
         where: { id: like.id },
-        select: { post: true },
+        select: { post: true, story: true, comment: true },
       });
+
+      const entity = post ?? story ?? comment;
 
       await NotificationService.store(
         {
           likeId: like.id,
           senderId: like.creatorId,
-          receiverId: post.creatorId,
+          receiverId: entity.creatorId,
         },
         tx,
       );
 
       eventBus.emit("send_notification", {
-        receivers: [post.creatorId],
+        receivers: [entity.creatorId],
       });
 
       return like;
     });
   }
 
-  static async destroy(id) {
+  static async unlike(id) {
     return await prisma.like.delete({
       where: {
         id: id,
