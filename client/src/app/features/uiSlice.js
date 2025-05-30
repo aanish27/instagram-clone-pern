@@ -8,7 +8,7 @@ const initialState = {
   optionsModalProps: null,
   IsPostUploadModalOpen: false,
   PostEditModalProps: null,
-  IsShareModalOpen: false,
+  isShareModalOpen: false,
   IsStoryModalOpen: false,
   storyId: null,
   isHighlight: false,
@@ -47,7 +47,7 @@ export const uiSlice = createSlice({
       state.PostEditModalProps = action.payload.props;
     },
     setIsShareModalOpen: (state, action) => {
-      state.IsShareModalOpen = action.payload;
+      state.isShareModalOpen = action.payload;
     },
     showStoryModal: (state, action) => {
       state.IsStoryModalOpen = action.payload.state;

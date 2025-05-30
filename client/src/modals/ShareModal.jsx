@@ -4,23 +4,19 @@ import { FaFacebook, FaFacebookMessenger, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { FaThreads } from "react-icons/fa6";
 import Input from "../components/Input";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsShareModalOpen } from "../app/features/uiSlice";
 import { useGetConnectionsQuery } from "../hooks/Query/followQueryHooks";
 import { useForm } from "react-hook-form";
+import ShareLink from "../components/ShareLink";
+import useToggleModal from "../hooks/useToggleModal";
 
 function ShareModal() {
   const { register } = useForm();
-  const [connections, setConnections] = useState(null);
   const dispatch = useDispatch();
   const { data, isSuccess } = useGetConnectionsQuery();
-
-  useEffect(() => {
-    if (data && isSuccess) {
-      setConnections(data);
-    }
-  }, [isSuccess, data]);
+  const { isShareModalOpen } = useSelector((state) => state.ui);
+  useToggleModal(isShareModalOpen, "shareModal");
 
   const modalOnClose = (e) => {
     if (e.type == "keydown" && e.code !== "Escape") {
@@ -30,8 +26,14 @@ function ShareModal() {
   };
 
   return (
-    <dialog id="shareModal" className="modal" onKeyDown={modalOnClose}>
-      <div className="modal-box bg-insta-black overflow-clip">
+    <dialog
+      id="shareModal"
+      className="modal"
+      onKeyDown={modalOnClose}
+      onClick={modalOnClose}>
+      <div
+        className="modal-box bg-insta-black overflow-clip"
+        onClick={(e) => e.stopPropagation()}>
         <h3 className="text-center text-lg capitalize">share</h3>
         <hr className="my-2 w-full"></hr>
         <div className="flex flex-col gap-3">
@@ -47,8 +49,8 @@ function ShareModal() {
             <button> Search</button>
           </form>
           <div className="flex h-[25vh] max-h-[20vh] flex-wrap items-center justify-between gap-4 overflow-scroll overflow-x-hidden">
-            {connections &&
-              connections.map((connection) => {
+            {isSuccess &&
+              data?.map((connection) => {
                 return (
                   <Avatar
                     key={connection.id}
@@ -60,42 +62,12 @@ function ShareModal() {
           </div>
         </div>
         <div className="flex justify-between gap-4">
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <RiLinkM className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Copy Link</div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <FaFacebook className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Facebook</div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <FaFacebookMessenger className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Messenger</div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <FaWhatsapp className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Whatsapp</div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <CiMail className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Email</div>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-black">
-              <FaThreads className="text-2xl text-white" />
-            </div>
-            <div className="text-xs">Threads</div>
-          </div>
+          <ShareLink icon={<RiLinkM />} title={"Copy Link"} />
+          <ShareLink icon={<FaFacebook />} title={"Facebook"} />
+          <ShareLink icon={<FaFacebookMessenger />} title={"Messenger"} />
+          <ShareLink icon={<FaWhatsapp />} title={"Whatsapp"} />
+          <ShareLink icon={<CiMail />} title={"Email"} />
+          <ShareLink icon={<FaThreads />} title={"Threads"} />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button
