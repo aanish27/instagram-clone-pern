@@ -17,9 +17,9 @@ function PostFooter({ post }) {
         postId={post.id}
       />
       <div>{post._count.likes} Likes</div>
-      <div>
+      <div className="truncate">
         <b>{post.creator.username}</b> {post.caption}
-        <span className="text-gray-400"> more</span>
+        {/* <span className="text-gray-400"> more</span> */}
       </div>
       <CommentForm postId={post.id} />
     </>
