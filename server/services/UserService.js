@@ -59,6 +59,7 @@ class UserService {
             post: { include: { creator: true } },
           },
         },
+        stories: { include: { creator: true } },
         _count: {
           select: { posts: true, followers: true, followings: true },
         },

@@ -13,6 +13,18 @@ class StoryService {
       orderBy: { createdAt: "asc" },
     });
   }
+
+  static async store(data) {
+    return await prisma.story.create({
+      data: data,
+    });
+  }
+
+  static async destroy(id) {
+    return await prisma.story.delete({
+      where: { id: id },
+    });
+  }
 }
 
 module.exports = StoryService;

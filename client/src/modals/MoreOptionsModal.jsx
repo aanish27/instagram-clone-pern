@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import {
+  hideStoryModal,
   setIsOptionsModalOpen,
   setIsPostEditModalOpen,
 } from "../app/features/uiSlice";
@@ -14,6 +15,7 @@ import { useDeletePostMutation } from "../hooks/Query/postQueryHooks";
 import { closeViewPostModal } from "../app/helpers";
 import { useDeleteCommentMutation } from "../hooks/Query/commentQueryHooks";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteStoryMutation } from "../hooks/Query/storyQueryHooks";
 
 function MoreOptionsModal({ props }) {
   const [propss, setProps] = useState(props);
@@ -25,6 +27,7 @@ function MoreOptionsModal({ props }) {
   const deletePostMutation = useDeletePostMutation();
   const deleteCommentMutation = useDeleteCommentMutation(); //postId i want to pass here
   const queryClient = useQueryClient();
+  const deleteStoryMutation = useDeleteStoryMutation();
 
   const handleOptionClick = (option) => {
     switch (option.actionType) {
@@ -67,6 +70,10 @@ function MoreOptionsModal({ props }) {
       case "confirmDeletePost":
         deletePostMutation.mutate(option.data.id);
         closeViewPostModal(dispatch);
+        break;
+      case "deleteStory":
+        deleteStoryMutation.mutate(option.data.id);
+        dispatch(hideStoryModal());
         break;
       case "deleteComment":
         deleteCommentMutation.mutate(option.data.commentId, {
@@ -130,7 +137,7 @@ function MoreOptionsModal({ props }) {
                   {option.onClick ? (
                     <button
                       onClick={() => handleOptionClick(option.onClick)}
-                      className={`flex h-12 w-full items-center justify-center capitalize ${option.textColor ? `${option.textColor} font-semibold` : ""}`}>
+                      className={`flex h-12 w-full items-center justify-center capitalize ${option.textColor && `${option.textColor} font-semibold`}`}>
                       {option.title}
                     </button>
                   ) : (

@@ -1,27 +1,38 @@
 import Avatar from "./Avatar";
 import { useDispatch } from "react-redux";
-import { setIsStoryModalOpen } from "../app/features/uiSlice";
+import { showStoryModal } from "../app/features/uiSlice";
 
-function StoryAvatar({ story }) {
+function StoryAvatar({ story, isHighlight }) {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setIsStoryModalOpen({ state: true, id: story.id }));
+    dispatch(
+      showStoryModal({
+        state: true,
+        id: story.id,
+        isHighlight: isHighlight,
+      }),
+    );
   };
 
   return (
     <div
-      className="flex w-17 flex-col items-center justify-center md:w-16"
+      className="flex flex-col items-center justify-center md:w-16"
       onClick={handleClick}>
       <Avatar
         isStory={true}
-        size={"h-16 w-16 md:h-15 md:w-15"}
-        img={story.creator.profile_pic}
-        ringSize={"h-17 w-16 md:h-16"}
+        size={"h-17 w-17 md:h-16 md:w-16"}
+        img={isHighlight ? story.attachment : story.creator.profile_pic}
+        ringSize={"h-18 w-17 md:h-17"}
+        {...(isHighlight
+          ? { ringColor: "bg-gradient-to-r from-neutral-400 to-stone-700" }
+          : {})}
       />
-      <span className="w-[100%] overflow-hidden whitespace-nowrap">
-        {story.creator.username}
-      </span>
+      {!isHighlight && (
+        <span className="w-[100%] overflow-hidden whitespace-nowrap">
+          {story.creator.username}
+        </span>
+      )}
     </div>
   );
 }

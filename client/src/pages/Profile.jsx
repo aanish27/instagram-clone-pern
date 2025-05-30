@@ -1,6 +1,5 @@
 import Avatar from "../components/Avatar";
 import MainLayout from "../layouts/MainLayout";
-import pic from "../assets/car.jpg";
 import { RiSettings4Line } from "react-icons/ri";
 import { HiPlus } from "react-icons/hi2";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { setIsOptionsModalOpen } from "../app/features/uiSlice";
 import { useGetProfileQuery } from "../hooks/Query/userQueryHooks";
 import IfAuthUser from "../app/helpers/IfAuthUser";
+import StoryRow from "../components/StoryRow";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Profile() {
@@ -151,13 +151,7 @@ function Profile() {
             <button className="btn btn-soft h-18 w-18 rounded-full">
               <HiPlus style={{ fontSize: "100px" }} />
             </button>
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
-            <Avatar img={pic} size={"h-18 w-18"} />
+            <StoryRow stories={profile.stories} isHighlight={true} />
           </div>
           <div
             role="tablist"

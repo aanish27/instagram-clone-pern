@@ -1,6 +1,6 @@
 import { FaInstagram } from "react-icons/fa";
 
-function BrandName({ isExpanded }) {
+function BrandName({ isExpanded = true }) {
   return isExpanded ? (
     <div className="cookie-regular my-5 text-4xl md:hidden lg:block">
       Instagram

@@ -23,7 +23,6 @@ function MainLayout({ children }) {
     IsPostUploadModalOpen,
     PostEditModalProps,
     IsShareModalOpen,
-    IsStoryModalOpen,
   } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
@@ -57,13 +56,6 @@ function MainLayout({ children }) {
     }
   }, [IsShareModalOpen]);
 
-  useEffect(() => {
-    if (IsStoryModalOpen) {
-      document.getElementById("storyModal").showModal();
-    } else {
-      document.getElementById("storyModal").close();
-    }
-  }, [IsStoryModalOpen]);
 
   return (
     <>
