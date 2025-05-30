@@ -58,7 +58,6 @@ export const uiSlice = createSlice({
       state.IsStoryModalOpen = false;
       state.storyId = null;
       state.isHighlight = false;
-      state.stories = null;
     },
     setStories: (state, action) => {
       state.stories = action.payload;
