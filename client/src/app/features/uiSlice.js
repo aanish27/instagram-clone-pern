@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  IsViewModalOpen: false,
+  isViewModalOpen: false,
   IsOptionsModalOpen: false,
   IsSidebarExpanded: true,
   NotificationReload: true,
@@ -20,7 +20,7 @@ export const uiSlice = createSlice({
   initialState,
   reducers: {
     setIsViewModalOpen: (state, action) => {
-      state.IsViewModalOpen = action.payload;
+      state.isViewModalOpen = action.payload;
     },
     expandSidebar: (state) => {
       state.IsSidebarExpanded = true;

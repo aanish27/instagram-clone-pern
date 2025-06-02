@@ -17,7 +17,7 @@ function TabContent({ activeTab, posts, savedPosts }) {
       default:
         setContents(null);
     }
-  }, [activeTab]);
+  }, [activeTab, posts, savedPosts]);
 
   const handlePostClick = (post) => {
     openViewPostModal(dispatch, post);

@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useStoreCommentMutation } from "../hooks/Query/commentQueryHooks";
 import { useEffect } from "react";
 import Input from "../components/Input";
+import { CiFaceSmile } from "react-icons/ci";
 
 function CommentForm({ postId }) {
   const { handleSubmit, register, resetField, setValue } = useForm();
@@ -20,22 +21,25 @@ function CommentForm({ postId }) {
   };
 
   return (
-    <form
-      className="flex w-full"
-      onSubmit={handleSubmit(handleCommentSubmitClick)}>
-      <Input
-        register={register("text", { required: true })}
-        type="text"
-        className="w-full border-none bg-transparent p-0 placeholder:text-xs focus:outline-0"
-        placeholder={"Type Comment"}
-      />
-      <Input
-        type="text"
-        hidden={true}
-        register={register("postId", { required: true })}
-      />
-      <button className="ml-auto font-semibold text-blue-400">Post</button>
-    </form>
+    <div className="flex items-center justify-center">
+      <CiFaceSmile className="text-2xl" />
+      <form
+        className="flex w-full"
+        onSubmit={handleSubmit(handleCommentSubmitClick)}>
+        <Input
+          register={register("text", { required: true })}
+          type="text"
+          className="w-full border-none bg-transparent p-0 placeholder:text-xs focus:outline-0"
+          placeholder={"Type Comment"}
+        />
+        <Input
+          type="text"
+          hidden={true}
+          register={register("postId", { required: true })}
+        />
+        <button className="ml-auto font-semibold text-blue-400">Post</button>
+      </form>
+    </div>
   );
 }
 

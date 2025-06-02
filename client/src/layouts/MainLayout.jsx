@@ -15,11 +15,9 @@ import ShareModal from "../modals/ShareModal";
 import StoryModal from "../modals/StoryModal";
 
 function MainLayout({ children }) {
-  const post = useSelector((state) => state.post.viewPost);
   const {
     optionsModalProps,
     IsOptionsModalOpen,
-    IsViewModalOpen,
     IsPostUploadModalOpen,
     PostEditModalProps,
   } = useSelector((state) => state.ui);
@@ -30,12 +28,6 @@ function MainLayout({ children }) {
     dispatch(setIsOptionsModalOpen({ options: null, state: false }));
     dispatch(setIsPostUploadModalOpen(false));
   }, []);
-
-  useEffect(() => {
-    if (IsViewModalOpen && post) {
-      document.getElementById("viewPostModal").showModal();
-    }
-  }, [IsViewModalOpen, post]);
 
   useEffect(() => {
     if (IsOptionsModalOpen) {
@@ -51,12 +43,12 @@ function MainLayout({ children }) {
 
   return (
     <>
-      {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
-      {IsViewModalOpen && <ViewPostModal post={post} />}
-      {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
+      <ViewPostModal />
       <ShareModal />
       <StoryModal />
       <NavbarMobile />
+      {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
+      {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
       <div className="flex max-h-screen items-center justify-between overflow-hidden">
         <Sidebar />
         {children}
