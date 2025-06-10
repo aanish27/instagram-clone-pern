@@ -30,11 +30,11 @@ function Notifications() {
   };
 
   return (
-    <div className="block max-h-screen w-[20vw] overflow-scroll p-3">
+    <div className="">
       <div className="text-2xl font-extrabold">Notifications</div>
       <div className="mt-5">
         <div
-          className="flex items-center gap-4 py-2"
+          className="flex items-center justify-center gap-4"
           onClick={() => {
             setIsShowRequests(true);
           }}>
@@ -42,7 +42,7 @@ function Notifications() {
           <div className="w-full">
             <div className="font-semibold">
               Follow Requests
-              <br className=" " />
+              <br />
               <span className="font-extralight"> others</span>
             </div>
           </div>

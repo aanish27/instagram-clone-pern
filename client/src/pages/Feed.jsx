@@ -29,7 +29,7 @@ function Feed() {
 
   return (
     <MainLayout>
-      <main className="hide-scroll-bar my-10 max-h-screen w-full overflow-y-scroll p-1 md:my-0 md:px-5 lg:w-[40%]">
+      <main className="hide-scroll-bar max-h-screen w-full overflow-y-scroll md:my-0 md:px-5 lg:w-[40%] ">
         {isStories && stories && <StoryRow stories={stories} />}
         <div className="flex w-full flex-col items-center justify-center md:px-20">
           {isPosts &&

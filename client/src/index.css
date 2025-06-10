@@ -24,10 +24,16 @@
   scrollbar-width: none;
 }
 
-.noto-sans-jp-body {
-  font-family: "Noto Sans JP", sans-serif;
+.sawarabi-gothic-regular {
+  font-family: "Sawarabi Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.arimo-body {
+  font-family: "Arimo", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 250;
+  font-weight: 400;
   font-style: normal;
 }
 

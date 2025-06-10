@@ -6,7 +6,11 @@ import Notifications from "./Notifications";
 import { NotificationPanelContext } from "../provider/provider";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 import { useDispatch, useSelector } from "react-redux";
-import { closeSidebar, expandSidebar, toggleNotificationReload } from "../app/features/uiSlice";
+import {
+  closeSidebar,
+  expandSidebar,
+  toggleNotificationReload,
+} from "../app/features/uiSlice";
 
 function NotificationPanel() {
   const [requests, setRequests] = useState(null);
@@ -20,7 +24,7 @@ function NotificationPanel() {
     setIsShowRequests(false);
     dispatch(closeSidebar());
 
-    dispatch(toggleNotificationReload())
+    dispatch(toggleNotificationReload());
     return () => {
       dispatch(expandSidebar());
     };
@@ -38,7 +42,7 @@ function NotificationPanel() {
   }, [isShowRequests, isReload]);
 
   return (
-    <div className="block max-h-screen w-[20vw] overflow-scroll p-3">
+    <div className="mb-2 flex max-h-screen flex-col overflow-y-scroll p-3">
       {isShowRequests ? (
         <>
           <div className="flex">

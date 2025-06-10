@@ -49,7 +49,7 @@ function MainLayout({ children }) {
       <NavbarMobile />
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
-      <div className="flex max-h-screen items-center justify-between overflow-hidden">
+      <div className="flex max-h-screen items-center justify-between">
         <Sidebar />
         {children}
       </div>
