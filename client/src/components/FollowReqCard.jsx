@@ -1,34 +1,30 @@
-import axios from "axios";
 import Avatar from "./Avatar";
 import { useDispatch } from "react-redux";
 import { toggleNotificationReload } from "../app/features/uiSlice";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import {
+  useAcceptFollowReqMutation,
+  useDeleteFollowReqMutation,
+} from "../hooks/Query/followQueryHooks";
 
 function FollowReqCard({ avatar, name, username, message, reqId }) {
+  const rejectRequestMutation = useDeleteFollowReqMutation();
+  const acceptRequestMutation = useAcceptFollowReqMutation();
   const dispatch = useDispatch();
 
-  const handleAcceptRequest = async () => {
-    await axios
-      .post(`${serverUrl}/follow`, { id: reqId }, { withCredentials: true })
-      .then((response) => {
+  const handleAcceptRequest = () => {
+    acceptRequestMutation.mutate(reqId, {
+      onSuccess: () => {
         dispatch(toggleNotificationReload());
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      },
+    });
   };
 
-  const handleRejectRequest = async () => {
-    await axios
-      .delete(`${serverUrl}/follow/req/${reqId}`, { withCredentials: true })
-      .then((response) => {
+  const handleRejectRequest = () => {
+    rejectRequestMutation.mutate(reqId, {
+      onSuccess: () => {
         dispatch(toggleNotificationReload());
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      },
+    });
   };
 
   return (

@@ -21,6 +21,10 @@ import { NotificationPanelContext } from "../provider/provider";
 import { setIsPostUploadModalOpen } from "../app/features/uiSlice";
 import SidebarMenu from "./SidebarMenu";
 import { FaThreads } from "react-icons/fa6";
+import {
+  useMarkNotificationsReadMutation,
+  useNotificationCountQuery,
+} from "../hooks/Query/notificationQueryHooks";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Sidebar() {
@@ -36,19 +40,10 @@ function Sidebar() {
   const [IsMessageActive, setIsMessageActive] = useState(false);
   const [IsNotificationActive, setIsNotificationActive] = useState(true);
   const [isShowRequests, setIsShowRequests] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(0);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    axios
-      .get(`${serverUrl}/notifications/count`, { withCredentials: true })
-      .then(function (response) {
-        setNotificationCount(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [isNotificationReload]);
+  const { data: notificationCount, isSuccess } =
+    useNotificationCountQuery(isNotificationReload);
+  const markReadMutation = useMarkNotificationsReadMutation();
 
   useEffect(() => {
     setIsSearchActive(false);
@@ -64,20 +59,17 @@ function Sidebar() {
     IsMessageActive ? setIsMessageActive(false) : setIsMessageActive(true);
   };
 
-  const handleNotificationClick = async () => {
-    await axios
-      .patch(`${serverUrl}/notifications/read`, {}, { withCredentials: true })
-      .then((response) => {
-        setNotificationCount(0);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    IsNotificationActive
-      ? setIsNotificationActive(false)
-      : setIsNotificationActive(true);
+  const handleNotificationClick = () => {
+    markReadMutation.mutate(
+      {},
+      {
+        onSuccess: () => {
+          IsNotificationActive
+            ? setIsNotificationActive(false)
+            : setIsNotificationActive(true);
+        },
+      },
+    );
   };
 
   const handleLogoutClick = async (e) => {
@@ -128,7 +120,7 @@ function Sidebar() {
               title={"Notifications"}
               isExpanded={IsSidebarExpanded}
               onClick={handleNotificationClick}
-              notification={notificationCount}
+              notification={isSuccess && notificationCount}
             />
             <SideBarItem
               icon={<CgAddR style={iconStyle} />}

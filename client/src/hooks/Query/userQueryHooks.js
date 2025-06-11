@@ -5,6 +5,7 @@ import {
   getProfile,
   getSuggestions,
   getUser,
+  searchUsers,
   updateAvatar,
   updateUser,
 } from "../../api/userApi";
@@ -14,6 +15,14 @@ export const useGetUserQuery = (username, options = {}) => {
   return useQuery({
     queryKey: ["getUser", username],
     queryFn: () => getUser(username),
+    ...options,
+  });
+};
+
+export const useSearchUsersQuery = (username, options = {}) => {
+  return useQuery({
+    queryKey: ["userSearch", username],
+    queryFn: () => searchUsers(username),
     ...options,
   });
 };

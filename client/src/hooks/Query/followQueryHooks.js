@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  acceptFollowReq,
   deleteFollowReq,
   getConnections,
   sendFollowReq,
@@ -40,6 +41,16 @@ export const useSendFollowReqMutation = (options = {}) => {
     onError: (error) => {
       console.log(`${error} error`);
     },
+  });
+};
+
+export const useAcceptFollowReqMutation = (options = {}) => {
+  return useMutation({
+    mutationFn: acceptFollowReq,
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    ...options,
   });
 };
 

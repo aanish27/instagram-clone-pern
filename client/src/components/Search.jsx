@@ -1,40 +1,34 @@
-import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Input from "./Input";
 import { useEffect } from "react";
 import { closeSidebar, expandSidebar } from "../app/features/uiSlice";
 import { useForm } from "react-hook-form";
+import { useSearchUsersQuery } from "../hooks/Query/userQueryHooks";
+import { useQueryClient } from "@tanstack/react-query";
+
 function Search() {
-  const [searchResult, setSearchResult] = useState(null);
+  const [searchParams, setSearchParams] = useState(null);
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     dispatch(closeSidebar());
 
     return () => {
       dispatch(expandSidebar());
+      queryClient.removeQueries("userSearch");
     };
   }, []);
 
-  const handleSearch = async (data) => {
-    axios
-      .get("http://localhost:3000/user/search", {
-        params: data,
-        withCredentials: "true",
-      })
-      .then((response) => {
-        setSearchResult(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const { isSuccess, data, refetch } = useSearchUsersQuery(searchParams, {
+    enabled: !!searchParams,
+  });
+
+  const handleSearch = (data) => {
+    setSearchParams(data);
+    refetch();
   };
 
   return (
@@ -53,8 +47,8 @@ function Search() {
           <button> Search</button>
         </form>
         <div className="hide-scroll-bar max-h-[80vh] overflow-y-scroll">
-          {searchResult &&
-            searchResult.map((user) => {
+          {isSuccess &&
+            data.map((user) => {
               return (
                 <div
                   key={user.id}
