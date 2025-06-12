@@ -25,6 +25,14 @@ export const useGetPostQuery = (id, options = {}) => {
   });
 };
 
+export const useGetExploreQuery = (options = {}) => {
+  return useQuery({
+    queryKey: ["explore"],
+    queryFn: getPosts,
+    ...options,
+  });
+};
+
 export const useStorePostMutation = (options = {}) => {
   const user = useSelector((state) => state.auth.authUser);
   const queryClient = useQueryClient();

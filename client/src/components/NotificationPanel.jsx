@@ -1,23 +1,22 @@
 import { FaChevronLeft } from "react-icons/fa";
 import FollowReqCard from "./FollowReqCard";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect } from "react";
 import Notifications from "./Notifications";
 import { NotificationPanelContext } from "../provider/provider";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeSidebar,
   expandSidebar,
   toggleNotificationReload,
 } from "../app/features/uiSlice";
+import { useGetRequestsQuery } from "../hooks/Query/followQueryHooks";
 
 function NotificationPanel() {
-  const [requests, setRequests] = useState(null);
   const { isShowRequests, setIsShowRequests } = useContext(
     NotificationPanelContext,
   );
   const isReload = useSelector((state) => state.ui.NotificationReload);
+  const { isSuccess, data: requests, refetch } = useGetRequestsQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,15 +30,8 @@ function NotificationPanel() {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(`${serverUrl}/follow/req`, { withCredentials: true })
-      .then((response) => {
-        setRequests(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [isShowRequests, isReload]);
+    refetch();
+  }, [isReload]);
 
   return (
     <div className="mb-2 flex max-h-screen flex-col overflow-y-scroll p-3">
@@ -55,8 +47,8 @@ function NotificationPanel() {
             <div className="mr-auto font-semibold">Follow Requests</div>
           </div>
           <div className="mt-4 flex flex-col gap-3">
-            {requests &&
-              requests.map((request) => {
+            {isSuccess &&
+              requests?.map((request) => {
                 return (
                   <FollowReqCard
                     key={request.id}

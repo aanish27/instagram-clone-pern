@@ -1,28 +1,28 @@
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useState } from "react";
-import { useUnfollowUserMutation } from "../hooks/Query/followQueryHooks";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import {
+  useRemoveFollowerMutation,
+  useSearchFollowersQuery,
+  useUnfollowUserMutation,
+} from "../hooks/Query/followQueryHooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 function FollowModal({ title, setFollowModalTitle, content }) {
-  const [searchResult, setSearchResult] = useState(content);
+  const [searchParams, setSearchParams] = useState(null);
   const isFollower = title === "follower" ? true : false;
   const { register, handleSubmit } = useForm();
-
   const unfollowMutation = useUnfollowUserMutation();
-
+  const removeFollowerMutation = useRemoveFollowerMutation();
+  const { data: searchResult, refetch } = useSearchFollowersQuery(
+    searchParams,
+    {
+      enabled: !!searchParams,
+    },
+  );
+  const queryClient = useQueryClient();
   const removeOnClick = async (e) => {
-    axios
-      .delete(`${serverUrl}/follow/remove/${Number(e.target.dataset.id)}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    removeFollowerMutation.mutate(e.target.dataset.id);
   };
 
   const followingOnClick = (e) => {
@@ -30,23 +30,13 @@ function FollowModal({ title, setFollowModalTitle, content }) {
   };
 
   const handleSearch = (data) => {
-    axios
-      .get(`${serverUrl}/follow/search`, {
-        params: data,
-        withCredentials: true,
-      })
-      .then((response) => {
-        setSearchResult(response.data);
-        console.log(response.data);
-        console.log("search");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setSearchParams(data);
+    refetch();
   };
 
   const closeOnClick = () => {
     setFollowModalTitle(null);
+    queryClient.removeQueries("userSearch");
   };
 
   return (
@@ -66,31 +56,28 @@ function FollowModal({ title, setFollowModalTitle, content }) {
           <button> Search</button>
         </form>
         <div className="max-h-[40vh] overflow-scroll overflow-x-hidden">
-          {searchResult &&
-            searchResult.map((data) => {
-              const user = isFollower ? data.follower : data.followee;
-              return (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between">
-                  <div className="flex w-full items-center">
-                    <img
-                      src={user.profile_pic}
-                      className="h-15 w-15 rounded-full"
-                    />
-                    <div className="flex flex-col p-3">
-                      <div className="font-semibold">{user.username}</div>
-                    </div>
-                    <button
-                      className="btn btn-black ml-auto h-8"
-                      data-id={user.id}
-                      onClick={isFollower ? removeOnClick : followingOnClick}>
-                      {isFollower ? "Remove" : "Following"}
-                    </button>
+          {(searchResult ?? content)?.map((data) => {
+            const user = isFollower ? data.follower : data.followee;
+            return (
+              <div key={user.id} className="flex items-center justify-between">
+                <div className="flex w-full items-center">
+                  <img
+                    src={user.profile_pic}
+                    className="h-15 w-15 rounded-full"
+                  />
+                  <div className="flex flex-col p-3">
+                    <div className="font-semibold">{user.username}</div>
                   </div>
+                  <button
+                    className="btn btn-black ml-auto h-8"
+                    data-id={user.id}
+                    onClick={isFollower ? removeOnClick : followingOnClick}>
+                    {isFollower ? "Remove" : "Following"}
+                  </button>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
         <form method="dialog" className="modal-backdrop">
           <button

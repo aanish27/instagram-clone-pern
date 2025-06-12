@@ -3,9 +3,9 @@ import axiosInstance from "./axiosInstance";
 export const getUser = (username) =>
   axiosInstance.get(`/user/${username}`).then((res) => res.data);
 
-export const searchUsers = (username) =>
+export const searchFollowers = (username) =>
   axiosInstance
-    .get("/user/search", { params: username })
+    .get("/follow/search", { params: username })
     .then((res) => res.data);
 
 export const getSuggestions = (limit) =>

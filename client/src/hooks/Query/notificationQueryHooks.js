@@ -1,8 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getNotificationCount,
+  getNotifications,
   patchNotificationsRead,
 } from "../../api/notifcationApi";
+
+export const useGetNotificationsQuery = (reload, options = {}) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: ["notifications", reload],
+    queryFn: getNotifications,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getRequests"] });
+    },
+    ...options,
+  });
+};
 
 export const useNotificationCountQuery = (reload, options = {}) => {
   return useQuery({

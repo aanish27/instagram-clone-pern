@@ -6,6 +6,9 @@ export const getPosts = () =>
 export const getPost = (id) =>
   axiosInstance.get(`/post/${id}`).then((res) => res.data);
 
+export const getExplore = () =>
+  axiosInstance.get(`/post/explore`).then((res) => res.data);
+
 export const storePost = (data) =>
   axiosInstance.post("post", data).then((res) => res.data);
 

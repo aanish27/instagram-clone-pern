@@ -1,33 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useSelector } from "react-redux";
 import Avatar from "./Avatar";
 import { GoDotFill } from "react-icons/go";
 import profile_pic from "../assets/car.jpg";
 import { FaChevronRight } from "react-icons/fa";
-import axios from "axios";
 import NotificationList from "./NotificationList";
 import { NotificationPanelContext } from "../provider/provider";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+import { useGetNotificationsQuery } from "../hooks/Query/notificationQueryHooks";
 
 function Notifications() {
   const isReload = useSelector((state) => state.ui.NotificationReload);
-  const [notifications, setNotifications] = useState(null);
   const { setIsShowRequests } = useContext(NotificationPanelContext);
-
-  useEffect(() => {
-    fetchNotifications();
-  }, [isReload]);
-
-  const fetchNotifications = async () => {
-    await axios
-      .get(`${serverUrl}/notifications/recent`, { withCredentials: true })
-      .then((response) => {
-        setNotifications(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const { isSuccess, data: notifications } = useGetNotificationsQuery(isReload);
 
   return (
     <div className="">
@@ -51,29 +35,33 @@ function Notifications() {
             <FaChevronRight className="text-gray-500" />
           </div>
         </div>
-        {notifications?.today?.length > 0 && (
-          <NotificationList
-            notifications={notifications.today}
-            period="Today"
-          />
-        )}
-        {notifications?.thisWeek?.length > 0 && (
-          <NotificationList
-            notifications={notifications.thisWeek}
-            period={"This Week"}
-          />
-        )}
-        {notifications?.thisMonth?.length > 0 && (
-          <NotificationList
-            notifications={notifications.thisMonth}
-            period={"This Month"}
-          />
-        )}
-        {notifications?.earlier?.length > 0 && (
-          <NotificationList
-            notifications={notifications.earlier}
-            period={"Earlier"}
-          />
+        {isSuccess && (
+          <>
+            {notifications?.today?.length > 0 && (
+              <NotificationList
+                notifications={notifications.today}
+                period="Today"
+              />
+            )}
+            {notifications?.thisWeek?.length > 0 && (
+              <NotificationList
+                notifications={notifications.thisWeek}
+                period="This Week"
+              />
+            )}
+            {notifications?.thisMonth?.length > 0 && (
+              <NotificationList
+                notifications={notifications.thisMonth}
+                period="This Month"
+              />
+            )}
+            {notifications?.earlier?.length > 0 && (
+              <NotificationList
+                notifications={notifications.earlier}
+                period="Earlier"
+              />
+            )}
+          </>
         )}
       </div>
     </div>

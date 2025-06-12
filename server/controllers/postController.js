@@ -106,7 +106,7 @@ const deleteSavePost = [
 const getExplore = asyncHandler(async (req, res) => {
   try {
     const posts = await PostService.getExplore(req.user.id);
-    return res.json({ posts: posts });
+    return res.json(posts);
   } catch (error) {
     throw error;
   }

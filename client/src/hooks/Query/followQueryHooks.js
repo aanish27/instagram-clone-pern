@@ -3,9 +3,12 @@ import {
   acceptFollowReq,
   deleteFollowReq,
   getConnections,
+  getRequests,
+  removeFollower,
   sendFollowReq,
   unfollowUser,
 } from "../../api/followApi";
+import { searchFollowers } from "../../api/userApi";
 
 export const useGetConnectionsQuery = (options = {}) => {
   return useQuery({
@@ -14,6 +17,25 @@ export const useGetConnectionsQuery = (options = {}) => {
     onError: (error) => {
       console.log(`${error} error`);
     },
+    ...options,
+  });
+};
+
+export const useGetRequestsQuery = (options = {}) => {
+  return useQuery({
+    queryKey: ["getRequests"],
+    queryFn: getRequests,
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    ...options,
+  });
+};
+
+export const useSearchFollowersQuery = (username, options = {}) => {
+  return useQuery({
+    queryKey: ["followersSearch", username],
+    queryFn: () => searchFollowers(username),
     ...options,
   });
 };
@@ -61,5 +83,15 @@ export const useDeleteFollowReqMutation = (options = {}) => {
     onError: (error) => {
       console.log(`${error} error`);
     },
+  });
+};
+
+export const useRemoveFollowerMutation = (options = {}) => {
+  return useMutation({
+    mutationFn: removeFollower,
+    onError: (error) => {
+      console.log(`${error} error`);
+    },
+    ...options,
   });
 };
