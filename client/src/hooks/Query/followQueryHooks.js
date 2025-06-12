@@ -5,10 +5,10 @@ import {
   getConnections,
   getRequests,
   removeFollower,
+  searchFollowers,
   sendFollowReq,
   unfollowUser,
 } from "../../api/followApi";
-import { searchFollowers } from "../../api/userApi";
 
 export const useGetConnectionsQuery = (options = {}) => {
   return useQuery({
@@ -35,7 +35,7 @@ export const useGetRequestsQuery = (options = {}) => {
 export const useSearchFollowersQuery = (username, options = {}) => {
   return useQuery({
     queryKey: ["followersSearch", username],
-    queryFn: () => searchFollowers(username),
+    queryFn: () => () => searchFollowers(username),
     ...options,
   });
 };
