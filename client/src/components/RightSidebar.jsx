@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FooterLink from "./FooterLink";
 import RightSidebarItem from "./RightSidebarItem";
 import { useGetSuggestionsQuery } from "../hooks/Query/userQueryHooks";
@@ -6,15 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 function RightSidebar() {
   const queryClient = useQueryClient();
-  const [followSuggestions, setFollowSuggestions] = useState([]);
   const [isAll, setIsAll] = useState(false);
-  const { isSuccess, data } = useGetSuggestionsQuery(isAll);
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      setFollowSuggestions(data);
-    }
-  }, [isSuccess, data]);
+  const { isSuccess, data: suggestions } = useGetSuggestionsQuery(isAll);
 
   const handleSeeAllClick = () => {
     if (isAll) {
@@ -37,8 +30,8 @@ function RightSidebar() {
         </div>
       </div>
       <div className="hide-scroll-bar overflow-y-scroll">
-        {followSuggestions &&
-          followSuggestions.map((user) => {
+        {isSuccess &&
+          suggestions?.map((user) => {
             return (
               <RightSidebarItem
                 key={user.id}

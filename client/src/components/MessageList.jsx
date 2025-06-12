@@ -4,18 +4,8 @@ import { closeSidebar, expandSidebar } from "../app/features/uiSlice";
 import RightSideBarItem from "./RightSidebarItem";
 import { FaRegEdit } from "react-icons/fa";
 import { useGetConnectionsQuery } from "../hooks/Query/followQueryHooks";
-import { useState } from "react";
 function MessageList() {
-  const [contatcts, setContacts] = useState(null);
-
-  const { data, isSuccess } = useGetConnectionsQuery();
-
-  useEffect(() => {
-    if (data && isSuccess) {
-      setContacts(data);
-    }
-  }, [isSuccess, data]);
-
+  const { data: contacts, isSuccess } = useGetConnectionsQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,8 +29,8 @@ function MessageList() {
         <div>Requests</div>
       </div>
       <div className="my-2 max-h-[90vh] overflow-y-scroll pr-2">
-        {contatcts &&
-          contatcts.map((contatct) => {
+        {isSuccess &&
+          contacts?.map((contatct) => {
             return <RightSideBarItem key={contatct.id} user={contatct} />;
           })}
       </div>

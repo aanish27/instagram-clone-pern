@@ -16,7 +16,6 @@ import Feed from "../pages/Feed";
 import { validateUsername } from "../app/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../app/features/authSlice";
-import { useEffect } from "react";
 import EditProfile from "../pages/EditProfile";
 import { useGetAuthQuery } from "../hooks/Query/userQueryHooks";
 
@@ -28,11 +27,7 @@ const Routes = () => {
     enabled: !!token,
   });
 
-  useEffect(() => {
-    if (isSuccess && data) {
-      dispatch(setAuthUser(data));
-    }
-  }, [isSuccess, data, dispatch]);
+  if (isSuccess && data) dispatch(setAuthUser(data));
 
   const routesForPublic = [
     {
