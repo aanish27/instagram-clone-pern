@@ -6,9 +6,9 @@ export const getConnections = () =>
 export const getRequests = () =>
   axiosInstance.get("/follow/req").then((res) => res.data);
 
-export const searchUsers = (username) =>
+export const searchFollowers = (username) =>
   axiosInstance
-    .get("/user/search", { params: username })
+    .get("/follow/search", { params: username })
     .then((res) => res.data);
 
 export const sendFollowReq = (data) =>
