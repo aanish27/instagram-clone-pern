@@ -5,6 +5,10 @@ const UserService = require("./UserService");
 
 class AuthService {
   static saltRounds = 10;
+  static accessTokenOptions = {
+    secure: true,
+    sameSite: "none",
+  };
 
   static async register(req) {
     bcrypt.hash(req.body.password, this.saltRounds, function (err, hash) {
@@ -30,23 +34,34 @@ class AuthService {
       return result;
     });
 
-    const cookieOptions = {
-      secure: true,
-      httpOnly: false,
-      sameSite: "none",
+    delete user.password;
+
+    const accessToken = this.createToken(user, "15m");
+    const refreshToken = this.createToken(user, "90 days");
+
+    const tokens = {
+      accessToken: {
+        token: accessToken,
+        options: this.accessTokenOptions,
+      },
+      refreshToken: {
+        token: refreshToken,
+        options: {
+          secure: true,
+          httpOnly: true,
+          sameSite: "none",
+          maxAge: 7776000 * 1000,
+        },
+      },
     };
 
-    delete user.password
-    const accesstoken = this.createToken(user, "6h");
-
-    return [accesstoken, cookieOptions];
+    return tokens;
   }
 
   static createToken(user, expTime) {
-    const token = jwt.sign(user, process.env.JWT_SECRET, {
+    return jwt.sign(user, process.env.JWT_SECRET, {
       expiresIn: expTime,
     });
-    return token;
   }
 }
 
