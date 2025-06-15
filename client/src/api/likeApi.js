@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 export const storePostLike = (data) =>
   axiosInstance.post("/like/post", data).then((res) => res.data);

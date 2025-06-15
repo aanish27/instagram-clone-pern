@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { openViewPostModal } from "../app/helpers";
+import { openViewPostModal } from "../utils/helpers";
 
 function TabContent({ activeTab, posts, savedPosts }) {
   const [contents, setContents] = useState(null);

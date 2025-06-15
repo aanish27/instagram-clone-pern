@@ -1,9 +1,10 @@
+/* eslint-disable import/no-restricted-paths */
 import { useState } from "react";
-import Avatar from "./Avatar";
 import {
   useDeleteFollowReqMutation,
   useSendFollowReqMutation,
-} from "../hooks/Query/followQueryHooks";
+} from "../features/follow/followQueryHooks";
+import Avatar from "./Avatar";
 
 function RightSidebarItem({ url, action, user }) {
   const [isReqSent, setReqSent] = useState(false);

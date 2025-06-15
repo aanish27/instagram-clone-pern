@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import Input from "./Input";
-import { useEffect } from "react";
-import { closeSidebar, expandSidebar } from "../app/features/uiSlice";
-import { useForm } from "react-hook-form";
-import { useSearchUsersQuery } from "../hooks/Query/userQueryHooks";
+/* eslint-disable import/no-restricted-paths */
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { closeSidebar, expandSidebar } from "../features/ui/uiSlice";
+import { useSearchUsersQuery } from "../features/user/userQueryHooks";
+import Input from "./Input";
 
 function Search() {
   const [searchParams, setSearchParams] = useState(null);
