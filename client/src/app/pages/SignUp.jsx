@@ -64,7 +64,7 @@ function SignUp() {
       </div>
       <form
         onSubmit={handleSubmit(handleRegister)}
-        className="mx-10 flex flex-col gap-3">
+        className="flex flex-col gap-3">
         <Input
           type="text"
           placeholder="Name"

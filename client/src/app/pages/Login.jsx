@@ -50,7 +50,7 @@ function Login() {
     <AuthLayout title="login">
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="mx-10 flex flex-col gap-3">
+        className="flex flex-col gap-3">
         <Input
           register={register("email", {
             required: "Please Enter Your Email",
