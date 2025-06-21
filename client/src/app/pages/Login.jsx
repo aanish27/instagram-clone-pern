@@ -6,7 +6,7 @@ import Hint from "../../components/Hint";
 import Input from "../../components/Input";
 import { useLoginMutation } from "../../features/auth/authQueryHooks";
 import AuthLayout from "../layouts/AuthLayout";
-import { useAuth } from "../provider/authProvider";
+import { useAuth } from "../provider/AuthProvider";
 const env = import.meta.env.VITE_ENVIRONMENT;
 
 function Login() {

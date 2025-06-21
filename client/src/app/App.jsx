@@ -1,4 +1,4 @@
-import AuthProvider from "./provider/authProvider";
+import AuthProvider from "./provider/AuthProvider";
 import Routes from "./routes";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

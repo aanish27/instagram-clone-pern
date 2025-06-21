@@ -11,6 +11,7 @@ import FollowModal from "../../features/follow/components/FollowModal";
 import StoryRow from "../../features/story/components/StoryRow";
 import { setIsOptionsModalOpen } from "../../features/ui/uiSlice";
 import { useGetProfileQuery } from "../../features/user/userQueryHooks";
+import IfAuthUser from "../../components/IfAuthUser";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Profile() {

@@ -16,7 +16,7 @@ import Messages from "../pages/Messages";
 import Profile from "../pages/Profile";
 import Reels from "../pages/Reels";
 import SignUp from "../pages/SignUp";
-import { useAuth } from "../provider/authProvider";
+import { useAuth } from "../provider/AuthProvider";
 import PrivateRoutes from "../routes/PrivateRoutes";
 
 const Routes = () => {
