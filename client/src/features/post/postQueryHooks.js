@@ -13,6 +13,7 @@ export const usePostsQuery = (options = {}) => {
   return useQuery({
     queryKey: ["feed"],
     queryFn: getPosts,
+    refetchOnMount: false,
     ...options,
   });
 };

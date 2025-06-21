@@ -6,6 +6,7 @@ export const useGetStories = (options = {}) => {
   return useQuery({
     queryKey: ["getStories"],
     queryFn: () => getStories(),
+    refetchOnMount: false,
     ...options,
   });
 };
