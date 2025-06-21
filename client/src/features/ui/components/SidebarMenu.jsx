@@ -3,14 +3,14 @@ import SideBarItem from "./SideBarItem";
 import ThemeController from "./ThemeController";
 IoMenu;
 
-function SidebarMenu({ isExpanded }) {
+function SidebarMenu({ isActive }) {
   return (
-    <div className="dropdown dropdown-top dropdown-center">
-      <div tabIndex={0} role="button" className="">
+    <div className="dropdown dropdown-top dropdown-center w-full">
+      <div tabIndex={0} role="button">
         <SideBarItem
           icon={<IoMenu className="text-2xl" />}
           title={"Menu"}
-          isExpanded={isExpanded}
+          isActive={isActive}
         />
       </div>
       <ul

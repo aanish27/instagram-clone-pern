@@ -12,11 +12,13 @@ export const validateUsername = async (username) => {
   }
 };
 
+// turn this into hook
 export const openViewPostModal = (dispatch, post) => {
   dispatch(setViewPost(post));
   dispatch(setIsViewModalOpen(true));
 };
 
+// turn this into hook
 export const closeViewPostModal = (dispatch) => {
   dispatch(setIsViewModalOpen(false));
   dispatch(setViewPost(null));
