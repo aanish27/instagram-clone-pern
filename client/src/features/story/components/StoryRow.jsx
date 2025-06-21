@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import StoryAvatar from "./StoryAvatar";
 import { setStories } from "../../ui/uiSlice";
+import StoryAvatar from "./StoryAvatar";
 
 function StoryRow({ stories, isHighlight = false }) {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ function StoryRow({ stories, isHighlight = false }) {
   }, [stories]);
 
   return (
-    <div className="hide-scroll-bar flex min-w-full shrink-0 gap-2 overflow-x-scroll md:w-full md:gap-4">
+    <div className="hide-scroll-bar flex shrink-0 gap-4 overflow-x-scroll px-1 py-2">
       {stories.map((story) => {
         return (
           <StoryAvatar key={story.id} story={story} isHighlight={isHighlight} />

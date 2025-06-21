@@ -29,7 +29,7 @@ function StoryAvatar({ story, isHighlight }) {
           : {})}
       />
       {!isHighlight && (
-        <span className="w-[100%] overflow-hidden whitespace-nowrap">
+        <span className="w-full truncate text-sm">
           {story.creator.username}
         </span>
       )}

@@ -29,16 +29,18 @@ function Feed() {
 
   return (
     <MainLayout>
-      <main className="hide-scroll-bar max-h-screen w-full overflow-y-scroll md:my-0 md:px-5 lg:w-[40%]">
-        {isStories && stories && <StoryRow stories={stories} />}
-        <div className="flex w-full flex-col items-center justify-center md:px-20">
-          {isPosts &&
-            posts?.map((post) => {
-              return <PostContainer key={post.id} {...post} />;
-            })}
+      <main className="m-20 grid grid-cols-3 items-center justify-center gap-10 overflow-hidden">
+        <div className="hide-scroll-bar flex max-h-screen flex-col overflow-scroll md:col-span-full lg:col-span-2">
+          {isStories && stories && <StoryRow stories={stories} />}
+          <div className="flex flex-col items-center justify-center">
+            {isPosts &&
+              posts?.map((post) => {
+                return <PostContainer key={post.id} {...post} />;
+              })}
+          </div>
         </div>
+        <RightSidebar />
       </main>
-      <RightSidebar />
     </MainLayout>
   );
 }
