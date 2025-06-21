@@ -1,7 +1,6 @@
 import { IoMenu } from "react-icons/io5";
 import SideBarItem from "./SideBarItem";
 import ThemeController from "./ThemeController";
-IoMenu;
 
 function SidebarMenu({ isActive }) {
   return (
