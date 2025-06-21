@@ -29,7 +29,7 @@ function FollowReqCard({ avatar, name, username, message, reqId }) {
 
   return (
     <div className="flex items-center justify-between gap-2">
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Avatar size={"h-13 w-13"} img={avatar} />
         <div className="truncate text-sm font-semibold">
           {username}
@@ -41,12 +41,12 @@ function FollowReqCard({ avatar, name, username, message, reqId }) {
       </div>
       <div className="flex gap-2">
         <button
-          className="btn h-8 rounded-lg bg-blue-500"
+          className="h-8 rounded-lg bg-blue-500 px-2"
           onClick={handleAcceptRequest}>
           Confirm
         </button>
         <button
-          className="btn bg-insta-black h-8 rounded-lg"
+          className="bg-insta-black h-8 rounded-lg px-2"
           onClick={handleRejectRequest}>
           Delete
         </button>
