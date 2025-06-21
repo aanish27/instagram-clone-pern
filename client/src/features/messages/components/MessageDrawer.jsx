@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import DrawerLayout from "../../../app/layouts/DrawerLayout";
-import RightSideBarItem from "../../../components/RightSidebarItem";
+// import RightSideBarItem from "../../../components/";
 import { useGetConnectionsQuery } from "../../follow/followQueryHooks";
 
-function MessageList() {
+function MessageDrawer() {
   const { data: contacts, isSuccess } = useGetConnectionsQuery();
   const navigate = useNavigate();
 
@@ -22,8 +22,8 @@ function MessageList() {
       isTitle={false}
       body={
         isSuccess &&
-        contacts?.map((contatct) => {
-          return <RightSideBarItem key={contatct.id} user={contatct} />;
+        contacts?.map((contact) => {
+          return <div key={contact.id}> </div>;
         })
       }
       header={
@@ -44,4 +44,4 @@ function MessageList() {
   );
 }
 
-export default MessageList;
+export default MessageDrawer;
