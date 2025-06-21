@@ -12,20 +12,18 @@ function PostFooterIcons({ postId, handleCommentClick }) {
   const unlikeMutation = useUnlikePostMutation();
 
   return (
-    <div className="flex items-center justify-between py-2">
-      <div className="flex gap-3">
-        <LikeButton
-          likeMutation={storeLikeMutation}
-          unlikeMutation={unlikeMutation}
-          entityId={postId}
-          entity={"POST"}
-        />
-        <button onClick={handleCommentClick}>
-          <FaRegComment className="scale-x-[-1] text-2xl" />
-        </button>
-        <ShareButton />
-      </div>
-      <SavePostButton />
+    <div className="flex gap-3 py-2">
+      <LikeButton
+        likeMutation={storeLikeMutation}
+        unlikeMutation={unlikeMutation}
+        entityId={postId}
+        entity={"POST"}
+      />
+      <button onClick={handleCommentClick}>
+        <FaRegComment className="scale-x-[-1] text-2xl" />
+      </button>
+      <ShareButton />
+      <SavePostButton className="ml-auto" />
     </div>
   );
 }

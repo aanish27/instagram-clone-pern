@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import {
-  useSavePostMutation,
-  useUnsavePostMutation,
-} from "../postQueryHooks";
+import { useSavePostMutation, useUnsavePostMutation } from "../postQueryHooks";
 
-function SavePostButton({ postId }) {
+function SavePostButton({ postId, className = "" }) {
   const [isSaved, setIsSaved] = useState(false);
   const savePostMutation = useSavePostMutation();
   const unsavePostMutation = useUnsavePostMutation();
@@ -25,7 +22,7 @@ function SavePostButton({ postId }) {
   };
 
   return (
-    <button onClick={handleSaveClick}>
+    <button onClick={handleSaveClick} className={`${className}`}>
       {isSaved ? (
         <FaBookmark className="text-2xl" />
       ) : (
