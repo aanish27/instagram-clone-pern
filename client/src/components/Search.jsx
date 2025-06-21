@@ -2,22 +2,18 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { closeSidebar, expandSidebar } from "../features/ui/uiSlice";
+import { IoMdSearch } from "react-icons/io";
+import DrawerLayout from "../app/layouts/DrawerLayout";
 import { useSearchUsersQuery } from "../features/user/userQueryHooks";
 import Input from "./Input";
 
 function Search() {
   const [searchParams, setSearchParams] = useState(null);
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    dispatch(closeSidebar());
-
     return () => {
-      dispatch(expandSidebar());
       queryClient.removeQueries("userSearch");
     };
   }, []);
@@ -32,21 +28,20 @@ function Search() {
   };
 
   return (
-    <div className="block max-h-screen w-[20vw] p-5">
-      <div className="text-2xl font-extrabold">Search</div>
-      <div className="mt-5">
-        <form onSubmit={handleSubmit(handleSearch)}>
-          <Input
-            register={register("search")}
-            type={"text"}
-            placeholder={"Search"}
-            className={
-              "input input-ghost h-10 w-[100%] rounded-lg bg-[#3d3a3c] focus:bg-[#3d3b3c]"
-            }
-          />
-          <button> Search</button>
-        </form>
-        <div className="hide-scroll-bar max-h-[80vh] overflow-y-scroll">
+    <DrawerLayout
+      title={"Search"}
+      body={
+        <>
+          <form onSubmit={handleSubmit(handleSearch)} className="flex gap-2">
+            <Input
+              register={register("search")}
+              type={"text"}
+              placeholder={"Search"}
+            />
+            <button className="bg-insta-black btn h-8 rounded-lg p-1 py-4">
+              <IoMdSearch className="text-2xl" />
+            </button>
+          </form>
           {isSuccess &&
             data.map((user) => {
               return (
@@ -69,9 +64,9 @@ function Search() {
                 </div>
               );
             })}
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    />
   );
 }
 
