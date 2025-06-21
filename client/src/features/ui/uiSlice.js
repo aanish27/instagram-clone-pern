@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isViewModalOpen: false,
   IsOptionsModalOpen: false,
-  IsSidebarExpanded: true,
+  isDrawerActive: false,
+  activeDrawer: null,
   NotificationReload: true,
   optionsModalProps: null,
   IsPostUploadModalOpen: false,
@@ -22,11 +23,13 @@ export const uiSlice = createSlice({
     setIsViewModalOpen: (state, action) => {
       state.isViewModalOpen = action.payload;
     },
-    expandSidebar: (state) => {
-      state.IsSidebarExpanded = true;
+    expandDrawer: (state, action) => {
+      state.isDrawerActive = true;
+      state.activeDrawer = action.payload;
     },
-    closeSidebar: (state) => {
-      state.IsSidebarExpanded = false;
+    closeDrawer: (state) => {
+      state.isDrawerActive = false;
+      state.activeDrawer = null;
     },
     toggleNotificationReload: (state) => {
       state.NotificationReload = !state.NotificationReload;
@@ -67,8 +70,8 @@ export const uiSlice = createSlice({
 
 export const {
   setIsViewModalOpen,
-  expandSidebar,
-  closeSidebar,
+  expandDrawer,
+  closeDrawer,
   toggleNotificationReload,
   setIsOptionsModalOpen,
   setIsPostUploadModalOpen,

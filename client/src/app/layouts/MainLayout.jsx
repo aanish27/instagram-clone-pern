@@ -5,6 +5,7 @@ import NavbarMobile from "../../components/NavbarMobile";
 import PostUploadModal from "../../features/post/components/PostUploadModal";
 import ViewPostModal from "../../features/post/components/ViewPostModal";
 import StoryModal from "../../features/story/components/StoryModal";
+import Drawer from "../../features/ui/components/Drawer";
 import MoreOptionsModal from "../../features/ui/components/MoreOptionsModal";
 import ShareModal from "../../features/ui/components/ShareModal";
 import Sidebar from "../../features/ui/components/Sidebar";
@@ -20,6 +21,7 @@ function MainLayout({ children }) {
     IsOptionsModalOpen,
     IsPostUploadModalOpen,
     PostEditModalProps,
+    isDrawerActive,
   } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
 
@@ -49,8 +51,9 @@ function MainLayout({ children }) {
       <NavbarMobile />
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
-      <div className="flex max-h-screen items-center justify-between">
+      <div className="flex h-screen items-center justify-between">
         <Sidebar />
+        {isDrawerActive && <Drawer />}
         {children}
       </div>
       <FooterBarMobile />
