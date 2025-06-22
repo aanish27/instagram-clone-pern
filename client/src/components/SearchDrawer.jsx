@@ -6,7 +6,7 @@ import { IoMdSearch } from "react-icons/io";
 import DrawerLayout from "../app/layouts/DrawerLayout";
 import { useSearchUsersQuery } from "../features/user/userQueryHooks";
 import Input from "./Input";
-import UserCardLayout from "./UserCardLayout";
+import UserCard from "./UserCard";
 
 function Search() {
   const [searchParams, setSearchParams] = useState(null);
@@ -46,12 +46,12 @@ function Search() {
           {isSuccess &&
             data.map((user) => {
               return (
-                <UserCardLayout
+                <UserCard
                   key={user.id}
                   username={user.username}
                   avatar={user.profile_pic}>
                   {""}
-                </UserCardLayout>
+                </UserCard>
               );
             })}
         </>

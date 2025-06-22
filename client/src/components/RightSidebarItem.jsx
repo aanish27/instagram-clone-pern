@@ -4,7 +4,7 @@ import {
   useDeleteFollowReqMutation,
   useSendFollowReqMutation,
 } from "../features/follow/followQueryHooks";
-import UserCardLayout from "./UserCardLayout";
+import UserCard from "./UserCard";
 
 function RightSidebarItem({ action = "Follow", user }) {
   const [isReqSent, setReqSent] = useState(false);
@@ -34,7 +34,7 @@ function RightSidebarItem({ action = "Follow", user }) {
   };
 
   return (
-    <UserCardLayout
+    <UserCard
       username={user.username}
       avatar={user.profile_pic}
       subText={user.name}>
@@ -45,7 +45,7 @@ function RightSidebarItem({ action = "Follow", user }) {
         onClick={handleFollowButtonOnclick}>
         {isReqSent ? "Sent" : action}
       </button>
-    </UserCardLayout>
+    </UserCard>
   );
 }
 

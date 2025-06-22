@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import Avatar from "./Avatar";
 
-function UserCardLayout({ avatar, username, subText, children }) {
+function UserCard({ avatar, username, subText, children }) {
   return (
     <div className="flex items-center justify-between">
       <Link to={`/${username}`}>
@@ -22,4 +22,4 @@ function UserCardLayout({ avatar, username, subText, children }) {
   );
 }
 
-export default UserCardLayout;
+export default UserCard;

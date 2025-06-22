@@ -5,7 +5,7 @@ import { Bounce, toast } from "react-toastify";
 import Hint from "../../components/Hint";
 import Input from "../../components/Input";
 import InputWithLabel from "../../components/InputWithLabel";
-import UserCardLayout from "../../components/UserCardLayout";
+import UserCard from "../../components/UserCard";
 import { setIsOptionsModalOpen } from "../../features/ui/uiSlice";
 import { useUpdateUserMutation } from "../../features/user/userQueryHooks";
 import { removeEmptyFields } from "../../utils/helpers";
@@ -108,7 +108,7 @@ function EditProfile() {
         <h1 className="font-bold">Edit Profile</h1>
         <div className="card card-border bg-insta-black w-full rounded-2xl">
           <div className="card-body">
-            <UserCardLayout
+            <UserCard
               username={user.username}
               avatar={user.profile_pic}
               subText={user.name}>
@@ -117,7 +117,7 @@ function EditProfile() {
                 onClick={handleChangePictureClick}>
                 Change Photo
               </button>
-            </UserCardLayout>
+            </UserCard>
           </div>
         </div>
         <form
