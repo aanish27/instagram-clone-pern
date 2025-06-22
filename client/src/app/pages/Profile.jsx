@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
-import { useDispatch } from "react-redux";
 import { FaEdit } from "react-icons/fa";
-import { RiSettings4Line } from "react-icons/ri";
 import { HiPlus } from "react-icons/hi2";
-import MainLayout from "../layouts/MainLayout";
+import { RiSettings4Line } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { Link, useLoaderData } from "react-router";
 import Avatar from "../../components/Avatar";
+import IfAuthUser from "../../components/IfAuthUser";
 import TabContent from "../../components/TabContent";
 import FollowModal from "../../features/follow/components/FollowModal";
 import StoryRow from "../../features/story/components/StoryRow";
 import { setIsOptionsModalOpen } from "../../features/ui/uiSlice";
 import { useGetProfileQuery } from "../../features/user/userQueryHooks";
-import IfAuthUser from "../../components/IfAuthUser";
+import MainLayout from "../layouts/MainLayout";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function Profile() {
@@ -85,7 +85,7 @@ function Profile() {
   return (
     <MainLayout>
       {isSuccess && profile && (
-        <div className="flex h-screen w-full items-center justify-center overflow-scroll">
+        <>
           {followModalTitle && followModalContent && (
             <FollowModal
               title={followModalTitle}
@@ -93,8 +93,8 @@ function Profile() {
               setFollowModalTitle={setFollowModalTitle}
             />
           )}
-          <div className="flex h-screen w-[50vw] flex-col gap-3">
-            <div className="mt-10 flex gap-2">
+          <div className="flex flex-col items-center justify-center gap-3 p-5">
+            <div className="flex gap-2">
               <div className="group relative h-40 w-40">
                 <Avatar
                   img={`${serverUrl}/${profile.profile_pic}`}
@@ -104,11 +104,11 @@ function Profile() {
                   <button
                     className="absolute inset-0 flex items-center justify-center rounded-full bg-white/30 text-sm text-black opacity-0 transition-opacity group-hover:opacity-100"
                     onClick={handleProfilePicOnClick}>
-                    <FaEdit style={{ fontSize: "25px" }} />
+                    <FaEdit className="text-3xl" />
                   </button>
                 </IfAuthUser>
               </div>
-              <div className="ml-[100px] flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <div>{user.username}</div>
                   <IfAuthUser userId={user.id}>
@@ -117,9 +117,9 @@ function Profile() {
                       className="btn btn-soft h-8">
                       Edit Profile
                     </Link>
-                    <button className="btn btn-soft h-8">veiw archive</button>
+                    <button className="btn btn-soft h-8">View Archive</button>
                     <button>
-                      <RiSettings4Line style={{ fontSize: "25px" }} />
+                      <RiSettings4Line className="text-2xl" />
                     </button>
                   </IfAuthUser>
                 </div>
@@ -149,15 +149,13 @@ function Profile() {
                 </div>
               </div>
             </div>
-            <div className="flex items-start gap-4 pt-5">
+            <div className="flex items-center justify-center gap-4 pt-5">
               <button className="btn btn-soft h-18 w-18 rounded-full">
-                <HiPlus style={{ fontSize: "100px" }} />
+                <HiPlus className="text-3xl" />
               </button>
               <StoryRow stories={profile.stories} isHighlight={true} />
             </div>
-            <div
-              role="tablist"
-              className="tabs tabs-border mb-2 flex items-center justify-center">
+            <div role="tablist" className="tabs tabs-border">
               {tabs.map((tab, index) => (
                 <a
                   key={index}
@@ -175,7 +173,7 @@ function Profile() {
               savedPosts={savedPosts}
             />
           </div>
-        </div>
+        </>
       )}
     </MainLayout>
   );

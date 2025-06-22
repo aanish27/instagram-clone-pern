@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Bounce, toast } from "react-toastify";
-import Avatar from "../../components/Avatar";
 import Hint from "../../components/Hint";
 import Input from "../../components/Input";
+import InputWithLabel from "../../components/InputWithLabel";
+import UserCardLayout from "../../components/UserCardLayout";
 import { setIsOptionsModalOpen } from "../../features/ui/uiSlice";
 import { useUpdateUserMutation } from "../../features/user/userQueryHooks";
 import { removeEmptyFields } from "../../utils/helpers";
 import MainLayout from "../layouts/MainLayout";
-const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function EditProfile() {
   const user = useSelector((state) => state.auth.authUser);
@@ -104,146 +104,112 @@ function EditProfile() {
 
   return (
     <MainLayout>
-      <div className="flex h-screen w-full flex-col items-center justify-center overflow-scroll">
-        <div className="flex h-full w-[80vh] flex-col p-10">
-          <h1 className="py-3 font-bold">Edit Proflie</h1>
-          <div className="card card-border bg-insta-black mb-10 rounded-2xl">
-            <div className="card-body">
-              <div key={user.id} className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Avatar
-                    img={`${serverUrl}/${user.profile_pic}`}
-                    size={"h-18 w-18"}
-                  />
-                  <div className="flex flex-col p-3">
-                    <div className="font-semibold">{user.username}</div>
-                    <div className="font-extralight text-gray-400">
-                      {user.name}
-                    </div>
-                  </div>
-                </div>
-                <button
-                  className="btn justify-end rounded-2xl bg-blue-500"
-                  onClick={handleChangePictureClick}>
-                  Change Photo
-                </button>
+      <div className="m-auto flex w-[40rem] flex-col gap-2 p-4">
+        <h1 className="font-bold">Edit Profile</h1>
+        <div className="card card-border bg-insta-black w-full rounded-2xl">
+          <div className="card-body">
+            <UserCardLayout
+              username={user.username}
+              avatar={user.profile_pic}
+              subText={user.name}>
+              <button
+                className="btn justify-end rounded-2xl bg-blue-500"
+                onClick={handleChangePictureClick}>
+                Change Photo
+              </button>
+            </UserCardLayout>
+          </div>
+        </div>
+        <form
+          onSubmit={handleSubmit(handleUserUpdateSubmit)}
+          className="flex flex-col gap-4">
+          <InputWithLabel label={"website"}>
+            <Input type="text" register={register("website")} disable={true} />
+          </InputWithLabel>
+          <InputWithLabel label={"username"}>
+            <Input
+              type="text"
+              placeholder="Username"
+              register={register("username", {
+                required: "Username cannot be empty",
+                minLength: 6,
+              })}
+            />
+            {errors?.username && <Hint message={errors.username.message} />}
+          </InputWithLabel>
+          <InputWithLabel label={"name"}>
+            <Input
+              type="text"
+              placeholder="Name"
+              register={register("name", {
+                required: "Name cannot be empty.",
+              })}
+            />
+            {errors?.name && <Hint message={errors.name.message} />}
+          </InputWithLabel>
+          <InputWithLabel label={"bio"}>
+            {" "}
+            <Input
+              type="text"
+              placeholder="Bio"
+              register={register("bio", { maxLength: 100 })}
+            />
+            {errors?.bio && <Hint message={errors.bio.message} />}
+          </InputWithLabel>
+          <InputWithLabel label={"gender"}>
+            <select
+              className="select w-full rounded-xl bg-transparent"
+              {...register("gender")}>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </InputWithLabel>
+          <InputWithLabel label={"email"}>
+            <Input
+              type="text"
+              placeholder="Email"
+              register={register("email", {
+                required: "Email cannot be empty",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email format",
+                },
+              })}
+            />
+            {errors?.email && <Hint message={errors.email.message} />}
+          </InputWithLabel>
+          <InputWithLabel label={"phone"}>
+            <Input
+              type="text"
+              placeholder="Phone"
+              register={register("phone", {
+                required: "Phone number cannot be empty",
+                pattern: {
+                  value: /^[0-9]{10,15}$/,
+                  message: "Enter a valid phone number",
+                },
+              })}
+            />
+            {errors?.phone && <Hint message={errors.phone.message} />}
+          </InputWithLabel>
+          <div className="flex flex-col">
+            <div className="font-semibold">
+              Show account suggestions on profiles
+            </div>
+            <div className="border-insta-black rounded-2xl border shadow-sm">
+              <div className="card-body flex-row items-center justify-center gap-3">
+                Choose whether people can see similar account suggestions on
+                your profile, and whether your account can be suggested on other
+                profiles.
+                <input type="checkbox" defaultChecked className="toggle" />
               </div>
             </div>
           </div>
-          <form
-            onSubmit={handleSubmit(handleUserUpdateSubmit)}
-            className="flex flex-col gap-10">
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold">website</div>
-              <Input
-                type="text"
-                register={register("website")}
-                disable={true}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold capitalize">username</div>
-              <Input
-                type="text"
-                placeholder="Username"
-                register={register("username", {
-                  required: "Username cannot be empty",
-                  minLength: 6,
-                })}
-              />
-              {errors && errors.username && (
-                <Hint message={errors.username.message} />
-              )}
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold capitalize">name</div>
-              <Input
-                type="text"
-                placeholder="Name"
-                register={register("name", {
-                  required: "Name cannot be empty.",
-                })}
-              />
-              {errors && errors.name && <Hint message={errors.name.message} />}
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold capitalize">Bio</div>
-              <Input
-                type="text"
-                placeholder="Bio"
-                register={register("bio", { maxLength: 100 })}
-              />
-              {errors && errors.bio && <Hint message={errors.bio.message} />}
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold">Gender</div>
-              <select
-                className="select w-full rounded-xl bg-transparent"
-                {...register("gender")}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold">Email</div>
-              <Input
-                type="text"
-                placeholder="Email"
-                register={register("email", {
-                  required: "Email cannot be empty",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email format",
-                  },
-                })}
-              />
-              {errors && errors.email && (
-                <Hint message={errors.email.message} />
-              )}
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold capitalize">phone</div>
-              <Input
-                type="text"
-                placeholder="Phone"
-                register={register("phone", {
-                  required: "Phone number cannot be empty",
-                  pattern: {
-                    value: /^[0-9]{10,15}$/,
-                    message: "Enter a valid phone number",
-                  },
-                })}
-              />
-              {errors && errors.phone && (
-                <Hint message={errors.phone.message} />
-              )}
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="font-semibold">
-                Show account suggestions on profiles
-              </div>
-              <div className="border-insta-black rounded-2xl border shadow-sm">
-                <div className="card-body flex-row items-center justify-center">
-                  <div>
-                    <h2 className="card-title">
-                      Show account suggestions on profiles
-                    </h2>
-                    <p>
-                      Choose whether people can see similar account suggestions
-                      on your profile, and whether your account can be suggested
-                      on other profiles.
-                    </p>
-                  </div>
-                  <input type="checkbox" defaultChecked className="toggle" />
-                </div>
-              </div>
-            </div>
-            <button className="btn ml-auto w-[50%] rounded-2xl bg-blue-500">
-              Submit
-            </button>
-          </form>
-        </div>
+          <button className="btn ml-auto w-[50%] rounded-2xl bg-blue-500">
+            Submit
+          </button>
+        </form>
       </div>
     </MainLayout>
   );

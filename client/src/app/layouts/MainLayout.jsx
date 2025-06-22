@@ -54,7 +54,7 @@ function MainLayout({ children }) {
       <div className="flex h-screen items-center justify-between">
         <Sidebar />
         {isDrawerActive && <Drawer />}
-        <div className="hide-scroll-bar max-h-full overflow-scroll">
+        <div className="hide-scroll-bar max-h-full w-full overflow-scroll">
           {children}
         </div>
       </div>

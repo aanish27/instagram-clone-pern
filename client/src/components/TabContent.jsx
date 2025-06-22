@@ -24,7 +24,7 @@ function TabContent({ activeTab, posts, savedPosts }) {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-3">
       {contents &&
         contents.map((content) => {
           return (

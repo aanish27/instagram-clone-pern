@@ -13,7 +13,7 @@ function Explore() {
 
   return (
     <MainLayout>
-      <div className="m-20 grid md:grid-cols-3">
+      <div className="m-10 grid grid-cols-3 lg:m-20">
         {isSuccess &&
           data.map((post) => {
             return (
