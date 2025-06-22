@@ -36,7 +36,7 @@ function RightSidebarItem({ action = "Follow", user }) {
   return (
     <UserCardLayout
       username={user.username}
-      url={user.profile_pic}
+      avatar={user.profile_pic}
       subText={user.name}>
       <button
         className="font-bold text-blue-500"

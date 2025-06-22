@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import Search from "../../../components/Search";
+import Search from "../../../components/SearchDrawer";
 import { DrawerType } from "../../../utils/constants";
 import MessageList from "../../messages/components/MessageDrawer";
 import NotificationPanel from "../../notification/components/NotificationPanel";
