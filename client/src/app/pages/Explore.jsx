@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import MainLayout from "../layouts/MainLayout";
-import { openViewPostModal } from "../../utils/helpers";
 import { useGetExploreQuery } from "../../features/post/postQueryHooks";
+import { openViewPostModal } from "../../utils/helpers";
+import MainLayout from "../layouts/MainLayout";
 
 function Explore() {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ function Explore() {
 
   return (
     <MainLayout>
-      <div className="hide-scroll-bar flex max-h-screen w-full flex-wrap items-center justify-center overflow-y-scroll p-2 md:my-0 md:px-5">
+      <div className="m-20 grid md:grid-cols-3">
         {isSuccess &&
           data.map((post) => {
             return (
