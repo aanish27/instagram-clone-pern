@@ -29,8 +29,8 @@ function Feed() {
 
   return (
     <MainLayout>
-      <main className="m-20 grid grid-cols-3 items-center justify-center gap-10 overflow-hidden">
-        <div className="hide-scroll-bar flex max-h-screen flex-col overflow-scroll md:col-span-full lg:col-span-2">
+      <main className="mx-20 grid grid-cols-3 justify-center gap-10">
+        <div className="flex flex-col md:col-span-full lg:col-span-2">
           {isStories && stories && <StoryRow stories={stories} />}
           <div className="flex flex-col items-center justify-center">
             {isPosts &&
