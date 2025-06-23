@@ -3,6 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import DrawerLayout from "../../../app/layouts/DrawerLayout";
 // import RightSideBarItem from "../../../components/";
+import UserCard from "../../../components/UserCard";
 import { useGetConnectionsQuery } from "../../follow/followQueryHooks";
 
 function MessageDrawer() {
@@ -11,10 +12,6 @@ function MessageDrawer() {
 
   useEffect(() => {
     navigate("/messages", { replace: true });
-
-    return () => {
-      navigate("/", { replace: true });
-    };
   }, []);
 
   return (
@@ -23,22 +20,22 @@ function MessageDrawer() {
       body={
         isSuccess &&
         contacts?.map((contact) => {
-          return <div key={contact.id}> </div>;
+          return (
+            <UserCard
+              key={contact.id}
+              username={contact.username}
+              avatar={contact.profile_pic}
+            />
+          );
         })
       }
       header={
-        <>
-          <div className="flex justify-between">
-            <div className="font-bold">aanish27</div>{" "}
-            <div>
-              <FaRegEdit style={{ fontSize: "25px" }} />
-            </div>
-          </div>
-          <div className="my-4 flex justify-between text-sm font-bold">
-            <div>Messages</div>
-            <div>Requests</div>
-          </div>
-        </>
+        <div className="grid grid-cols-2">
+          <div className="font-bold">aanish27</div>
+          <FaRegEdit className="justify-self-end text-2xl" />
+          <div className="font-semibold">Messages</div>
+          <div className="text-right">Requests</div>
+        </div>
       }
     />
   );

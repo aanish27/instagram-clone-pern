@@ -1,7 +1,8 @@
 // import { Form } from "react-router";
 import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
-import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { FaRegHeart } from "react-icons/fa";
+import { FaRegFaceSmile } from "react-icons/fa6";
 import {
   IoCallOutline,
   IoImageOutline,
@@ -9,15 +10,15 @@ import {
   IoSend,
   IoVideocamOutline,
 } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa";
-import { FaRegFaceSmile } from "react-icons/fa6";
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 import { PiSticker } from "react-icons/pi";
-import { useForm } from "react-hook-form";
-import MainLayout from "../layouts/MainLayout";
+import { useSelector } from "react-redux";
+import { io } from "socket.io-client";
 import Input from "../../components/Input";
-import Avatar from "../../components/Avatar";
-
+import UserCard from "../../components/UserCard";
+import ReceivedText from "../../features/messages/components/ReceivedText";
+import SentText from "../../features/messages/components/SentText";
+import MainLayout from "../layouts/MainLayout";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 const iconStyle = { fontSize: "25px" };
 
@@ -47,89 +48,34 @@ function Messages() {
 
   return (
     <MainLayout>
-      <div className="flex h-screen w-full flex-col justify-between p-3">
-        <div className="flex items-center justify-between border-b-2 border-gray-900 py-3">
-          <div className="flex items-center gap-4">
-            <Avatar img="https://img.daisyui.com/images/profile/demo/kenobee@192.webp" />
-            <div>{authUser.username}</div>
-          </div>
+      <div className="w-full">
+        <UserCard username={authUser?.username} avatar={authUser?.profile_pic}>
           <div className="flex gap-4">
             <IoCallOutline style={iconStyle} />
             <IoVideocamOutline style={iconStyle} />
             <IoInformationCircleOutline style={iconStyle} />
           </div>
+        </UserCard>
+        <div className="divider m-0"></div>
+        <div className="hide-scroll-bar flex flex-col">
+          <SentText
+            name={authUser?.username}
+            text={"Hi"}
+            sentTime={"00:05"}
+            seenTime={"00:10"}
+          />
+          <ReceivedText
+            name={"Obi-Wan Kenobi"}
+            status={"Delivered"}
+            text={"You were the Chosen One!"}
+            receivedTime={"00:11"}
+          />
         </div>
-        <div className="flex h-full w-full flex-col">
-          <div className="chat chat-start">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
-                />
-              </div>
-            </div>
-            <div className="chat-header">
-              Obi-Wan Kenobi
-              <time className="text-xs opacity-50">12:45</time>
-            </div>
-            <div className="chat-bubble">You were the Chosen One!</div>
-            <div className="chat-footer opacity-50">Delivered</div>
-          </div>
-          <div className="chat chat-end">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
-                />
-              </div>
-            </div>
-            <div className="chat-header">
-              Anakin
-              <time className="text-xs opacity-50">12:46</time>
-            </div>
-            <div className="chat-bubble">I hate you!</div>
-            <div className="chat-footer opacity-50">Seen at 12:46</div>
-          </div>
-          <div className="chat chat-start">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
-                />
-              </div>
-            </div>
-            <div className="chat-header">
-              Obi-Wan Kenobi
-              <time className="text-xs opacity-50">12:45</time>
-            </div>
-            <div className="chat-bubble">You were the Chosen One!</div>
-            <div className="chat-footer opacity-50">Delivered</div>
-          </div>
-          <div className="chat chat-end">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS chat bubble component"
-                  src="https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
-                />
-              </div>
-            </div>
-            <div className="chat-header">
-              Anakin
-              <time className="text-xs opacity-50">12:46</time>
-            </div>
-            <div className="chat-bubble">I hate you!</div>
-            <div className="chat-footer opacity-50">Seen at 12:46</div>
-          </div>
-        </div>
-        <div className="flex w-full items-center justify-center gap-2">
+        <div className="absolute bottom-0 flex gap-2">
           <FaRegFaceSmile style={iconStyle} />
           <form
             onSubmit={handleSubmit(handleSendText)}
-            className="flex w-full items-center justify-center gap-2">
+            className="flex items-center justify-center gap-2">
             <Input
               register={register("text")}
               className={"grow rounded-full px-3"}

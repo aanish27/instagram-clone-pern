@@ -20,6 +20,8 @@
 }
 
 .hide-scroll-bar {
+  max-height: 100%;
+  overflow: scroll;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none;
 }

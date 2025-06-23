@@ -51,12 +51,10 @@ function MainLayout({ children }) {
       <NavbarMobile />
       {IsOptionsModalOpen && <MoreOptionsModal props={optionsModalProps} />}
       {IsPostUploadModalOpen && <PostUploadModal props={PostEditModalProps} />}
-      <div className="flex h-screen items-center justify-between">
+      <div className="flex h-screen">
         <Sidebar />
         {isDrawerActive && <Drawer />}
-        <div className="hide-scroll-bar max-h-full w-full overflow-scroll">
-          {children}
-        </div>
+        <div className="hide-scroll-bar w-full">{children}</div>
       </div>
       <FooterBarMobile />
     </>
