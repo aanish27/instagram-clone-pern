@@ -1,43 +1,75 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import eslintConfigPrettier from 'eslint-config-prettier';
+import js from "@eslint/js";
+import globals from "globals";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import eslintConfigPrettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import importPlugin from "eslint-plugin-import";
 
 export default [
-  ...pluginQuery.configs['flat/recommended'],
-  { ignores: ['dist'] },
+  ...pluginQuery.configs["flat/recommended"],
+  { ignores: ["dist"] },
+
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        sourceType: "module",
       },
     },
-    settings: { react: { version: '18.3' } },
+    settings: {
+      react: { version: "18.3" },
+    },
     plugins: {
       react,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
+      import: importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
+      ...react.configs["jsx-runtime"].rules,
       ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',
+      "react/jsx-no-target-blank": "off",
       "react/prop-types": 0,
-      'react-refresh/only-export-components': [
-        'warn',
+      "react-refresh/only-export-components": [
+        "warn",
         { allowConstantExport: true },
+      ],
+
+      // custom import path rules - from bulletproof-react
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            // enforce unidirectional codebase:
+            // e.g. src/app can import from src/features but not the other way around
+            {
+              target: "./src/features",
+              from: "./src/app",
+            },
+            // e.g src/features and src/app can import from these shared modules but not the other way around
+            {
+              target: [
+                "./src/api",
+                "./src/assets",
+                "./src/components",
+                "./src/hooks",
+                "./src/utils",
+              ],
+              from: ["./src/features", "./src/app"],
+            },
+          ],
+        },
       ],
     },
   },
-  eslintConfigPrettier
+
+  eslintConfigPrettier,
 ];

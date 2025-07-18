@@ -1,12 +1,13 @@
 import { FaInstagram } from "react-icons/fa";
 
-function BrandName({ isExpanded }) {
-  return isExpanded ? (
-    <div className="cookie-regular my-5 text-4xl md:hidden lg:block">
+function BrandName({ isActive = true, className = "" }) {
+  return isActive ? (
+    <FaInstagram className="mx-2 text-2xl" />
+  ) : (
+    <div
+      className={`cookie-regular my-5 text-4xl text-black md:hidden lg:block dark:text-white ${className}`}>
       Instagram
     </div>
-  ) : (
-    <FaInstagram className="mx-2 text-2xl" />
   );
 }
 export default BrandName;

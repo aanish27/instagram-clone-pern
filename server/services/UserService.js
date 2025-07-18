@@ -10,8 +10,12 @@ class UserService {
   static async getSuggestions(limit, id) {
     return await prisma.user.findMany({
       where: {
-        id: {
-          notIn: [id],
+        NOT: {
+          followers: { some: { followerId: id } },
+          followings: { some: { followeeId: id } },
+        },
+        AND: {
+          id: { not: id },
         },
       },
       ...(limit ? { take: 100 } : { take: 30 }),
@@ -59,6 +63,7 @@ class UserService {
             post: { include: { creator: true } },
           },
         },
+        stories: { include: { creator: true } },
         _count: {
           select: { posts: true, followers: true, followings: true },
         },

@@ -1,23 +1,16 @@
 const asyncHandler = require("express-async-handler");
-const { PrismaClient } = require("@prisma/client");
 const {
   createStoryValidator,
-  updateStoryValidator,
-  getStoryByIdValidator,
 } = require("../shared/middlewares/validators/storyValidator");
+const {
+  idValidator,
+} = require("../shared/middlewares/validators/commonValidator");
+const StoryService = require("../services/StoryService");
 
-const prisma = new PrismaClient({
-  errorFormat: "minimal",
-});
-
-const index = asyncHandler(async (req, res) => {
+const getFeed = asyncHandler(async (req, res) => {
   try {
-    const stories = await prisma.story.findMany({
-      include: {
-        creator: true,
-      },
-    });
-    return res.json({ stories: stories });
+    const stories = await StoryService.getFeed(req.user.id);
+    return res.json(stories);
   } catch (error) {
     throw error;
   }
@@ -26,11 +19,8 @@ const index = asyncHandler(async (req, res) => {
 const store = [
   createStoryValidator,
   asyncHandler(async (req, res) => {
-    req.body.creatorId = req.user.id;
     try {
-      await prisma.story.create({
-        data: req.body,
-      });
+      await StoryService.store(req.body);
       return res.send("Success");
     } catch (error) {
       throw error;
@@ -38,58 +28,11 @@ const store = [
   }),
 ];
 
-const show = [
-  getStoryByIdValidator,
-  asyncHandler(async (req, res) => {
-    try {
-      const Story = await prisma.story.findUnique({
-        where: {
-          id: parseInt(req.body.id),
-        },
-      });
-
-      if (!Story) {
-        return res.json({ error: "Story not found" });
-      }
-
-      return res.json(Story);
-    } catch (error) {
-      throw error;
-    }
-  }),
-];
-
-const update = [
-  updateStoryValidator,
-  asyncHandler(async (req, res) => {
-    try {
-      const Story = await prisma.story.update({
-        where: {
-          id: parseInt(req.params.id),
-        },
-        data: req.body,
-      });
-      return res.json(Story);
-    } catch (error) {
-      throw error;
-    }
-  }),
-];
-
 const destroy = [
-  getStoryByIdValidator,
+  idValidator,
   asyncHandler(async (req, res) => {
     try {
-      const Story = await prisma.story.delete({
-        where: {
-          id: parseInt(req.params.id),
-        },
-      });
-
-      if (!Story) {
-        return res.json({ error: "Posy not found" });
-      }
-
+      await StoryService.destroy(req.body.id);
       return res.json({ message: "Story deleted" });
     } catch (error) {
       throw error;
@@ -97,4 +40,4 @@ const destroy = [
   }),
 ];
 
-module.exports = { index, store, show, update, destroy };
+module.exports = { getFeed, store, destroy };

@@ -11,7 +11,7 @@ function Input({
       {...register}
       type={type}
       placeholder={placeholder}
-      className={`bg-insta-black rounded-xl border-1 border-[#424242] p-2 placeholder:text-xs focus:outline-none ${className}`}
+      className={`bg-insta-black h-8 w-full rounded-xl border-1 border-[#424242] p-2 placeholder:text-xs focus:outline-none ${className}`}
       disabled={disable}
       hidden={hidden}
     />

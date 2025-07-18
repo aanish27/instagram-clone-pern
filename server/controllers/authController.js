@@ -19,11 +19,12 @@ const register = [
 
 const login = asyncHandler(async (req, res) => {
   try {
-    const [token, options] = await AuthService.login(
+    const { accessToken, refreshToken } = await AuthService.login(
       req.body.email,
       req.body.password,
     );
-    res.cookie("accessToken", token, options);
+    res.cookie("accessToken", accessToken.token, accessToken.options);
+    res.cookie("refreshToken", refreshToken.token, refreshToken.options);
     return res.json({ message: "User Logged In Successfully" });
   } catch (error) {
     throw error;
@@ -34,6 +35,7 @@ const logout = [
   verifyToken,
   asyncHandler(async (req, res) => {
     res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     return res.json({ message: "User logged Out!!" });
   }),
 ];

@@ -39,6 +39,7 @@ class CommentService {
       include: {
         creator: true,
       },
+      orderBy: { createdAt: "desc" },
     });
   }
 

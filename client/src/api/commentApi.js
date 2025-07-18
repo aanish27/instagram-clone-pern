@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 export const getComments = (id) =>
   axiosInstance.get(`/comment/post/${Number(id)}`).then((res) => res.data);

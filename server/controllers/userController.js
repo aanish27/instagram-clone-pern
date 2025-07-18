@@ -71,7 +71,7 @@ const search = [
   searchUserValidator,
   asyncHandler(async (req, res) => {
     try {
-      const result = UserService.search(req.body.search);
+      const result = await UserService.search(req.body.search);
       return res.json(result);
     } catch (error) {
       throw error;
