@@ -78,10 +78,10 @@ async function main() {
     skipDuplicates: true,
   });
 
-  await prisma.notification.createMany({
-    data: factory(10000, usersSavedPostsSeeder),
-    skipDuplicates: true,
-  });
+  // await prisma.notification.createMany({
+  //   data: factory(10000, usersSavedPostsSeeder),
+  //   skipDuplicates: true,
+  // });
 }
 
 main()
