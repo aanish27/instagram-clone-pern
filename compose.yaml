@@ -1,0 +1,128 @@
+# define the services/containers to be run
+services:
+  # define the frontend service
+  # we can use any name for the service. A standard naming convention is to use "web" for the frontend
+  web:
+    # we use depends_on to specify that service depends on another service
+    # in this case, we specify that the web depends on the api service
+    # this means that the api service will be started before the web service
+    depends_on:
+      - api
+    # specify the build context for the web service
+    # this is the directory where the Dockerfile for the web service is located
+    build: ./client
+    # specify the ports to expose for the web service
+    # the first number is the port on the host machine
+    # the second number is the port inside the container
+    ports:
+      - 5173:5173
+    # specify the environment variables for the web service
+    # these environment variables will be available inside the container
+    env_file:
+      - ./client/.env
+
+    # this is for docker compose watch mode
+    # anything mentioned under develop will be watched for changes by docker compose watch and it will perform the action mentioned
+    develop:
+      # we specify the files to watch for changes
+      watch:
+        # it'll watch for changes in package.json and package-lock.json and rebuild the container if there are any changes
+        - path: ./client/package.json
+          action: rebuild
+        - path: ./client/package-lock.json
+          action: rebuild
+        # it'll watch for changes in the client directory and sync the changes with the container real time
+        - path: ./client
+          target: /app
+          action: sync
+
+  # define the api service/container
+  api:
+    # api service depends on the db service so the db service will be started before the api service
+    depends_on:
+      - db
+
+    # specify the build context for the api service
+    build: ./server
+
+    # specify the ports to expose for the api service
+    # the first number is the port on the host machine
+    # the second number is the port inside the container
+    ports:
+      - 3000:3000
+
+    # specify environment variables for the api service
+    # for demo purposes, we're using a local mongodb instance
+
+    # environment:
+    env_file:
+      - ./server/.env
+
+    # establish docker compose watch mode for the api service
+    develop:
+      # specify the files to watch for changes
+      watch:
+        # it'll watch for changes in package.json and package-lock.json and rebuild the container and image if there are any changes
+        - path: ./server/package.json
+          action: rebuild
+        - path: ./server/package-lock.json
+          action: rebuild
+
+        # it'll watch for changes in the server directory and sync the changes with the container real time
+        - path: ./server
+          target: /app
+          action: sync
+
+  # define the db service
+  db:
+    # Use official PostgreSQL image from Docker Hub
+    # Version 16 is used here; you can check tags at https://hub.docker.com/_/postgres
+    image: postgres:16
+    container_name: postgres_primary
+
+    # Automatically restart container if it crashes or Docker restarts
+    restart: always
+
+    # Environment variables to initialize the database
+    environment:
+      # username for the default database
+      POSTGRES_USER: iam-batman
+      # password for the default database user
+      POSTGRES_PASSWORD: 123456
+      # name of the default database to create
+      POSTGRES_DB: instagram_clone_pern
+      # enable checksums for data integrity
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+
+    # Persist data outside the container to avoid data loss
+    volumes:
+      # Main database data volume
+      - pgdata_primary:/var/lib/postgresql/data
+      # Volume for PostgreSQL logs
+      - pglogs_primary:/var/log/postgresql
+
+    # Expose PostgreSQL port
+    ports:
+      - "5432:5432"
+
+  db-backup:
+    # Backup service using pg_dump
+    image: postgres:16
+    container_name: postgres_backup
+    restart: "no" # only run manually, do not restart
+    depends_on:
+      - db # ensure DB is running before backup
+    environment:
+      PGPASSWORD: 123456 # Postgres password for pg_dump
+    volumes:
+      - ./backups:/backups # host folder for backup files
+      # Run backup weekly on Sunday at 2AM
+  command: >
+    bash -c "echo '0 2 * * 0 pg_dump -h db -U iam-batman instagram_clone_pern > /backups/backup_$(date +\%F_\%H-\%M-\%S).sql' | crontab - && cron -f"
+
+# Define named volumes for persistence
+volumes:
+  # Primary database data
+  pgdata_primary:
+  # Primary logs
+  pglogs_primary:
