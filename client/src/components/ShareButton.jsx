@@ -1,6 +1,7 @@
+/* eslint-disable import/no-restricted-paths */
 import { IoPaperPlaneOutline } from "react-icons/io5";
-import { setIsShareModalOpen } from "../app/features/uiSlice";
 import { useDispatch } from "react-redux";
+import { setIsShareModalOpen } from "../features/ui/uiSlice";
 
 function ShareButton() {
   const dispatch = useDispatch();

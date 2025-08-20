@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { openViewPostModal } from "../app/helpers";
+import { openViewPostModal } from "../utils/helpers";
 
 function TabContent({ activeTab, posts, savedPosts }) {
   const [contents, setContents] = useState(null);
@@ -24,7 +24,7 @@ function TabContent({ activeTab, posts, savedPosts }) {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-3">
       {contents &&
         contents.map((content) => {
           return (
